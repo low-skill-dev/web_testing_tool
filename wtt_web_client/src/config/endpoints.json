@@ -1,0 +1,45 @@
+{
+	"host": "https://wtt.bruhcontent.ru",
+	"backend": {
+		"v1": {
+			"basePath": "/api/v1",
+			"authController": {
+				"basePath": "/auth",
+				"get": {
+					"ValidateToken": "",
+					"GetMySessions": "/sessions"
+				},
+				"post": {
+					"Login": "",
+					"ResetPassword": "/recovery"
+				},
+				"put": {
+					"Register": "",
+					"CreateAndSendLink": "/recovery"
+				},
+				"patch": {
+					"Refresh": "",
+					"ChangePassword": "/password"
+				},
+				"delete": {
+					"TerminateSession": ""
+				}
+			},
+			"scenarioController": {
+				"basePath": "/scenario",
+				"get": {
+					"GetScenario": "",
+					"GetMyScenarios": "/my",
+					"GetMyScenariosHashes": "/my/hash"
+				},
+				"put": {
+					"WriteScenario": ""
+				}
+			}
+		}
+	},
+	"fontend": {
+		"basePath": "",
+		"passwordRecovery": "/recovery-password"
+	}
+}

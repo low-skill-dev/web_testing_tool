@@ -1,0 +1,25 @@
+.mainPanelWrapper{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	border:bo
+}
+
+.panel {
+	display: flex;
+
+	width: 100%;
+	height: fit-content;
+	/* height: 10em;
+	min-height: fit-content; */
+}
+
+.card {
+	display: flex;
+	margin: .1em;
+	width: fit-content;
+	height: fit-content;
+	background-color: mintcream;
+	border: 1px solid lightcyan;
+	border-radius: .25em;
+}

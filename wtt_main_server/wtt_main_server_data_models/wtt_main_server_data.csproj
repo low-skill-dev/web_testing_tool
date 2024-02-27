@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Api\Auth\**" />
+    <Compile Remove="Requests\**" />
+    <Compile Remove="Responses\**" />
+    <EmbeddedResource Remove="Api\Auth\**" />
+    <EmbeddedResource Remove="Requests\**" />
+    <EmbeddedResource Remove="Responses\**" />
+    <None Remove="Api\Auth\**" />
+    <None Remove="Requests\**" />
+    <None Remove="Responses\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jint" Version="3.0.0-beta-2056" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\webooster\webooster\webooster.csproj" />
+  </ItemGroup>
+
+</Project>

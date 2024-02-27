@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wtt_main_server_scenario_executor.Tests\NewFolder\**" />
+    <EmbeddedResource Remove="wtt_main_server_scenario_executor.Tests\NewFolder\**" />
+    <None Remove="wtt_main_server_scenario_executor.Tests\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wtt_main_server_api\wtt_main_server_api.csproj" />
+    <ProjectReference Include="..\wtt_main_server_data_access_layer\wtt_main_server_data_access.csproj" />
+    <ProjectReference Include="..\wtt_main_server_data_models\wtt_main_server_data.csproj" />
+    <ProjectReference Include="..\wtt_main_server_scenario_executor\wtt_main_server_scenario_executor.csproj" />
+    <ProjectReference Include="..\wtt_main_server_services\wtt_main_server_services.csproj" />
+  </ItemGroup>
+
+</Project>
