@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using wtt_main_server_data.Database.RunningScenarios;
 using wtt_main_server_data.Database.Abstract;
-using webooster.Helpers;
 using wtt_main_server_data.Application.TestScenarios.Parameter;
 using wtt_main_server_data.Database.Common;
 
@@ -15,7 +14,7 @@ namespace wtt_main_server_data.Application.TestScenarios.ScenarioRun;
 public sealed class ScenarioRunInfo
 {
 	// GUID текущего запуска сценария
-	public Guid Guid { get; init; } = BinaryGuid.Create();
+	public Guid Guid { get; init; } = Guid.NewGuid();
 
 	// GUID сценария в базе данных
 	public required Guid DbScenarioGuid { get; init; }

@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="devhelpers.DbConcept" Version="1.0.1" />
+    <PackageReference Include="devhelpers.JwtService" Version="1.0.3" />
     <PackageReference Include="EFCore.BulkExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-rc.1.23421.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
@@ -20,11 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\wtt_main_server_data_access_layer\wtt_main_server_data_access.csproj" />
     <ProjectReference Include="..\wtt_main_server_data_models\wtt_main_server_data.csproj" />
-    <ProjectReference Include="..\wtt_main_server_helpers\wtt_main_server_helpers.csproj" />
     <ProjectReference Include="..\wtt_main_server_scenario_executor\wtt_main_server_scenario_executor.csproj" />
     <ProjectReference Include="..\wtt_main_server_services\wtt_main_server_services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

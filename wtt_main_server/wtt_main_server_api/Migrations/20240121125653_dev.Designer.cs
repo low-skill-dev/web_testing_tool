@@ -26,14 +26,14 @@ namespace wtt_main_server_api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.HasSequence("ADbObjectWithGuidSequence");
+            modelBuilder.HasSequence("ObjectWithGuidSequence");
 
-            modelBuilder.Entity("webooster.DataModels.ADbObjectWithGuid", b =>
+            modelBuilder.Entity("webooster.DataModels.ObjectWithGuid", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
-                        .HasDefaultValueSql("nextval('\"ADbObjectWithGuidSequence\"')");
+                        .HasDefaultValueSql("nextval('\"ObjectWithGuidSequence\"')");
 
                     NpgsqlPropertyBuilderExtensions.UseSequence(b.Property<long>("Id"));
 
@@ -52,7 +52,7 @@ namespace wtt_main_server_api.Migrations
 
             modelBuilder.Entity("wtt_main_server_data.Database.Common.DbEmailSendLog", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ADbObjectWithGuid");
+                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
 
                     b.Property<string>("Addressee")
                         .IsRequired()
@@ -64,7 +64,7 @@ namespace wtt_main_server_api.Migrations
                     b.Property<bool>("IsSucceeded")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("RelatedUserGuid")
+                    b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Type")
@@ -75,7 +75,7 @@ namespace wtt_main_server_api.Migrations
 
             modelBuilder.Entity("wtt_main_server_data.Database.Common.DbUser", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ADbObjectWithGuid");
+                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -113,7 +113,7 @@ namespace wtt_main_server_api.Migrations
 
             modelBuilder.Entity("wtt_main_server_data.Database.Infrastructure.DbJwtIdentifier", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ADbObjectWithGuid");
+                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
 
                     b.Property<string>("City")
                         .HasColumnType("text");
@@ -135,7 +135,7 @@ namespace wtt_main_server_api.Migrations
                     b.Property<DateTime>("OriginIssuedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("RelatedUserGuid")
+                    b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
                     b.ToTable("DbJwtIdentifier");
@@ -143,7 +143,7 @@ namespace wtt_main_server_api.Migrations
 
             modelBuilder.Entity("wtt_main_server_data.Database.Networking.DbUserImapAccount", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ADbObjectWithGuid");
+                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
 
                     b.Property<string>("ConnectionUrl")
                         .IsRequired()
@@ -157,7 +157,7 @@ namespace wtt_main_server_api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("RelatedUserGuid")
+                    b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Username")
@@ -169,7 +169,7 @@ namespace wtt_main_server_api.Migrations
 
             modelBuilder.Entity("wtt_main_server_data.Database.Networking.DbUserProxy", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ADbObjectWithGuid");
+                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -179,7 +179,7 @@ namespace wtt_main_server_api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("RelatedUserGuid")
+                    b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Type")
@@ -194,7 +194,7 @@ namespace wtt_main_server_api.Migrations
 
             modelBuilder.Entity("wtt_main_server_data.Database.TestScenarios.DbTestScenario", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ADbObjectWithGuid");
+                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
 
                     b.Property<string>("ActionsJson")
                         .IsRequired()
@@ -226,7 +226,7 @@ namespace wtt_main_server_api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("RelatedUserGuid")
+                    b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
                     b.Property<byte[]>("Sha512")

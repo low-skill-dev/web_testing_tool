@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\wtt_main_server_data_access_layer\wtt_main_server_data_access.csproj" />
     <ProjectReference Include="..\wtt_main_server_data_models\wtt_main_server_data.csproj" />
   </ItemGroup>
 

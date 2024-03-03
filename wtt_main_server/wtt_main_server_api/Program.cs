@@ -60,8 +60,8 @@ public class Program
 			return new WttJwtService(cert, logger);
 		});
 
-		builder.Services.AddScoped<AuthControllerSettings>(sp =>
-			sp.GetRequiredService<SettingsProviderService>().AuthControllerSettings);
+		builder.Services.AddScoped<WttJwtServiceSettings>(sp =>
+			sp.GetRequiredService<SettingsProviderService>().WttJwtServiceSettings);
 
 		var app = builder.Build();
 

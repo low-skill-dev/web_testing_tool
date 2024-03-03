@@ -1,15 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Platforms>AnyCPU;x64</Platforms>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\webooster\webooster\webooster.csproj" />
-    <ProjectReference Include="..\wtt_main_server_data_models\wtt_main_server_data.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="devhelpers.JwtService" Version="*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\wtt_main_server_data_models\wtt_main_server_data.csproj" />
+	</ItemGroup>
 
 </Project>

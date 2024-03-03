@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DbConcept;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,7 +8,6 @@ using System.Security;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using webooster.DataModels;
 using wtt_main_server_data.Enums;
 using wtt_main_server_data.Structures;
 
@@ -39,7 +39,7 @@ namespace wtt_main_server_data.Database.TestScenarios;
  * 
  * ==========================================================================
  */
-public class DbTestScenario : ADbObjectWithRelatedUser
+public class DbTestScenario : ObjectWithUser
 {
 	public string Name { get; set; }
 	public string Description { get; set; }

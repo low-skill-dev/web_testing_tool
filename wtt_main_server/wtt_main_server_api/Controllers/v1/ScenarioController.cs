@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using webooster.Helpers;
 using wtt_main_server_api.Database;
 using wtt_main_server_api.Infrastructure;
 using wtt_main_server_data.Api;
@@ -20,10 +19,10 @@ namespace wtt_main_server_api.Controllers.v1;
 public class ScenarioController : ControllerBase
 {
 	private readonly WttContext _context;
-	private readonly AuthControllerSettings _settings;
+	private readonly WttJwtServiceSettings _settings;
 	private readonly ILogger<ScenarioController> _logger;
 
-	public ScenarioController(WttContext context, AuthControllerSettings settings, ILogger<ScenarioController> logger)
+	public ScenarioController(WttContext context, WttJwtServiceSettings settings, ILogger<ScenarioController> logger)
 	{
 		_context = context;
 		_settings = settings;
@@ -37,7 +36,7 @@ public class ScenarioController : ControllerBase
 
 		var userGuid = this.ParseGuidClaim();
 		var found = await _context.TestScenarios.AsNoTracking()
-			.FirstOrDefaultAsync(x => x.RelatedUserGuid.Equals(userGuid) && x.Guid.Equals(scenGuid));
+			.FirstOrDefaultAsync(x => x.UserGuid.Equals(userGuid) && x.Guid.Equals(scenGuid));
 
 		if(found is null) return NotFound(nameof(DbTestScenario));
 
@@ -50,7 +49,7 @@ public class ScenarioController : ControllerBase
 	{
 		var userGuid = this.ParseGuidClaim();
 		var found = await _context.TestScenarios.AsNoTracking()
-			.Where(x => x.RelatedUserGuid.Equals(userGuid)).ToListAsync();
+			.Where(x => x.UserGuid.Equals(userGuid)).ToListAsync();
 
 		return Ok(found);
 	}
@@ -61,7 +60,7 @@ public class ScenarioController : ControllerBase
 	{
 		var userGuid = this.ParseGuidClaim();
 		var found = await _context.TestScenarios.AsNoTracking()
-			.Where(x => x.RelatedUserGuid.Equals(userGuid))
+			.Where(x => x.UserGuid.Equals(userGuid))
 			.Select(x => new { x.Guid, x.Sha512 })
 			.ToListAsync();
 
@@ -87,7 +86,7 @@ public class ScenarioController : ControllerBase
 
 		if(found is not null)
 		{
-			if(!found.RelatedUserGuid.Equals(user))
+			if(!found.UserGuid.Equals(user))
 				return Forbid("You are not the owner of this scenario.");
 
 			var oldId = found.Id;
@@ -98,7 +97,7 @@ public class ScenarioController : ControllerBase
 		else
 		{
 			data.Id = 0;
-			data.Guid = BinaryGuid.Create();
+			data.Guid = Guid.NewGuid();
 			_context.TestScenarios.Add(data);
 		}
 

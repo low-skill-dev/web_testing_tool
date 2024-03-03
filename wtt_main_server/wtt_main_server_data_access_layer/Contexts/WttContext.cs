@@ -1,7 +1,6 @@
 ﻿//using Microsoft.EntityFrameworkCore;
 //using System;
-//using webooster.DataModels;
-//using wtt_main_server_data.Database.Common;
+////using wtt_main_server_data.Database.Common;
 //using wtt_main_server_data.Database.Infrastructure;
 //using wtt_main_server_data.Database.Networking;
 //using wtt_main_server_data.Database.TestScenarios;
@@ -43,7 +42,7 @@
 //		 * Means that it was configured for the upper (in deriving hierarchy) type.
 //		 * No need to configure it again.
 //		 */
-//		modelBuilder.Entity<ADbObjectWithGuid>(e => { e.HasKey(x => x.Id); e.HasAlternateKey(x => x.Guid); });
+//		modelBuilder.Entity<ObjectWithGuid>(e => { e.HasKey(x => x.Id); e.HasAlternateKey(x => x.Guid); });
 //		//modelBuilder.Entity<DbUser>(e => { /*e.HasKey(x => x.Id); e.HasAlternateKey(x => x.Guid); */});
 //		//modelBuilder.Entity<DbJwtIdentifier>(e => { /*e.HasKey(x => x.Id);*/ e.HasAlternateKey(x => x.Guid); });
 //		//modelBuilder.Entity<DbEmailSendLog>(e => { /*e.HasKey(x => x.Id);*/ e.HasAlternateKey(x => x.Guid); });
@@ -65,7 +64,7 @@
 //		var hashExclude = new string[] 
 //		{ 
 //			nameof(DbTestScenario.Sha512), nameof(DbTestScenario.Id), 
-//			nameof(DbTestScenario.Guid), nameof(DbTestScenario.RelatedUserGuid) 
+//			nameof(DbTestScenario.Guid), nameof(DbTestScenario.UserGuid) 
 //		};
 //		modelBuilder.Entity<DbTestScenario>(e =>
 //		{

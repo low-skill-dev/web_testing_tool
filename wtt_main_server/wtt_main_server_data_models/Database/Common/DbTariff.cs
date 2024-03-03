@@ -1,16 +1,16 @@
-﻿using System;
+﻿using DbConcept;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using webooster.DataModels;
 using wtt_main_server_data.Enums;
 
 namespace wtt_main_server_data.Database.Common;
 
 #pragma warning disable CS8618
 
-public class DbTariff : ADbObjectWithGuid
+public class DbTariff : ObjectWithGuid
 {
 	public string Name { get; set; }
 	public string Description { get; set; }

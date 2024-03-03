@@ -1,5 +1,4 @@
-﻿using webooster.DataModels;
-using wtt_main_server_data.Database.Abstract;
+﻿using wtt_main_server_data.Database.Abstract;
 using HttpMethod = wtt_main_server_data.Enums.HttpRequestMethod;
 
 namespace wtt_main_server_data.Database.TestScenarios;

@@ -1,7 +1,6 @@
 ﻿using Duende.IdentityServer.Validation;
 using Microsoft.EntityFrameworkCore;
 using System;
-using webooster.DataModels;
 using wtt_main_server_data.Database.Common;
 using wtt_main_server_data.Database.Infrastructure;
 using wtt_main_server_data.Database.Networking;
@@ -26,8 +25,8 @@ public class WttContext : DbContext
 		 * Means that it was configured for the upper (in deriving hierarchy) type.
 		 * No need to configure it again. Moreover, it must be configured there.
 		 */
-		modelBuilder.Entity<ADbObjectWithGuid>().UseTpcMappingStrategy();
-		modelBuilder.Entity<ADbObjectWithGuid>(e => { e.HasKey(x => x.Id); e.HasIndex(x => x.Guid).IsUnique(); });
+		modelBuilder.Entity<ObjectWithGuid>().UseTpcMappingStrategy();
+		modelBuilder.Entity<ObjectWithGuid>(e => { e.HasKey(x => x.Id); e.HasIndex(x => x.Guid).IsUnique(); });
 
 		modelBuilder.Entity<DbJwtIdentifier>();
 		modelBuilder.Entity<DbEmailSendLog>();
@@ -43,8 +42,8 @@ public class WttContext : DbContext
 		var hashMembers = typeof(DbTestScenario).GetProperties().Select(x => x.Name);
 		var hashExclude = new string[]
 		{
-			nameof(DbTestScenario.Id), nameof(DbTestScenario.Guid),
-			nameof(DbTestScenario.Sha512), nameof(DbTestScenario.RelatedUserGuid)
+			nameof(DbTestScenario.Guid),
+			nameof(DbTestScenario.Sha512), nameof(DbTestScenario.UserGuid)
 		};
 		var result = this.Database.ExecuteSqlRaw($"""
 			CREATE OR REPLACE FUNCTION DbTestScenarioHashTriggerFunction()

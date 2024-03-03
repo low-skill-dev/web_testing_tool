@@ -13,13 +13,13 @@ namespace wtt_main_server_api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateSequence(
-                name: "ADbObjectWithGuidSequence");
+                name: "ObjectWithGuidSequence");
 
             migrationBuilder.CreateTable(
                 name: "DbJwtIdentifier",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     JtiSha512 = table.Column<byte[]>(type: "bytea", maxLength: 64, nullable: false),
                     IssuedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -27,7 +27,7 @@ namespace wtt_main_server_api.Migrations
                     IPAddress = table.Column<IPAddress>(type: "inet", nullable: true),
                     Country = table.Column<string>(type: "text", nullable: true),
                     City = table.Column<string>(type: "text", nullable: true),
-                    RelatedUserGuid = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserGuid = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -38,13 +38,13 @@ namespace wtt_main_server_api.Migrations
                 name: "EmailSendLogs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     Addressee = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsSucceeded = table.Column<bool>(type: "boolean", nullable: false),
-                    RelatedUserGuid = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserGuid = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -55,14 +55,14 @@ namespace wtt_main_server_api.Migrations
                 name: "ImapAccounts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     ConnectionUrl = table.Column<string>(type: "text", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     SubscriptionRequired = table.Column<int>(type: "integer", nullable: false),
-                    RelatedUserGuid = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserGuid = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,14 +73,14 @@ namespace wtt_main_server_api.Migrations
                 name: "Proxies",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     SubscriptionRequired = table.Column<int>(type: "integer", nullable: false),
-                    RelatedUserGuid = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserGuid = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,7 +91,7 @@ namespace wtt_main_server_api.Migrations
                 name: "TestScenarios",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
@@ -102,7 +102,7 @@ namespace wtt_main_server_api.Migrations
                     ArgTypes = table.Column<int[]>(type: "integer[]", nullable: false),
                     ArgNames = table.Column<string[]>(type: "text[]", nullable: false),
                     Sha512 = table.Column<byte[]>(type: "bytea", maxLength: 64, nullable: false),
-                    RelatedUserGuid = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserGuid = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,13 +113,13 @@ namespace wtt_main_server_api.Migrations
                 name: "UserImapAccounts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     ConnectionUrl = table.Column<string>(type: "text", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    RelatedUserGuid = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserGuid = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,13 +130,13 @@ namespace wtt_main_server_api.Migrations
                 name: "UserProxies",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
-                    RelatedUserGuid = table.Column<Guid>(type: "uuid", nullable: true)
+                    UserGuid = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -147,7 +147,7 @@ namespace wtt_main_server_api.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ADbObjectWithGuidSequence\"')"),
+                    Id = table.Column<long>(type: "bigint", nullable: false, defaultValueSql: "nextval('\"ObjectWithGuidSequence\"')"),
                     Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
                     IsDisabled = table.Column<bool>(type: "boolean", nullable: false),
@@ -240,7 +240,7 @@ namespace wtt_main_server_api.Migrations
                 name: "Users");
 
             migrationBuilder.DropSequence(
-                name: "ADbObjectWithGuidSequence");
+                name: "ObjectWithGuidSequence");
         }
     }
 }

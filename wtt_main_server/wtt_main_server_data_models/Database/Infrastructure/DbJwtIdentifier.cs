@@ -1,17 +1,17 @@
-﻿using System;
+﻿using DbConcept;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using webooster.DataModels;
 
 namespace wtt_main_server_data.Database.Infrastructure;
 
 #pragma warning disable CS8618
 
-public class DbJwtIdentifier : ADbObjectWithRelatedUser
+public class DbJwtIdentifier : ObjectWithUser
 {
 	[MinLength(512 / 8)]
 	[MaxLength(512 / 8)]

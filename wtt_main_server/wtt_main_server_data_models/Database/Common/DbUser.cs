@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
 using wtt_main_server_data.Database.Abstract;
 using System.Net;
-using webooster.DataModels;
 using wtt_main_server_data.Enums;
+using DbConcept;
 
 namespace wtt_main_server_data.Database.Common;
 
-public class DbUser : ADbObjectWithGuid
+public class DbUser : ObjectWithGuid
 {
 	#region basic props
 
@@ -39,8 +39,7 @@ public class DbUser : ADbObjectWithGuid
 	[DefaultValue("")]
 	public string Email { get; set; } = string.Empty;
 
-	[DefaultValue(null)]
-	public DateTime? EmailConfirmedAtUtc { get; set; } = null;
+	public DateTime EmailConfirmedAtUtc { get; set; } = DateTime.UnixEpoch;
 
 	#endregion
 

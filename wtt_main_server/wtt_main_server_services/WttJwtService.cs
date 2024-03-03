@@ -1,82 +1,100 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.ConstrainedExecution;
+﻿using JwtService;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using webooster.Services;
 using wtt_main_server_data.Api;
 using wtt_main_server_data.Database.Common;
+using wtt_main_server_data.Enums;
+using wtt_main_server_data.ServicesSettings;
 
 namespace wtt_main_server_services;
 
-public class WttJwtService : JwtService
+public sealed class WttJwtService
 {
-	public WttJwtService(ECDsa cert, ILogger<WttJwtService>? logger) : base(cert, logger)
-	{
+	private readonly IJwtService _service;
+	private readonly WttJwtServiceSettings _settings;
+	private readonly ILogger<WttJwtService>? _logger;
 
+	public WttJwtService(
+		IJwtService service,
+		WttJwtServiceSettings settings,
+		ILogger<WttJwtService>? logger)
+	{
+		_settings = settings;
+		_service = service;
+		_logger = logger;
 	}
 
-	public string GenerateAccessJwt(DbUser user, TimeSpan lifespan)
-		=> GenerateAccessJwt(new DbUserPublicInfo(user), lifespan);
-	public string GenerateAccessJwt(DbUserPublicInfo user, TimeSpan lifespan)
+	public string GenerateAccessJwt(DbUser user, TimeSpan? lifespan = null)
 	{
 		var claims = new Claim[]
 		{
-			new(nameof(user.Guid),user.Guid.ToString(),ClaimValueTypes.String),
+			new(JwtRegisteredClaimNames.Sub, user.Guid.ToString(), ClaimValueTypes.String),
+			new(nameof(DbUser.Email), user.Email.ToString(), ClaimValueTypes.Email),
+			new(nameof(DbUser.Role), ((int)user.Role).ToString(), ClaimValueTypes.Integer32),
+			new(nameof(DbUser.IsDisabled), user.IsDisabled.ToString(), ClaimValueTypes.Boolean),
+			new(nameof(DbUser.RegistrationDate), user.RegistrationDate.ToString("O"), ClaimValueTypes.DateTime),
+			new(nameof(DbUser.PasswordLastChanged), user.PasswordLastChanged.ToString("O"), ClaimValueTypes.DateTime),
+			new(nameof(DbUser.EmailConfirmedAtUtc), user.EmailConfirmedAtUtc.ToString("O"), ClaimValueTypes.DateTime),
+		};
+
+		_logger?.LogInformation($"Creating access token: {claims.ToStringRepresentation()}.");
+
+		return _service.CreateToken(claims, lifespan ?? TimeSpan.FromSeconds(_settings.AccessTokenLifespanSeconds));
+	}
+
+	public string GenerateRefreshJwt(DbUser user, out byte[] jti, TimeSpan? lifespan = null)
+	{
+		jti = RandomNumberGenerator.GetBytes(512 / 8);
+
+		var claims = new Claim[]
+		{
+			new(JwtRegisteredClaimNames.Sub, user.Guid.ToString(), ClaimValueTypes.String),
+			new(JwtRegisteredClaimNames.Jti, Convert.ToHexString(jti), ClaimValueTypes.String),
 			new(nameof(user.Email), user.Email.ToString(), ClaimValueTypes.Email),
-			new(nameof(user.Role), ((int)user.Role).ToString(), ClaimValueTypes.Integer32),
-			new(nameof(user.IsDisabled), user.IsDisabled.ToString(), ClaimValueTypes.Boolean),
-			new(nameof(user.IsEmailConfirmed), user.IsEmailConfirmed.ToString(), ClaimValueTypes.Boolean),
-			new(nameof(user.RegistrationDate), user.RegistrationDate.ToString("O"), ClaimValueTypes.DateTime),
-			new(nameof(user.PasswordLastChanged), user.PasswordLastChanged.ToString("O"), ClaimValueTypes.DateTime),
 		};
 
-		_logger?.LogTrace($"Created public info for user '{user.Guid}': {ClaimsToStr(claims)}.");
+		_logger?.LogInformation($"Creating refresh token: {claims.ToStringRepresentation()}.");
 
-		return base.GenerateJwt(claims, lifespan);
+		return _service.CreateToken(claims, lifespan ?? TimeSpan.FromSeconds(_settings.RefreshTokenLifespanSeconds));
 	}
 
-	public string GenerateRecoveryJwtToken(byte[] jti, Guid userGuid, TimeSpan lifespan)
-		=> GenerateRefreshJwt(jti, userGuid, lifespan);
-	public string GenerateRefreshJwt(byte[] jti, Guid userGuid, TimeSpan lifespan)
+	public string GenerateRecoveryJwt(DbUser user, out byte[] jti, TimeSpan? lifespan = null)
 	{
-		var encoded = Convert.ToHexString(jti);
+		return GenerateRefreshJwt(user, out jti, lifespan ?? TimeSpan.FromSeconds(_settings.RecoveryTokenLifespanSeconds));
+	}
 
-		var claims = new Claim[]
+
+	public DbUserJwtInfo? ValidateAccessJwt(string token)
+	{
+		var result = _service.ValidateToken(token);
+
+		return !result.IsValid ? null : new DbUserJwtInfo
 		{
-			new(JwtRegisteredClaimNames.Jti, encoded),
-			new(JwtRegisteredClaimNames.Sub, userGuid.ToString())
+			Guid = Guid.Parse((string)result.Claims[JwtRegisteredClaimNames.Sub]),
+			Email = (string)result.Claims[nameof(DbUser.Email)],
+			Role = (UserRoles)((int)result.Claims[nameof(DbUser.Role)]),
+			IsDisabled = (bool)result.Claims[nameof(DbUser.IsDisabled)],
+			RegistrationDate = (DateTime)result.Claims[nameof(DbUser.RegistrationDate)],
+			PasswordLastChanged = (DateTime)result.Claims[nameof(DbUser.PasswordLastChanged)],
+			EmailConfirmedAtUtc = (DateTime)result.Claims[nameof(DbUser.EmailConfirmedAtUtc)],
 		};
-
-		_logger?.LogTrace($"Created refresh token claims for user '{userGuid}': {ClaimsToStr(claims)}.");
-
-		return base.GenerateJwt(claims, lifespan);
 	}
 
-	public (byte[] Jti, Guid userGuid)? ValidateRecoveryJwtToken(string refreshJwt)
-		=> ValidateRefreshJwt(refreshJwt);
-	public (byte[] Jti, Guid userGuid)? ValidateRefreshJwt(string refreshJwt)
+	public RefreshJwtInfo? ValidateRefreshJwt(string token)
 	{
-		try
-		{
-			var claims = base.ValidateJwtToken(refreshJwt)!;
+		var result = _service.ValidateToken(token);
 
-			var jti = Convert.FromHexString(claims.FindFirstValue(JwtRegisteredClaimNames.Jti)!);
-			var uGuid = Guid.Parse(claims.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
-
-			_logger?.LogTrace($"Parsed refresh token '{refreshJwt}'.");
-			return (jti, uGuid);
-		}
-		catch
+		return !result.IsValid ? null : new RefreshJwtInfo
 		{
-			_logger?.LogTrace($"Failed parsing refresh token '{refreshJwt}'.");
-			return null;
-		}
+			UserGuid = Guid.Parse((string)result.Claims[JwtRegisteredClaimNames.Sub]),
+			Jti = Convert.FromHexString((string)result.Claims[JwtRegisteredClaimNames.Jti])
+		};
+	}
+
+	public RefreshJwtInfo? ValidateRecoveryJwt(string token)
+	{
+		return ValidateRefreshJwt(token);
 	}
 }

@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using IdentityModel;
 using Microsoft.Extensions.Configuration;
-using webooster.Services;
 using wtt_main_server_data.ServicesSettings;
 using static System.Runtime.InteropServices.RuntimeInformation;
 
@@ -24,9 +15,9 @@ public class SettingsProviderService
 {
 	protected readonly IConfiguration _configuration;
 
-	public virtual AuthControllerSettings AuthControllerSettings =>
-		this._configuration.GetSection(nameof(this.AuthControllerSettings))
-		.Get<AuthControllerSettings>() ?? new();
+	public virtual WttJwtServiceSettings WttJwtServiceSettings =>
+		this._configuration.GetSection(nameof(this.WttJwtServiceSettings))
+		.Get<WttJwtServiceSettings>() ?? new();
 
 	public virtual ECDsaFilesLocations ECDsaFilesLocations =>
 		this._configuration.GetSection(nameof(this.ECDsaFilesLocations))
@@ -64,7 +55,6 @@ public class SettingsProviderService
 			return ret;
 		}
 	}
-
 
 	public SettingsProviderService(IConfiguration configuration)
 	{

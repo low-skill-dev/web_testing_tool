@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using webooster.Services;
 using wtt_main_server_api.Database;
 using Microsoft.EntityFrameworkCore;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
@@ -12,7 +11,6 @@ using wtt_main_server_data.ServicesSettings;
 using wtt_main_server_helpers;
 using wtt_main_server_data.Database.Infrastructure;
 using System.Security.Cryptography;
-using webooster.Helpers;
 using static wtt_main_server_api.Controllers.ResponseMessages;
 using OtpNet;
 using static wtt_main_server_data.Constants.CookieNames;
@@ -51,12 +49,12 @@ public sealed class AuthController : ControllerBase
 
 	private readonly WttContext _context;
 	private readonly WttJwtService _jwtService;
-	private readonly AuthControllerSettings _settings;
+	private readonly WttJwtServiceSettings _settings;
 	private readonly ILogger<AuthController> _logger;
 	private readonly CookieOptions _jwtAccessCookieOptions;
 	private readonly CookieOptions _jwtRefreshCookieOptions;
 
-	public AuthController(WttContext context, WttJwtService jwtService, AuthControllerSettings settings, ILogger<AuthController> logger)
+	public AuthController(WttContext context, WttJwtService jwtService, WttJwtServiceSettings settings, ILogger<AuthController> logger)
 	{
 		this._context = context;
 		this._jwtService = jwtService;
@@ -127,7 +125,7 @@ public sealed class AuthController : ControllerBase
 		var dbRefresh = new DbJwtIdentifier()
 		{
 			JtiSha512 = SHA512.HashData(jti), 
-			RelatedUserGuid = user.Guid,
+			UserGuid = user.Guid,
 			IPAddress = geoInfo.IpAddress,
 			City = geoInfo.City,
 			Country = geoInfo.Country,
@@ -187,7 +185,7 @@ public sealed class AuthController : ControllerBase
 	public async Task<IActionResult> GetMySessions()
 	{
 		var tokens = await this._context.RefreshJtis
-			.Where(x => x.RelatedUserGuid == this.ParseGuidClaim())
+			.Where(x => x.UserGuid == this.ParseGuidClaim())
 			.ToListAsync();
 
 		return this.Ok(tokens);
@@ -259,7 +257,7 @@ public sealed class AuthController : ControllerBase
 		var foundToken = await _context.RefreshJtis.AsTracking().FirstOrDefaultAsync(x => x.JtiSha512 == SHA512.HashData(claims.Value.Jti));
 		if(foundToken is null) return Unauthorized();
 
-		if(foundToken.RelatedUserGuid != foundUser.Guid) return Unauthorized();
+		if(foundToken.UserGuid != foundUser.Guid) return Unauthorized();
 
 		var newToken = this.IssueJwtAndAddToUser(foundUser, true, foundToken);
 
@@ -275,7 +273,7 @@ public sealed class AuthController : ControllerBase
 		var userGuid = this.ParseGuidClaim();
 		var jtiHash = Convert.FromHexString(jtiShaHex);
 
-		var found = await _context.RefreshJtis.FirstOrDefaultAsync(x => x.RelatedUserGuid == userGuid && x.JtiSha512.SequenceEqual(jtiHash));
+		var found = await _context.RefreshJtis.FirstOrDefaultAsync(x => x.UserGuid == userGuid && x.JtiSha512.SequenceEqual(jtiHash));
 
 		if(found is null) return NotFound();
 
@@ -344,7 +342,7 @@ public sealed class AuthController : ControllerBase
 			IPAddress = geoInfo.IpAddress,
 			IssuedAt = now,
 			OriginIssuedAt = now,
-			RelatedUserGuid = found.Guid,
+			UserGuid = found.Guid,
 		});
 
 		await this._context.SaveChangesAsync();
@@ -376,7 +374,7 @@ public sealed class AuthController : ControllerBase
 		var found = await _context.RecoveryJtis.FirstOrDefaultAsync(x => x.JtiSha512.SequenceEqual(parsed.Value.Jti));
 		if(found is null) return Unauthorized();
 
-		var user = await _context.Users.FirstOrDefaultAsync(x => x.Guid == found.RelatedUserGuid);
+		var user = await _context.Users.FirstOrDefaultAsync(x => x.Guid == found.UserGuid);
 		if(user is null) return Unauthorized();
 
 		SetPassword(user, request);

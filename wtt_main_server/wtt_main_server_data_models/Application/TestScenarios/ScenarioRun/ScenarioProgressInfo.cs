@@ -10,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using wtt_main_server_data.Database.RunningScenarios;
 using wtt_main_server_data.Database.Abstract;
-using webooster.Helpers;
 using wtt_main_server_data.Application.Abstract;
 using wtt_main_server_data.Enums;
 

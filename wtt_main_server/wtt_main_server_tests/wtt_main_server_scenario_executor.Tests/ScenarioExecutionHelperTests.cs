@@ -36,7 +36,7 @@ public class ScenarioExecutionHelperTests : webooster.Abstract.AXUnitTests
 
         Assert.Equal(3, merged.Count);
         Assert.True(merged.Keys.SequenceEqual(new string[] { "var1", "var3", "var2" }));
-        Assert.True(merged.Values.Select(x => x.Value).SequenceEqual(new string[] { "12", "31", "21" }));
+		Assert.True(merged.Values.Select(x => x.Value).SequenceEqual(new string[] { "12", "31", "21" }));
     }
 
     [Fact]

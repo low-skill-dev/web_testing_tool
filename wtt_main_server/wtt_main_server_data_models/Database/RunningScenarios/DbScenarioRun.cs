@@ -1,17 +1,17 @@
-﻿using System;
+﻿using DbConcept;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using webooster.DataModels;
 using wtt_main_server_data.Enums;
 
 namespace wtt_main_server_data.Database.RunningScenarios;
 
 #pragma warning disable CS8618
 
-public class DbScenarioRun : ADbObjectWithGuid
+public class DbScenarioRun : ObjectWithGuid
 {
 	public Guid OriginalScenarioGuid { get; set; }
 

@@ -1,13 +1,13 @@
-﻿using System;
+﻿using DbConcept;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using webooster.DataModels;
 
 namespace wtt_main_server_data.Database.Abstract;
 
-public abstract class ADbAction : ADbObjectWithGuid
+public abstract class ADbAction : ObjectWithGuid
 {
 	public abstract string Type { get; } 
 
