@@ -34,7 +34,7 @@ public abstract class AActionExecutor
 	{
 		AActionExecutor? ae = null;
 
-		if(action is DbHttpAction dbHttpAction) ae = new HttpActionExecutor(dbHttpAction) { Tariff = subscription ?? new() };
+		if(action is DbHttpAction dbHttpAction) ae = new HttpActionExecutor(dbHttpAction);
 		if(action is DbEchoAction dbEchoAction) ae = new EchoActionExecutor(dbEchoAction);
 		if(action is DbImapAction dbImapAction) ae = new ImapActionExecutor(dbImapAction);
 		if(action is DbDelayAction dbDelayAction) ae = new DelayActionExecutor(dbDelayAction);
@@ -47,6 +47,11 @@ public abstract class AActionExecutor
 		ae.UserSubscription = subscription;
 
 		return ae;
+	}
+
+	public virtual async Task ExecuteUserScripts()
+	{
+
 	}
 }
 

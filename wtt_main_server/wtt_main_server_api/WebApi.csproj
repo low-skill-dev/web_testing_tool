@@ -22,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\wtt_main_server_data_models\wtt_main_server_data.csproj" />
-    <ProjectReference Include="..\wtt_main_server_scenario_executor\wtt_main_server_scenario_executor.csproj" />
-    <ProjectReference Include="..\wtt_main_server_services\wtt_main_server_services.csproj" />
+    <ProjectReference Include="..\wtt_main_server_data_models\Models.csproj" />
+    <ProjectReference Include="..\wtt_main_server_scenario_executor\ScenarioExecutor.csproj" />
+    <ProjectReference Include="..\wtt_main_server_services\SharedServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,6 +13,7 @@ using System.Diagnostics;
 using static System.Text.Json.JsonSerializer;
 using System;
 using wtt_main_server_data.Constants;
+using Common.Helpers;
 
 namespace wtt_main_server_scenario_executor.ActionExecutors;
 
@@ -42,8 +43,6 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 	public static int TotalCompletedRequests => _totalCompletedRequests;
 
 	#endregion
-
-	public required DbTariff Tariff { get; init; }
 
 	public HttpActionExecutor(DbHttpAction action) : base(action) { }
 
@@ -174,7 +173,7 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 		//var updateVariableFunc = (string name, string val) => contextUpdates.Add((name, val));
 		//var logErrorFunc = (string msg, bool crit = false) => errors.Add((msg, crit));
 
-		JsHelper.Execute(eng => this.Result!.BindAll(eng), js, this.Tariff);
+		JsHelper.Execute(eng => this.Result!.BindAll(eng), js, this.UserSubscription);
 	}
 
 	private enum HttpType

@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using wtt_main_server_data.Database.Common;
+﻿using TestHelper;
 using wtt_main_server_data.Database.TestScenarios;
 using wtt_main_server_scenario_executor.ActionExecutors;
 using Xunit.Abstractions;
 
-namespace wtt_main_server_tests.wtt_main_server_scenario_executor.Tests;
 
-public class HttpScenarioExecutorTests : TestHelper.ATestsWithLogging
+namespace Tests.ScenarioExecutor;
+
+
+public class HttpScenarioExecutorTests : ATestsWithLogging
 {
 	private HttpActionExecutor _defaultExecutor;
 	private Dictionary<string, string> _emptyContext;
 
 	public HttpScenarioExecutorTests(ITestOutputHelper o) : base(o)
 	{
-		_defaultExecutor = new HttpActionExecutor(new()) { Tariff = new() };
+		_defaultExecutor = new HttpActionExecutor(new());
 		_emptyContext = new();
 	}
 
 	[Fact]
 	public void CanCreate()
 	{
-		var executor = new HttpActionExecutor(new()) { Tariff = new() };
+		var executor = new HttpActionExecutor(new());
 
 		Assert.NotNull(executor);
 	}
@@ -42,7 +39,7 @@ public class HttpScenarioExecutorTests : TestHelper.ATestsWithLogging
 		};
 
 
-		var executor = new HttpActionExecutor(action) { Tariff = new() };
+		var executor = new HttpActionExecutor(action);
 
 		var result = await executor.Execute(_emptyContext);
 

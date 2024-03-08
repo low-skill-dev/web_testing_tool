@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using wtt_main_server_data.Database.TestExecutors;
 using System.Net.Http.Json;
-using Duende.IdentityServer.Models;
 using System.Reflection.PortableExecutable;
 using wtt_main_server_data.Database.TestScenarios;
 using static System.Text.Json.JsonSerializer;

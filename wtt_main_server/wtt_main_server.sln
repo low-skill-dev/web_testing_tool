@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wtt_main_server_api", "wtt_main_server_api\wtt_main_server_api.csproj", "{25D68E19-37AF-4CDD-AD51-72DD4B31F1AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "wtt_main_server_api\WebApi.csproj", "{25D68E19-37AF-4CDD-AD51-72DD4B31F1AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wtt_main_server_tests", "wtt_main_server_tests\wtt_main_server_tests.csproj", "{12F179B2-30FC-4A4C-BA55-EF9705255080}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "wtt_main_server_tests\Tests.csproj", "{12F179B2-30FC-4A4C-BA55-EF9705255080}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wtt_main_server_services", "wtt_main_server_services\wtt_main_server_services.csproj", "{C872925C-64E8-4749-A828-39CD387A7407}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedServices", "wtt_main_server_services\SharedServices.csproj", "{C872925C-64E8-4749-A828-39CD387A7407}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wtt_main_server_data", "wtt_main_server_data_models\wtt_main_server_data.csproj", "{A8D53CD0-DC97-49D0-9DE8-DBBFE0308A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "wtt_main_server_data_models\Models.csproj", "{A8D53CD0-DC97-49D0-9DE8-DBBFE0308A97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wtt_main_server_scenario_executor", "wtt_main_server_scenario_executor\wtt_main_server_scenario_executor.csproj", "{D6487EC5-10CF-467B-AC1F-B0B419B6B520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScenarioExecutor", "wtt_main_server_scenario_executor\ScenarioExecutor.csproj", "{D6487EC5-10CF-467B-AC1F-B0B419B6B520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{F6234919-2824-4F27-AA44-735ABB55D06B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,14 @@ Global
 		{D6487EC5-10CF-467B-AC1F-B0B419B6B520}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6487EC5-10CF-467B-AC1F-B0B419B6B520}.Release|x64.ActiveCfg = Release|x64
 		{D6487EC5-10CF-467B-AC1F-B0B419B6B520}.Release|x64.Build.0 = Release|x64
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Debug|x64.Build.0 = Debug|Any CPU
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Release|x64.ActiveCfg = Release|Any CPU
+		{F6234919-2824-4F27-AA44-735ABB55D06B}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
