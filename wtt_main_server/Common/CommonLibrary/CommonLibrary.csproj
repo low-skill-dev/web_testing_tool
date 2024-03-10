@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../build.props" />
+
+	<PropertyGroup>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="*" />
+		<PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="*" />
+	</ItemGroup>
+
+</Project>

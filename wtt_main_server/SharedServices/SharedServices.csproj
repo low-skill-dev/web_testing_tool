@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../build.props" />
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="*" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Common\CommonLibrary\CommonLibrary.csproj" />
+		<ProjectReference Include="..\Models\Models.csproj" />
+		<ProjectReference Include="..\wtt_main_server_data_models\Models.csproj" />
+	</ItemGroup>
+
+</Project>
