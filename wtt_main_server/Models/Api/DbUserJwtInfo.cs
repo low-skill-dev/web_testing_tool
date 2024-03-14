@@ -1,5 +1,4 @@
 ﻿using CommonLibrary.Models;
-using CommonLibrary.Models;
 using Models.Enums;
 
 namespace Models.Api;

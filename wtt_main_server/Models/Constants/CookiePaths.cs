@@ -8,7 +8,8 @@ namespace Models.Constants;
 
 public class CookiePaths
 {
-	public const string 
-		JwtRefreshTokenCookiePath = @"/api/auth",
-		JwtAccessTokenCookiePath = @"/";
+	public const string
+		JwtAccessTokenCookiePath = @"/",
+		JwtRefreshTokenCookiePathV1 = @"/api/v1/auth",
+		JwtRefreshTokenCookiePathV2 = @"/api/v2/auth";
 }

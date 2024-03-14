@@ -1,3 +1,5 @@
+import ADbAction from "./Abstract/ADbAction";
+
 export default interface DbConditionalAction extends ADbAction
 {
 	type: string;

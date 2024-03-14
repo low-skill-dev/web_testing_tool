@@ -1,5 +1,5 @@
 export default interface JwtResponse
 {
-	Access: string;
-	Refresh: string;
+	access: string;
+	refresh: string;
 }

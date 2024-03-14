@@ -28,9 +28,7 @@
 			"scenarioController": {
 				"basePath": "/scenario",
 				"get": {
-					"GetScenario": "",
-					"GetMyScenarios": "/my",
-					"GetMyScenariosHashes": "/my/hash"
+					"GetScenarios": ""
 				},
 				"put": {
 					"WriteScenario": ""

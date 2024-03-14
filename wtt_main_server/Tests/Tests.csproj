@@ -3,14 +3,14 @@
 	<Import Project="../build.props" />
 
 	<ItemGroup>
-		<PackageReference Include="devhelpers.TestHelper" Version="1.0.0" />
+		<PackageReference Include="devhelpers.TestHelper" Version="*" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
 		<PackageReference Include="xunit" Version="*" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="*">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="coverlet.collector" Version="6.0.0">
+		<PackageReference Include="coverlet.collector" Version="*">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -22,10 +22,6 @@
 		<ProjectReference Include="..\ScenarioExecutor\ScenarioExecutor.csproj" />
 		<ProjectReference Include="..\SharedServices\SharedServices.csproj" />
 		<ProjectReference Include="..\WebApi\WebApi.csproj" />
-		<ProjectReference Include="..\wtt_main_server_api\WebApi.csproj" />
-		<ProjectReference Include="..\wtt_main_server_data_models\Models.csproj" />
-		<ProjectReference Include="..\wtt_main_server_scenario_executor\ScenarioExecutor.csproj" />
-		<ProjectReference Include="..\wtt_main_server_services\SharedServices.csproj" />
 	</ItemGroup>
 
 </Project>

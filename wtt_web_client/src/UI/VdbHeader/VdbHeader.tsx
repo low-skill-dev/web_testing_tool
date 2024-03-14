@@ -3,17 +3,24 @@ import { NavLink } from "react-router-dom";
 import GlobalContext from '../../helpers/GlobalContext';
 import AuthorizedApiInteractionBase from "src/helpers/Api/AuthorizedApiInteractionBase";
 import { useMemo, useState } from "react";
+import { isatty } from "tty";
 
 const VdbHeader: React.FC = () =>
 {
-    let [accountPath, setAccountPath] = useState<string>("/auth")
+    const [isAuthed, setIsAuthed] = useState(false);
 
     useMemo(async () =>
     {
-        try { var user = await AuthorizedApiInteractionBase.Create(); }
-        catch (e) { if (e instanceof Error) console.info(e.message); }
-        setAccountPath(user?.Access ? "/personal" : "/auth");
-        console.info(`Account path was set to '${accountPath}'.`);
+        try
+        {
+            var user = await AuthorizedApiInteractionBase.Create();
+            setIsAuthed(user?.Access ? true : false);
+        }
+        catch (e)
+        {
+            if (e instanceof Error) console.info(e.message);
+            setIsAuthed(false);
+        }
     }, []);
 
     return (
@@ -35,8 +42,11 @@ const VdbHeader: React.FC = () =>
                 {/* <NavLink to="/download" className={cl.menuElement}>
                     Download
                 </NavLink> */}
-                <NavLink to={accountPath} className={cl.menuElement} >
+                <NavLink to={isAuthed ? "/personal" : "/auth"} className={cl.menuElement} >
                     Account
+                </NavLink>
+                <NavLink to={isAuthed ? "/panel" : "/auth"} className={cl.menuElement} >
+                    Panel
                 </NavLink>
             </nav>
         </header>);

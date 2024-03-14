@@ -24,9 +24,11 @@ const AuthForm: React.FC = () =>
 
     useMemo(async () =>
     {
-        try { var auth = await AuthorizedApiInteractionBase.Create(); } catch { }
-        if (auth?.Access) navigate("/personal");
-    }, [navigate]); // TODO: delete dep (use []) ?
+        try { 
+            var auth = await AuthorizedApiInteractionBase.Create(); 
+            if (auth?.Access) navigate("/personal");
+        } catch { }
+    }, [navigate]);
 
     const onSubmit = async () =>
     {
@@ -53,7 +55,7 @@ const AuthForm: React.FC = () =>
         }
 
         setErrorMessage("");
-        console.info(`Submitting: ${email}:${password}`);
+        console.info(`Submitting: ${email}:${password.substring(0,1)}**`);
 
         let result = -1;
         try

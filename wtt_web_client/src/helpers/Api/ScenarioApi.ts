@@ -18,9 +18,15 @@ export default class ScenarioApi
 		return new ScenarioApi(await AuthorizedApiInteractionBase.Create());
 	}
 
-	public GetMyScenarios = async () =>
+	public GetMyScenarios = async (byScenarioGuid?: string, byUserGuid?: string) =>
 	{
-		const res = await axios.post<DbTestScenario[]>(UrlHelper.Backend.V1.Scenario.Get.GetMyScenarios);
+		let queryArr = new Array<string>();
+		if (byScenarioGuid) queryArr.push(`guid=${byUserGuid}`);
+		if (byUserGuid) queryArr.push(`owner=${byUserGuid}`);
+
+		let query = queryArr.length > 0 ? "?" + queryArr.join("&") : "";
+
+		const res = await axios.get<DbTestScenario[]>(UrlHelper.Backend.V1.Scenario.Get.GetScenarios + query);
 		return Common.Between(200, res.status, 299) ? res.data : null;
 	}
 }

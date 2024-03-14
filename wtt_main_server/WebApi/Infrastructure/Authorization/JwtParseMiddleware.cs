@@ -8,7 +8,6 @@ using wtt_main_server_services;
 using System.Runtime.ConstrainedExecution;
 using Models.Database.Common;
 using SharedServices;
-using static Models.Constants.CookieNames;
 using Models.Api;
 using Microsoft.IdentityModel.Tokens;
 using CommonLibrary.Services.Jwt;
@@ -26,9 +25,9 @@ namespace WebApi.Infrastructure.Authorization;
 /// </summary>
 public sealed class JwtParseMiddleware : IMiddleware
 {
-    private const string jwt = "jwt";
-    private const string underscore = "_";
-    private const string prefix = jwt + underscore;
+	private const string jwt = "jwt";
+	private const string underscore = "_";
+	private const string prefix = jwt + underscore;
 
 	private const string isOkItem = prefix + "isOk";
 	private const string issItem = prefix + "iss";
@@ -38,46 +37,51 @@ public sealed class JwtParseMiddleware : IMiddleware
 	private const string usrItem = prefix + "usr";
 	private const string rstItem = prefix + "rst";
 
-    public const string OkFlagItemId = isOkItem;
+	public const string OkFlagItemId = isOkItem;
 	public const string ResultItemId = rstItem;
 	public const string TokenItemId = tknItem;
-	public const string UserItemId = rstItem;
+	public const string UserItemId = usrItem;
 
-    private readonly WttJwtService _jwtService;
-    private readonly ObjectStorage<Guid, DateTime> _minIatStorage;
+	private readonly WttJwtService _jwtService;
+	private readonly JwtMinIatStorage _minIatStorage;
 
-    public JwtParseMiddleware(/*[FromServices]*/ WttJwtService jwtService, /*[FromServices]*/ ObjectStorage<Guid, DateTime> minIatStorage)
-    {
-        _jwtService = jwtService;
-        _minIatStorage = minIatStorage;
-    }
+	public JwtParseMiddleware(/*[FromServices]*/ WttJwtService jwtService, /*[FromServices]*/ JwtMinIatStorage minIatStorage)
+	{
+		_jwtService = jwtService;
+		_minIatStorage = minIatStorage;
+	}
 
-    public Task InvokeAsync(HttpContext context, RequestDelegate next)
-    {
-        string? token;
-        DbUserJwtInfo? parsed;
-        TokenValidationResult? result;
-        try
-        {
-            token = context.Request.Cookies[JwtAccessTokenCookieName];
-            parsed = _jwtService.ValidateAccessJwt(token!, out result);
-            ArgumentNullException.ThrowIfNull(token);
-            ArgumentNullException.ThrowIfNull(parsed);
-            ArgumentNullException.ThrowIfNull(result);
+	public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+	{
+		bool ok = true;
+		string? token = null;
+		DbUserJwtInfo? parsed = null;
+		TokenValidationResult? result = null;
+		try
+		{
+			token = context.Request.Cookies[JwtAccessTokenCookieName];
+			parsed = _jwtService.ValidateAccessJwt(token!, out result);
+			ArgumentNullException.ThrowIfNull(token);
+			ArgumentNullException.ThrowIfNull(parsed);
+			ArgumentNullException.ThrowIfNull(result);
 
-            var minIat = _minIatStorage.GetObject(parsed.Guid);
-            if(minIat != default && result.GetIat() < minIat)
-                throw new Exception();
-        }
-        catch
-        {
-            return next.Invoke(context);
-        }
+			var minIat = _minIatStorage.GetObject(parsed.Guid);
+			if(minIat != default && result.GetIat() < minIat)
+				throw new SecurityTokenExpiredException();
+		}
+		catch
+		{
+			ok = false;
+		}
 
-        context.Items.Add(OkFlagItemId, true);
-        context.Items.Add(UserItemId, parsed);
-		context.Items.Add(TokenItemId, token);
-		context.Items.Add(ResultItemId, result);
-        return next.Invoke(context);
-    }
+		if(ok && (result?.IsValid ?? false))
+		{
+			context.Items.Add(OkFlagItemId, true);
+			context.Items.Add(UserItemId, parsed);
+			context.Items.Add(TokenItemId, token);
+			context.Items.Add(ResultItemId, result);
+		}
+
+		await next.Invoke(context);
+	}
 }

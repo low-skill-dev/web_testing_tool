@@ -1,3 +1,5 @@
+import ADbHttpAction from "./Abstract/ADbHttpAction";
+
 export default interface DbHttpAction extends ADbHttpAction
 {
 	type: string;

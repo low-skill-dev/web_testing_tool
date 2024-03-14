@@ -10,7 +10,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Common\CommonLibrary\CommonLibrary.csproj" />
 		<ProjectReference Include="..\Models\Models.csproj" />
-		<ProjectReference Include="..\wtt_main_server_data_models\Models.csproj" />
 	</ItemGroup>
 
 </Project>

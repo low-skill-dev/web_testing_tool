@@ -109,23 +109,11 @@ export default class UrlHelper
                 }
                 static Get = class
                 {
-                    static get GetScenario()
+                    static get GetScenarios()
                     {
                         return urlJoin(
                             UrlHelper.Backend.V1.Scenario.FullPath,
-                            endpoints.backend.v1.scenarioController.get.GetScenario);
-                    }
-                    static get GetMyScenarios()
-                    {
-                        return urlJoin(
-                            UrlHelper.Backend.V1.Scenario.FullPath,
-                            endpoints.backend.v1.scenarioController.get.GetMyScenarios);
-                    }
-                    static get GetMyScenariosHashes()
-                    {
-                        return urlJoin(
-                            UrlHelper.Backend.V1.Scenario.FullPath,
-                            endpoints.backend.v1.scenarioController.get.GetMyScenariosHashes);
+                            endpoints.backend.v1.scenarioController.get.GetScenarios);
                     }
                 }
             }

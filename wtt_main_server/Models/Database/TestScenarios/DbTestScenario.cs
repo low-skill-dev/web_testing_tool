@@ -44,12 +44,6 @@ public class DbTestScenario : ObjectWithUser
 	public string Name { get; set; }
 	public string Description { get; set; }
 
-	[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-	public DateTime Created { get; set; }
-
-	[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-	public DateTime Changed { get; set; }
-
 	/* Для отправки почты следует сделать отдельное действие,
 	 * а эта настройка должна позволять глобально отключить
 	 * отправку почты по всему сценарию.

@@ -8,5 +8,5 @@ namespace Models.ServicesSettings;
 
 public class AuthControllerSettings
 {
-	public string RecoveryEndpointWithoutToken { get; set; } = null!;
+	public string RecoveryEndpointWithoutToken { get; set; } = @"https://wtt.lowskill.dev/reset-password";
 }

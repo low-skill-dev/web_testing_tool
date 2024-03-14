@@ -12,7 +12,7 @@ using Models.Enums;
 namespace WebApi.Controllers.v1;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v1/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class ScenarioController : ControllerBase

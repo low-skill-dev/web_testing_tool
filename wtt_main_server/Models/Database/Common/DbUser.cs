@@ -10,7 +10,6 @@ using Models.Database.Abstract;
 using System.Net;
 using Models.Enums;
 using CommonLibrary.Models;
-using CommonLibrary.Models;
 
 namespace Models.Database.Common;
 
@@ -20,9 +19,6 @@ public class DbUser : ObjectWithGuid
 
 	public UserRoles Role { get; set; } = UserRoles.Regular;
 	public bool IsDisabled { get; set; } = false;
-
-	public DateTime Created { get; set; }
-	public DateTime Changed { get; set; }
 
 	public IPAddress RegistrationIPAddress { get; set; } = null!;
 	public string? RegistrationCountry { get; set; } = null;

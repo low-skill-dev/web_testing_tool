@@ -18,42 +18,23 @@ namespace WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.HasSequence("ObjectWithGuidSequence");
-
-            modelBuilder.Entity("webooster.DataModels.ObjectWithGuid", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValueSql("nextval('\"ObjectWithGuidSequence\"')");
-
-                    NpgsqlPropertyBuilderExtensions.UseSequence(b.Property<long>("Id"));
-
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Guid")
-                        .IsUnique();
-
-                    b.ToTable((string)null);
-
-                    b.UseTpcMappingStrategy();
-                });
-
             modelBuilder.Entity("Models.Database.Common.DbEmailSendLog", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Addressee")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -61,25 +42,35 @@ namespace WebApi.Migrations
                     b.Property<bool>("IsSucceeded")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
                     b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.HasKey("Guid");
 
                     b.ToTable("EmailSendLogs");
                 });
 
             modelBuilder.Entity("Models.Database.Common.DbUser", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<DateTime?>("EmailConfirmedAtUtc")
+                    b.Property<DateTime>("EmailConfirmedAtUtc")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDisabled")
@@ -98,6 +89,16 @@ namespace WebApi.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("bytea");
 
+                    b.Property<string>("RegistrationCity")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RegistrationCountry")
+                        .HasColumnType("text");
+
+                    b.Property<IPAddress>("RegistrationIPAddress")
+                        .IsRequired()
+                        .HasColumnType("inet");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
@@ -105,18 +106,28 @@ namespace WebApi.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("bytea");
 
+                    b.HasKey("Guid");
+
                     b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Models.Database.Infrastructure.DbJwtIdentifier", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("City")
                         .HasColumnType("text");
 
                     b.Property<string>("Country")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<IPAddress>("IPAddress")
                         .HasColumnType("inet");
@@ -135,17 +146,32 @@ namespace WebApi.Migrations
                     b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
+                    b.HasKey("Guid");
+
                     b.ToTable("DbJwtIdentifier");
                 });
 
             modelBuilder.Entity("Models.Database.Networking.DbUserImapAccount", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ConnectionUrl")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -161,12 +187,31 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.HasKey("Guid");
+
                     b.ToTable("UserImapAccounts");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("DbUserImapAccount");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Models.Database.Networking.DbUserProxy", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -176,22 +221,30 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("UserGuid")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Type")
                         .HasColumnType("integer");
+
+                    b.Property<Guid?>("UserGuid")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.HasKey("Guid");
+
                     b.ToTable("UserProxies");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("DbUserProxy");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Models.Database.TestScenarios.DbTestScenario", b =>
                 {
-                    b.HasBaseType("webooster.DataModels.ObjectWithGuid");
+                    b.Property<Guid>("Guid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ActionsJson")
                         .IsRequired()
@@ -205,8 +258,10 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("integer[]");
 
-                    b.Property<DateTime>("ChangeDate")
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<DateTime?>("Changed")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -226,11 +281,7 @@ namespace WebApi.Migrations
                     b.Property<Guid?>("UserGuid")
                         .HasColumnType("uuid");
 
-                    b.Property<byte[]>("Sha512")
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasMaxLength(64)
-                        .HasColumnType("bytea");
+                    b.HasKey("Guid");
 
                     b.ToTable("TestScenarios");
                 });
@@ -242,7 +293,7 @@ namespace WebApi.Migrations
                     b.Property<int>("SubscriptionRequired")
                         .HasColumnType("integer");
 
-                    b.ToTable("ImapAccounts");
+                    b.HasDiscriminator().HasValue("DbImapAccount");
                 });
 
             modelBuilder.Entity("Models.Database.Networking.DbProxy", b =>
@@ -252,7 +303,7 @@ namespace WebApi.Migrations
                     b.Property<int>("SubscriptionRequired")
                         .HasColumnType("integer");
 
-                    b.ToTable("Proxies");
+                    b.HasDiscriminator().HasValue("DbProxy");
                 });
 #pragma warning restore 612, 618
         }

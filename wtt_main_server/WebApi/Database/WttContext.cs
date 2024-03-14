@@ -25,8 +25,8 @@ public class WttContext : DbContext
 		 * Means that it was configured for the upper (in deriving hierarchy) type.
 		 * No need to configure it again. Moreover, it must be configured there.
 		 */
-		modelBuilder.Entity<ObjectWithGuid>().UseTpcMappingStrategy();
-		modelBuilder.Entity<ObjectWithGuid>(e => { e.HasKey(x => x.Guid); });
+		//modelBuilder.Entity<ObjectWithGuid>().UseTpcMappingStrategy();
+		//modelBuilder.Entity<ObjectWithGuid>(e => { e.HasKey(x => x.Guid); });
 
 		modelBuilder.Entity<DbJwtIdentifier>();
 		modelBuilder.Entity<DbEmailSendLog>();

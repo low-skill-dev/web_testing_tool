@@ -9,7 +9,7 @@ using static System.Threading.Interlocked;
 
 namespace SharedServices;
 
-public class ObjectStorage<K, V>
+public class ObjectStorage<K, V> where K : notnull
 {
 	private readonly ConcurrentDictionary<K, (V Obj, DateTime Exp)> _dict;
 
@@ -68,7 +68,7 @@ public class ObjectStorage<K, V>
 	/// </returns>
 	public V? GetObject(K id, bool remove = false)
 	{
-		return _dict.TryGetValue(id, out var val) 
+		return _dict.TryGetValue(id, out var val)
 			&& val.Exp > DateTime.UtcNow ? val.Obj : default;
 	}
 }

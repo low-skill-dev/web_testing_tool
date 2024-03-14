@@ -46,7 +46,7 @@ const MainPanel: React.FC = () =>
 		}));
 	});
 
-	return <span >
+	return <span>
 		{
 			!loadCompleted ?
 				<span>
@@ -57,7 +57,9 @@ const MainPanel: React.FC = () =>
 					Failed to load scenarios.
 				</span>
 			:
-				<ScenarioSelectionPanel >
+				<ScenarioSelectionPanel Scenarios={scenarios} onSelectionChanged={setSelectedScenario}  />
 		}
 	</span>
 }
+
+export default MainPanel;

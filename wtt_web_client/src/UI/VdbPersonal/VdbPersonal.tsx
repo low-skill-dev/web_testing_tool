@@ -1,93 +1,80 @@
-// import cl from "./VdbPersonal.module.css";
-// import { NavLink, useNavigate } from 'react-router-dom';
-// import GlobalContext from '../../helpers/GlobalContext';
-// import hrefs from "../../config/hrefsList.json";
-// import { useState, useEffect, useMemo } from 'react';
-// import { CSSTransition } from 'react-transition-group';
-// // import DevicesList from "../DevicesList/DevicesList";
-// // import AuthHelper from '../../helpers/AuthHelper';
-// // import UserApiHelper from '../../helpers/UserApiHelper';
-// // import ISessionsResponse from '../../models/Auth/ISessionsResponse';
-// // import VdbSecurity from '../VdbSecurity/VdbSecurity';
-// // import EnvHelper from '../../helpers/Common/EnvHelper';
-// // import IUserInfoFromJwt from '../../models/Auth/IUserInfoFromJwt';
-// // import ApiHelper from '../../helpers/ApiHelper';
+import cl from "./VdbPersonal.module.css";
+import { NavLink, useNavigate } from 'react-router-dom';
+import GlobalContext from '../../helpers/GlobalContext';
+import hrefs from "../../config/hrefsList.json";
+import { useState, useEffect, useMemo } from 'react';
+import { CSSTransition } from 'react-transition-group';
+import AuthorizedApiInteractionBase from "src/helpers/Api/AuthorizedApiInteractionBase";
+import AuthHelper from "src/helpers/Api/AuthHelper";
+// import DevicesList from "../DevicesList/DevicesList";
+// import AuthHelper from '../../helpers/AuthHelper';
+// import UserApiHelper from '../../helpers/UserApiHelper';
+// import ISessionsResponse from '../../models/Auth/ISessionsResponse';
+// import VdbSecurity from '../VdbSecurity/VdbSecurity';
+// import EnvHelper from '../../helpers/Common/EnvHelper';
+// import IUserInfoFromJwt from '../../models/Auth/IUserInfoFromJwt';
+// import ApiHelper from '../../helpers/ApiHelper';
 
-// const VdbPersonal: React.FC = () => {
-//     const [transState, setTransState] = useState(false);
-//     const [user, setUser] = useState<string | undefined>(undefined);
-//     const [limit, setLimit] = useState(0);
-//     const navigate = useNavigate();
+const VdbPersonal: React.FC = () =>
+{
+	const [transState, setTransState] = useState(false);
+	const [userEmail, setUserEmail] = useState<string | null>(null);
+	const navigate = useNavigate();
 
-//     useMemo(async () => {
-//         try {
-//             await AuthHelper.EnsureUserInContext();
-//         } catch {
-//             console.info("Redirecting to auth because error occured during user loading.");
-//             navigate("/auth");
-//         } finally {
-//             if (GlobalContext.currentUser === undefined && (!EnvHelper.isDebugMode() || EnvHelper.isProduction())) {
-//                 console.info("Redirecting to auth because no user available.");
-//                 navigate("/auth");
-//                 return;
-//             }
-//         }
+	useMemo(async () =>
+	{
+		try
+		{
+			var user = await AuthorizedApiInteractionBase.Create();
+			if (user?.Access) setUserEmail(user.Access.email);
+			else throw new Error();
+		}
+		catch (e)
+		{
+			if (e instanceof Error && e.message) console.info(e.message);
+			navigate("/auth");
+		}
 
-//         ApiHelper.getDevicesLimits().then(r => {
-//             console.info(`Current access level: ${GlobalContext.GetAccessLevel()}`);
-//             var limit = r?.filter(x => x.accessLevel === GlobalContext.GetAccessLevel())[0].devicesLimit;
-//             if (limit !== undefined) setLimit(limit);
-//         });
+		setTransState(true);
+	}, []);
 
-//         setUser(GlobalContext.currentUser!.Email);
-
-//         setTransState(true)
-//     }, []);
-
-//     const logout = async () => {
-//         console.log("Log out required...");
-//         await new UserApiHelper().terminateThisSession();
-//         GlobalContext.logout();
-//         navigate("/");
-//         window.location.reload();
-//     }
+	const logout = async () =>
+	{
+		await AuthHelper.TerminateSession();
+		navigate("/");
+		//window.location.reload();
+	}
 
 
-//     const transitionClasses = {
-//         enterActive: cl.welcomeTransitionEnter,
-//         enterDone: cl.welcomeTransitionEnterActive,
-//         exitActive: cl.welcomeTransitionExit,
-//         exitDone: cl.welcomeTransitionExitActive,
-//     }
-//     const commonTransProp = {
-//         timeout: 300,
-//         classNames: transitionClasses
-//     }
+	const transitionClasses = {
+		enterActive: cl.welcomeTransitionEnter,
+		enterDone: cl.welcomeTransitionEnterActive,
+		exitActive: cl.welcomeTransitionExit,
+		exitDone: cl.welcomeTransitionExitActive,
+	}
+	const commonTransProp = {
+		timeout: 300,
+		classNames: transitionClasses
+	}
 
-//     return (
-//         <CSSTransition in={transState} {...commonTransProp}>
-//             <span className={cl.personalWrapper}>
-//                 <span className={cl.loggedAs}>
-//                     You are logged in as: <span className={cl.loggedAsEmail}>
-//                         {user ?? "unknown"}
-//                     </span>
-//                     <button className={cl.logoutBtn} onClick={logout}>
-//                         LOG OUT
-//                     </button>
-//                 </span>
-//                 <span className={cl.loggedAs}>Devices limit: <span style={{ fontWeight: "500" }}>{limit}</span></span>
+	return (
+		<CSSTransition in={transState} {...commonTransProp}>
+			<span className={cl.personalWrapper}>
+				<span className={cl.loggedAs}>
+					You are logged in as: <span className={cl.loggedAsEmail}>
+						{userEmail ?? "unknown"}
+					</span>
+					<button className={cl.logoutBtn} onClick={logout}>
+						LOG OUT
+					</button>
+				</span>
+				<span className={cl.personalText}>
+					Security:
+				</span>
+				{/* <VdbSecurity /> */}
+			</span>
+		</CSSTransition>
+	);
+}
 
-//                 <span className={cl.personalText}>
-//                     Security:
-//                 </span>
-//                 <VdbSecurity />
-//                 <span className={cl.personalText}>
-//                     Devices:
-//                 </span>
-//                 <DevicesList />
-//             </span>
-//         </CSSTransition>
-//     );
-// }
-
-// export default VdbPersonal;
+export default VdbPersonal;

@@ -15,6 +15,8 @@ using wtt_main_server_services;
 using Microsoft.EntityFrameworkCore;
 using CommonLibrary.Services.Jwt;
 using Microsoft.Extensions.DependencyInjection;
+using WebApi.Infrastructure.Authorization;
+using SharedServices;
 
 namespace WebApi;
 
@@ -55,19 +57,25 @@ public class Program
 				: builder.Configuration["ConnectionStrings:DatabaseConnection"]);
 		});
 		builder.Services.AddSingleton<SettingsProviderService>();
-		builder.Services.AddSingleton<IJwtService, EcdsaJwtService>();
+		builder.Services.AddSingleton<IJwtService, EcdsaJwtService>(sp =>
+		{
+			var pr = sp.GetRequiredService<SettingsProviderService>();
+			var logger = sp.GetRequiredService<ILogger<EcdsaJwtService>>();
+			return new(pr.JwtSigningECDsa, logger);
+		});
 		builder.Services.AddSingleton<WttJwtService>(sp =>
 		{
-			var settingsProvider = sp.GetRequiredService<SettingsProviderService>();
-			var settings = settingsProvider.WttJwtServiceSettings;
-			var cert = settingsProvider.JwtSigningECDsa;
+			var pr = sp.GetRequiredService<SettingsProviderService>();
 			var logger = sp.GetRequiredService<ILogger<WttJwtService>>();
 			var baseJwt = sp.GetRequiredService<IJwtService>();
-			return new WttJwtService(baseJwt, settings, logger);
+			return new WttJwtService(baseJwt, pr.WttJwtServiceSettings, logger);
 		});
 
 		builder.Services.AddScoped<JwtServiceSettings>(sp =>
 			sp.GetRequiredService<SettingsProviderService>().WttJwtServiceSettings);
+
+		builder.Services.AddScoped<JwtMinIatStorage>();
+		builder.Services.AddScoped<JwtParseMiddleware>();
 
 		var app = builder.Build();
 
@@ -78,6 +86,7 @@ public class Program
 
 
 		app.UseRouting();
+		app.UseMiddleware<JwtParseMiddleware>();
 		app.MapControllers();
 
 		app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().Database.EnsureDeleted();

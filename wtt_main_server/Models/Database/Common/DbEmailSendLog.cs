@@ -15,6 +15,5 @@ public class DbEmailSendLog : ObjectWithUser
 {
 	public EmailTypes Type { get; set; }
 	public string Addressee { get; set; }
-	public DateTime Created { get; set; }
 	public bool IsSucceeded { get; set; }
 }

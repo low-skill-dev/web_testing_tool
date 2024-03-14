@@ -1,6 +1,6 @@
-import ADbObjectWithId from "./ADbObjectWithId";
+import ObjectWithDates from "./ADbObjectWithDates";
 
-export default interface ADbObjectWithGuid extends ADbObjectWithId
+export default interface ADbObjectWithGuid extends ObjectWithDates
 {
 	guid: string;
 }

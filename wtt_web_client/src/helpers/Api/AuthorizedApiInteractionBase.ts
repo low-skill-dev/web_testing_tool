@@ -8,6 +8,7 @@ import axios from "axios";
 import JwtResponse from "src/models/Auth/Responses/JwtResponse";
 import Common from "../Common/Common";
 import Constants from "../Common/Constants";
+import EnvHelper from "../Common/EnvHelper";
 
 export default class AuthorizedApiInteractionBase
 {
@@ -126,8 +127,8 @@ export default class AuthorizedApiInteractionBase
 
 		if (!Common.Between(200, response.status, 299)) return false;
 
-		localStorage.setItem(Constants.AccessTokenName, response.data.Access);
-		localStorage.setItem(Constants.RefreshTokenName, response.data.Refresh);
+		localStorage.setItem(Constants.AccessTokenName, response.data.access);
+		localStorage.setItem(Constants.RefreshTokenName, response.data.refresh);
 		return true;
 	}
 }

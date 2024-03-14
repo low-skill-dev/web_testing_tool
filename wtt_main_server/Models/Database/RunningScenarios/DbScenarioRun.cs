@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models.Enums;
-using CommonLibrary.Models;
 
 namespace Models.Database.RunningScenarios;
 

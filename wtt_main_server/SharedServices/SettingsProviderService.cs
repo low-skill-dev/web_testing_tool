@@ -23,6 +23,10 @@ public class SettingsProviderService
 		this._configuration.GetSection(nameof(this.ECDsaFilesLocations))
 		.Get<ECDsaFilesLocations>() ?? new();
 
+	public virtual AuthControllerSettings AuthControllerSettings =>
+		this._configuration.GetSection(nameof(this.AuthControllerSettings))
+		.Get<AuthControllerSettings>() ?? new();
+
 	private static readonly string JwtSigningECDsaLock = DateTime.UtcNow.ToString();
 	public virtual ECDsa JwtSigningECDsa
 	{
@@ -33,12 +37,12 @@ public class SettingsProviderService
 			if(IsOSPlatform(OSPlatform.Windows)) path = "C:" + path;
 			var file = new FileInfo(path);
 
-			if(!file.Exists || file.Length < 512)
+			if(!file.Exists || file.Length < 256)
 			{
 				Monitor.TryEnter(JwtSigningECDsaLock, TimeSpan.FromSeconds(10));
 				try
 				{
-					if(!file.Exists || file.Length < 512)
+					if(!file.Exists || file.Length < 256)
 					{
 						ret.GenerateKey(ECCurve.NamedCurves.nistP521);
 						File.WriteAllText(path, ret.ExportPkcs8PrivateKeyPem());

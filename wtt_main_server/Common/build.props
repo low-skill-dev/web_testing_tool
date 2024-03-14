@@ -1,16 +1,9 @@
 <Project>
 
 	<PropertyGroup>
-		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Authors>RRV</Authors>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Deterministic>true</Deterministic>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 

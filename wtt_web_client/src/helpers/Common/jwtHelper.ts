@@ -1,4 +1,5 @@
 import IJwtInfo from '../../models/Common/IJwtInfo';
+import EnvHelper from './EnvHelper';
 
 export default class JwtHelper 
 {
@@ -18,6 +19,13 @@ export default class JwtHelper
 	public static ValidateParsedLifetime = (nbf: Date, exp: Date) => 
 	{
 		let now = new Date(Date.now());
-		return (exp < now) && (now < nbf);
+
+		if (EnvHelper.isDebugMode) console.log(
+			"Validating JWT lifetime:\n" +
+			`nbf=${nbf}\n` +
+			`now=${now}\n` +
+			`exp=${exp}\n`);
+
+		return (nbf < now) && (now < exp);
 	}
 }
