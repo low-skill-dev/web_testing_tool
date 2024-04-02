@@ -1,0 +1,35 @@
+.actionCard{
+	display: flex;
+	flex-direction: column;
+}
+
+.moveRow {
+	display: flex;
+	flex-direction: row;
+}
+
+.moveBtn {
+	display: flex;
+	justify-content: center;
+}
+
+.moveLeft{
+	content: '/heroicons/solid/arrow-left.svg';
+}
+
+.moveRight{
+	content: '/heroicons/solid/arrow-right.svg';
+}
+
+.moveUp{
+	content: '/heroicons/solid/arrow-up.svg';
+}
+
+.moveDown{
+	content: '/heroicons/solid/arrow-down.svg';
+}
+
+.actionGuid{
+	display: flex;
+	overflow: hidden;
+}

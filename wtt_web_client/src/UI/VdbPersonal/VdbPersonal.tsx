@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import AuthorizedApiInteractionBase from "src/helpers/Api/AuthorizedApiInteractionBase";
 import AuthHelper from "src/helpers/Api/AuthHelper";
+import EnvHelper from "src/helpers/Common/EnvHelper";
 // import DevicesList from "../DevicesList/DevicesList";
 // import AuthHelper from '../../helpers/AuthHelper';
 // import UserApiHelper from '../../helpers/UserApiHelper';
@@ -26,7 +27,7 @@ const VdbPersonal: React.FC = () =>
 		try
 		{
 			var user = await AuthorizedApiInteractionBase.Create();
-			if (user?.Access) setUserEmail(user.Access.email);
+			if (user?.Access) setUserEmail(user.Access.Email);
 			else throw new Error();
 		}
 		catch (e)
@@ -36,7 +37,7 @@ const VdbPersonal: React.FC = () =>
 		}
 
 		setTransState(true);
-	}, []);
+	}, [navigate]);
 
 	const logout = async () =>
 	{

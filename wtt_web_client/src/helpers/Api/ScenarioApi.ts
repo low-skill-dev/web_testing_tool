@@ -25,7 +25,7 @@ export default class ScenarioApi
 		if (byUserGuid) queryArr.push(`owner=${byUserGuid}`);
 
 		let query = queryArr.length > 0 ? "?" + queryArr.join("&") : "";
-
+		
 		const res = await axios.get<DbTestScenario[]>(UrlHelper.Backend.V1.Scenario.Get.GetScenarios + query);
 		return Common.Between(200, res.status, 299) ? res.data : null;
 	}

@@ -22,9 +22,9 @@ export default class JwtHelper
 
 		if (EnvHelper.isDebugMode) console.log(
 			"Validating JWT lifetime:\n" +
-			`nbf=${nbf}\n` +
-			`now=${now}\n` +
-			`exp=${exp}\n`);
+			`nbf='${nbf.toISOString()}'\n` +
+			`now='${now.toISOString()}'\n` +
+			`exp='${exp.toISOString()}'\n`);
 
 		return (nbf < now) && (now < exp);
 	}

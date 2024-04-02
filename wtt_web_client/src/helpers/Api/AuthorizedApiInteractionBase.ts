@@ -24,12 +24,14 @@ export default class AuthorizedApiInteractionBase
 
 	private constructor(
 		Access: IDbUserPublicInfo, Refresh: IJwtInfo,
-		AccessExpires: Date, RefreshExpires: Date)
+		AccessExpires: Date, RefreshExpires: Date,
+		id: number)
 	{
 		this._Access = Access;
 		this._Refresh = Refresh;
 		this._AccessExpires = AccessExpires;
 		this._RefreshExpires = RefreshExpires;
+		this._id = id;
 	}
 
 	private static _access?: IDbUserPublicInfo;
@@ -37,15 +39,16 @@ export default class AuthorizedApiInteractionBase
 	private static _accessExpires?: Date;
 	private static _refreshExpires?: Date;
 	private static _isCreating = false;
-	private static _id = 0;
+	private static _idCounter = 0;
+	private _id: number;
 
 	static Create = async (): Promise<AuthorizedApiInteractionBase> =>
 	{
-		this._id++;
+		let _id = ++this._idCounter;
 		let count = 0;
 		while (this._isCreating && count++ < 100)
 		{
-			console.info(`AApiInteractor[${this._id}] creating is delayed during another call.`);
+			console.info(`AApiInteractor[${_id}] creating is delayed during another call.`);
 			await new Promise(resolve => setTimeout(resolve, 100));
 		}
 
@@ -61,10 +64,10 @@ export default class AuthorizedApiInteractionBase
 			let minAccessExp = new Date(nowUnix + 5 * 1000); // +5 sec
 			if (isAccessValid && this._accessExpires! > minAccessExp)
 			{
-				console.info("AApiInteractor created: access token is still valid.");
+				console.info(`AApiInteractor[${_id}] created: access token is still valid.`);
 				return new AuthorizedApiInteractionBase(
 					this._access!, this._refresh!,
-					this._accessExpires!, this._refreshExpires!);
+					this._accessExpires!, this._refreshExpires!, _id);
 			}
 
 			let isRefreshValid = false;
@@ -77,20 +80,20 @@ export default class AuthorizedApiInteractionBase
 				if (!this.CheckAccessValidity())
 				{
 					// Refresh failed
-					throw new Error("Error creating AApiInteractor: access token is invalid after refresh.");
+					throw new Error(`Error creating AApiInteractor[${_id}]: access token is invalid after refresh.`);
 				}
 				else
 				{
 					// Refresh successfully
-					console.info("AApiInteractor created: refresh successfully.");
+					console.info(`AApiInteractor[${_id}] created: refresh successfully.`);
 					return new AuthorizedApiInteractionBase(
 						this._access!, this._refresh!,
-						this._accessExpires!, this._refreshExpires!)
+						this._accessExpires!, this._refreshExpires!, _id)
 				}
 			} else
 			{
 				// Refresh is invalid
-				throw new Error("Error while creating AApiInteractor: both access and refresh token are invalid.");
+				throw new Error(`Error while creating AApiInteractor[${_id}]: both access and refresh token are invalid.`);
 			}
 		} finally
 		{

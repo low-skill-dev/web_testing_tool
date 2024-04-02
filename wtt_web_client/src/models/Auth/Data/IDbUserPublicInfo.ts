@@ -3,13 +3,13 @@ import UserRoles from "./UserRoles";
 
 export default interface IDbUserPublicInfo extends IJwtInfo
 {
-    guid: string;
-    role: UserRoles;
-    isDisabled: boolean;
-    registrationDate: string;
+    Guid: string;
+    Role: UserRoles;
+    IsDisabled: boolean;
+    RegistrationDate: string;
 
-    email: string;
-    emailConfirmedAtUtc: string | null;
+    Email: string;
+    EmailConfirmedAtUtc: string | null;
 
-    passwordLastChanged: string;
+    PasswordLastChanged: string;
 }

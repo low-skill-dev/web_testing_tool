@@ -36,7 +36,7 @@ const VdbHeader: React.FC = () =>
                         </strong>
                     </span>
                     <span className={cl.subtitle}>
-                        .bruhcontent.ru
+                        .lowskill.dev
                     </span>
                 </NavLink >
                 {/* <NavLink to="/download" className={cl.menuElement}>

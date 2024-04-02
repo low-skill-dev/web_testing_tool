@@ -12,6 +12,7 @@ public abstract class ADbAction : ObjectWithGuid
 {
 	public abstract string Type { get; } 
 
+	
 	public string Name { get; set; } = "Action";
 	public string Description { get; set; } = "";
 	public Guid? Next { get; set; }
@@ -19,4 +20,6 @@ public abstract class ADbAction : ObjectWithGuid
 
 	public int ColumnId { get; set; } = 0;
 	public int InColumnId {  get; set; } = 0;
+
+	public bool Bypass { get; set; } = false;
 }

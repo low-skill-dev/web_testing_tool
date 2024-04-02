@@ -1,0 +1,54 @@
+.mainPanelWrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	border: bo
+}
+
+.scenarioSelectionPanel {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+	height: fit-content;
+
+}
+
+.scenarioSelectionCard {
+	width: fit-content;
+	height: fit-content;
+	padding: .25rem;
+	padding-left: .5rem;
+	padding-right: .5rem;
+	font-size: 1.5rem;
+	border-radius: .25rem;
+	margin: .1rem;
+	cursor: pointer;
+	display: flex;
+	background-color: lightcyan;
+	border: 1px solid black;
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.scenarioSelectionAddNew {
+	background-color: lightblue;
+}
+
+.columnsList{
+	display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    width: 100%;
+    height: fit-content;
+	min-height: 50vh;
+	overflow: scroll;
+}
+
+.actionsColumns {
+	width: 10rem;
+	min-height: 50%;
+	height: fit-content;
+	border-color: gray;
+	background-color: lightgray;
+	border-radius: .25rem;
+}

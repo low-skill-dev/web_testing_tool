@@ -7,7 +7,7 @@ namespace Models.Database.TestScenarios;
 
 public class DbHttpAction : ADbHttpAction
 {
-	public override string Type => "Http";
+	public override string Type => nameof(DbHttpAction);
 
 	/* Тело, заголовки, куки. В видео форматироуемых строк, в которые будут
 	 * вставлены переменные из текущего контекста выполнения операции.

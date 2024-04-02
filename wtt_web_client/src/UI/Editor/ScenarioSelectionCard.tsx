@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import DbTestScenario from '../../models/Scenario/DbTestScenario';
-import cl from "./ScenarioSelectionPanel.module.css";
+import cl from "./Editor.module.css";
 
 type ScenarioSelectionCardArgs = {
 	IsSelected: boolean;
@@ -10,12 +10,12 @@ type ScenarioSelectionCardArgs = {
 
 const ScenarioSelectionCard: React.FC<ScenarioSelectionCardArgs> = (props) =>
 {
-	return <span
-		className={cl.card}
-		onClick={() => props.onSelection(props.Scenario.guid)}
+	return <button
+		className={cl.scenarioSelectionCard}
+		onClick={() => props.onSelection(props.Scenario.Guid)}
 	>
 		{props.Scenario.name}
-	</span>
+	</button>
 }
 
 export default ScenarioSelectionCard;

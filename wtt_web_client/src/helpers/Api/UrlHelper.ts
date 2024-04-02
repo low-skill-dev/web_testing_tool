@@ -99,7 +99,7 @@ export default class UrlHelper
             }
             static Scenario = class
             {
-                static get BasePath() { return endpoints.backend.v1.authController.basePath; }
+                static get BasePath() { return endpoints.backend.v1.scenarioController.basePath; }
                 static get FullPath()
                 {
                     return urlJoin(
