@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models.Database.Abstract;
+using Models.Enums;
+using Reinforced.Typings.Attributes;
 
 namespace Models.Database.TestScenarios;
 
@@ -14,7 +16,8 @@ namespace Models.Database.TestScenarios;
 /// где ключ - имя присваиваемой переменной,
 /// значение, соответственно - значение.
 /// </summary>
+//[TsClass(IncludeNamespace = false, Order = 500)]
 public class DbGetParametersAction : ADbWebRequest
 {
-	public override string Type => "GetParameters";
+	public override ActionTypes Type { get; set; } = ActionTypes.DbGetParametersActionType;
 }

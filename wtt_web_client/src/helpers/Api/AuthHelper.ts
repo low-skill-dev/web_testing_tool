@@ -1,15 +1,11 @@
 import axios from "axios";
-import ChangePasswordRequest from "src/models/Auth/Requests/ChangePasswordRequest";
 import Common from "../Common/Common";
 import UrlHelper from "./UrlHelper";
-import LoginRequest from "src/models/Auth/Requests/LoginRequest";
 import AuthorizedApiInteractionBase from "./AuthorizedApiInteractionBase";
-import JwtResponse from "src/models/Auth/Responses/JwtResponse";
-import RegistrationRequest from '../../models/Auth/Requests/RegistrationRequest';
 import Constants from "../Common/Constants";
-import GlobalContext from "../GlobalContext";
+//import GlobalContext from "../GlobalContext";
 import EnvHelper from "../Common/EnvHelper";
-
+import { ChangePasswordRequest, IJwtResponse, LoginRequest, RegistrationRequest } from "src/csharp/project";
 
 export default class AuthHelper
 {
@@ -27,19 +23,24 @@ export default class AuthHelper
 
 	public static Login = async (login: string, password: string, totp: string): Promise<number> =>
 	{
-		const req = new LoginRequest(login, password, totp);
-		const res = await axios.post<JwtResponse>(UrlHelper.Backend.V1.Auth.Post.Login, req);
+		const req = new LoginRequest();
+		req.Email = login;
+		req.Password = password;
+		req.TotpCode = totp;
+		const res = await axios.post<IJwtResponse>(UrlHelper.Backend.V1.Auth.Post.Login, req);
 
-		if (Common.Between(200, res.status, 299)) this.setJwt(res.data.access, res.data.refresh)
+		if (Common.Between(200, res.status, 299)) this.setJwt(res.data.Access, res.data.Refresh)
 
 		return res.status;
 	}
 	public static Register = async (login: string, password: string): Promise<number> =>
 	{
-		const req = new RegistrationRequest(login, password);
-		const res = await axios.put<JwtResponse>(UrlHelper.Backend.V1.Auth.Put.Register, req);
+		const req = new RegistrationRequest();
+		req.Email = login;
+		req.Password = password;
+		const res = await axios.put<IJwtResponse>(UrlHelper.Backend.V1.Auth.Put.Register, req);
 
-		if (Common.Between(200, res.status, 299)) this.setJwt(res.data.access, res.data.refresh)
+		if (Common.Between(200, res.status, 299)) this.setJwt(res.data.Access, res.data.Refresh)
 
 		return res.status;
 	}
@@ -51,7 +52,7 @@ export default class AuthHelper
 		let query = jtiSha ? `?jtiShaHex=${jtiSha}` : "";
 
 		return (
-			await axios.delete<JwtResponse>(
+			await axios.delete<IJwtResponse>(
 				UrlHelper.Backend.V1.Auth.Delete.TerminateSession + query)
 		).status;
 	}
@@ -61,7 +62,8 @@ export default class AuthHelper
 		// before request
 		await AuthorizedApiInteractionBase.Create();
 
-		const req = new ChangePasswordRequest(password);
+		const req = new ChangePasswordRequest();
+		req.Password = password;
 		const res = await axios.patch(UrlHelper.Backend.V1.Auth.Patch.ChangePassword, req);
 
 		return res.status;
@@ -73,7 +75,8 @@ export default class AuthHelper
 	}
 	public static ResetPassword = async (password: string, jwt: string): Promise<number> =>
 	{
-		const req = new ChangePasswordRequest(password);
+		const req = new ChangePasswordRequest();
+		req.Password = password
 		const res = await axios.post(UrlHelper.Backend.V1.Auth.Post.ResetPassword + `/${jwt}`, req,);
 
 		return res.status;

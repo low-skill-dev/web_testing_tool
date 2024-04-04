@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Models.Enums;
 using Models.Structures;
 using CommonLibrary.Models;
+using Reinforced.Typings.Attributes;
 
 namespace Models.Database.TestScenarios;
 
@@ -39,10 +40,10 @@ namespace Models.Database.TestScenarios;
  * 
  * ==========================================================================
  */
+//[TsClass(IncludeNamespace = false, Order = 500)]
 public class DbTestScenario : ObjectWithUser
 {
-	public string Name { get; set; }
-	public string Description { get; set; }
+	public string Name { get; set; } = "";
 
 	/* Для отправки почты следует сделать отдельное действие,
 	 * а эта настройка должна позволять глобально отключить
@@ -66,8 +67,8 @@ public class DbTestScenario : ObjectWithUser
 	 *		прописывать???
 	 */
 	[Column(TypeName = "jsonb")]
-	public string ActionsJson { get; set; }
-	public Guid EntryPoint { get; set; }
+	public string ActionsJson { get; set; } = "{}";
+	public Guid EntryPoint { get; set; } = Guid.Empty;
 
 
 	/* Киллер-фича - параметры в сценариях, реализуется
@@ -79,8 +80,8 @@ public class DbTestScenario : ObjectWithUser
 	 * ЗДЕСЬ УКАЗАНО ТО, ЧТО СЦЕНАРИЙ МОЖЕТ ПРИНЯТЬ,
 	 * А КОНКРЕТНЫЙ НАБОР ПАРАМЕТРО ЗАДАЕТСЯ ОТДЕЛЬНО
 	 */
-	public TestScenarioArgTypes[] ArgTypes { get; set; }
-	public string[] ArgNames { get; set; }
+	public TestScenarioArgTypes[] ArgTypes { get; set; } = [];
+	public string[] ArgNames { get; set; } = [];
 
 	public void EncodeActions(ActionsCollection actions)
 	{

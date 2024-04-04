@@ -1,9 +1,9 @@
-import { useState, useMemo, useReducer } from 'react';
-import ActionsCollection from "src/models/Actions/ActionsCollection";
+import { useState, useMemo, useReducer, MutableRefObject, useEffect } from 'react';
 import cl from "./Editor.module.css";
 import clg from "../../App.module.css";
-import ADbAction from "src/models/Actions/Abstract/ADbAction";
 import ActionsColumn from './ActionsColumn';
+import { ActionsCollection, ADbAction, DbHttpAction } from "src/csharp/project";
+import ScenarioHelper from '../../helpers/Scenario/ScenarioHelper';
 
 type ActionsEditorArgs = {
 	Actions: ActionsCollection;
@@ -11,10 +11,11 @@ type ActionsEditorArgs = {
 
 const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 {
-	const [actions, setActions] = useState<ActionsCollection>();
+	//const [actions, setActions] = useState<ActionsCollection>();
 	const [enumeratedActions, setEnumeratedActions] = useState<ADbAction[]>([]);
 	const [columns, setColumns] = useState<number[]>([]);
 	const [actionsByColumn, setActionsByColumn] = useState<Map<number, Array<ADbAction>>>();
+	const [, forceUpdate] = useReducer(x => x + 1, 0);
 
 	// useLayoutEffect(() =>
 	// {
@@ -25,8 +26,7 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 
 	useMemo(async () =>
 	{
-		setActions(actions);
-		setEnumeratedActions(actions ? actions.Enumerate() : []);
+		setEnumeratedActions(props.Actions ? ScenarioHelper.EnumerateActions(props.Actions) : []);
 		console.info(`Enumeated actions: ${enumeratedActions!.length}`);
 		setColumns([...new Set(enumeratedActions!.map(x => x.ColumnId))]);
 		setActionsByColumn(new Map<number, Array<ADbAction>>());
@@ -44,14 +44,49 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 		console.info(`Added column[${newId}]. Total: [${Array.from(actionsByColumn?.keys() ?? []).join(',')}].`);
 	}
 
+	const initNewAction = (a: ADbAction, column: number, row: number) =>
+	{
+		let name = `action_${Date.now().toString().substring(4, 10)}`;
+		while (enumeratedActions.some(x => x.Name === name))
+			name = `action_${Math.floor(Math.random() * (1000 * 1000))}`;
+
+		a.Name = a.Guid = name;
+		console.info(`Adding action: '${a.Name}'.`);
+	}
+
+	const addNewHttpAction = (column: number, row: number) =>
+	{
+		console.log("addNewHttpAction()");
+
+		let toAdd = new DbHttpAction();
+		initNewAction(toAdd, column, row);
+
+		props.Actions.DbHttpActions?.push(toAdd);
+		forceUpdate();
+	}
+
+	const addNewEchoAction = (column: number, row: number) =>
+	{
+		console.log("addNewEchoAction()");
+
+		let toAdd = new DbHttpAction();
+		initNewAction(toAdd, column, row);
+
+		props.Actions.DbEchoActions?.push(toAdd);
+		forceUpdate();
+	}
+
 	return <span className={clg.rootElementsMargin}>
 		<span className={cl.columnsList}>
 			{columns.map((x, index) => (
 				<ActionsColumn
 					key={index}
-					Actions={actionsByColumn?.get(x)!}
+					SelfColumnId={x}
+					Actions={enumeratedActions.filter(y => y.ColumnId === x)}
 					MoveActionLeftCallback={null!}
 					MoveActionRightCallback={null!}
+					AddHttpCallback={addNewHttpAction}
+					AddEchoCallback={addNewEchoAction}
 				/>))}
 			<button onClick={AddColumn}>Add column</button>
 		</span>

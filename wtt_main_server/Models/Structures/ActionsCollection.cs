@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Models.Database.Abstract;
 using Models.Database.TestScenarios;
+using Reinforced.Typings.Attributes;
 
 namespace Models.Structures;
 
+//[TsInterface(AutoExportMethods = false)]
 public sealed class ActionsCollection : IEnumerable<ADbAction>
 {
 	#pragma warning disable format
@@ -19,12 +21,12 @@ public sealed class ActionsCollection : IEnumerable<ADbAction>
 	public List<DbConditionalAction>	DbConditionalActions	{ get; init; }
 	public List<DbScenarioAction>		DbScenarioActions		{ get; init; }
 	public List<DbDelayAction>			DbDelayActions			{ get; init; }
-	public List<DbErrorAction>			DbErrorActions			{ get; init; }
+	public List<DbLogAction>			DbErrorActions			{ get; init; }
 	public List<DbEchoAction>			DbEchoActions			{ get; init; }
 	public List<DbHttpAction>			DbHttpActions			{ get; init; }
 	public List<DbImapAction>			DbImapActions			{ get; init; }
 
-	#pragma warning restore format
+#pragma warning restore format
 
 	public ActionsCollection()
 	{
@@ -46,7 +48,7 @@ public sealed class ActionsCollection : IEnumerable<ADbAction>
 			if(a is DbImapAction _DbImapAction) DbImapActions.Add(_DbImapAction);
 			else if(a is DbHttpAction _DbHttpAction) DbHttpActions.Add(_DbHttpAction);
 			else if(a is DbEchoAction _DbEchoAction) DbEchoActions.Add(_DbEchoAction);
-			else if(a is DbErrorAction _DbErrorAction) DbErrorActions.Add(_DbErrorAction);
+			else if(a is DbLogAction _DbErrorAction) DbErrorActions.Add(_DbErrorAction);
 			else if(a is DbDelayAction _DbDelayAction) DbDelayActions.Add(_DbDelayAction);
 			else if(a is DbScenarioAction _DbScenarioAction) DbScenarioActions.Add(_DbScenarioAction);
 			else if(a is DbConditionalAction _DbConditionalAction) DbConditionalActions.Add(_DbConditionalAction);
@@ -55,7 +57,6 @@ public sealed class ActionsCollection : IEnumerable<ADbAction>
 			else throw new NotImplementedException(a.GetType().ToString());
 		}
 	}
-
 
 	public IEnumerator<ADbAction> GetEnumerator()
 	{

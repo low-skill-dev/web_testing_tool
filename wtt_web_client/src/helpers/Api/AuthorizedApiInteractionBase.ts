@@ -1,14 +1,15 @@
 import jwtDecode from "jwt-decode";
-import IDbUserPublicInfo from "src/models/Auth/Data/IDbUserPublicInfo";
 import JwtHelper from "../Common/jwtHelper";
-import IJwtInfo from '../../models/Common/IJwtInfo';
 import endpoints from "../../config/endpoints.json";
 import UrlHelper from "./UrlHelper";
 import axios from "axios";
-import JwtResponse from "src/models/Auth/Responses/JwtResponse";
 import Common from "../Common/Common";
 import Constants from "../Common/Constants";
 import EnvHelper from "../Common/EnvHelper";
+
+import IJwtInfo from "src/models/IJwtInfo";
+import { IDbUserPublicInfo, IJwtResponse } from 'src/csharp/project';
+import AuthHelper from "./AuthHelper";
 
 export default class AuthorizedApiInteractionBase
 {
@@ -106,7 +107,15 @@ export default class AuthorizedApiInteractionBase
 	{
 		let readed = localStorage.getItem(Constants.AccessTokenName);
 		let parsed = jwtDecode<IDbUserPublicInfo>(readed!);
-		let dates = JwtHelper.GetLifetime(parsed);
+		var lifespans = jwtDecode<IJwtInfo>(readed!);
+		let dates = JwtHelper.GetLifetime(lifespans);
+
+		if (EnvHelper.isDebugMode)
+		{
+			// console.log(`readed=${readed}`);
+			// console.log(`parsed=${parsed}`);
+			// console.log(`lifespans=${lifespans}`);
+		}
 
 		this._accessExpires = dates.exp;
 		this._access = parsed;
@@ -126,12 +135,18 @@ export default class AuthorizedApiInteractionBase
 	}
 	private static PerformRefresh = async () =>
 	{
-		let response = await axios.patch<JwtResponse>(UrlHelper.Backend.V1.Auth.Patch.Refresh);
+		let response = await axios.patch<IJwtResponse>(UrlHelper.Backend.V1.Auth.Patch.Refresh);
 
 		if (!Common.Between(200, response.status, 299)) return false;
 
-		localStorage.setItem(Constants.AccessTokenName, response.data.access);
-		localStorage.setItem(Constants.RefreshTokenName, response.data.refresh);
+		localStorage.setItem(Constants.AccessTokenName, response.data.Access);
+		localStorage.setItem(Constants.RefreshTokenName, response.data.Refresh);
 		return true;
+	}
+	public static LogOut = async () =>
+	{
+		try { await AuthHelper.TerminateSession(); } catch { }
+		localStorage.removeItem(Constants.AccessTokenName);
+		localStorage.removeItem(Constants.RefreshTokenName);
 	}
 }

@@ -1,4 +1,4 @@
-import IJwtInfo from '../../models/Common/IJwtInfo';
+import IJwtInfo from 'src/models/IJwtInfo';
 import EnvHelper from './EnvHelper';
 
 export default class JwtHelper 

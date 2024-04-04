@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import DbTestScenario from '../../models/Scenario/DbTestScenario';
 import cl from "./Editor.module.css";
+import { DbTestScenario } from "src/csharp/project";
 
 type ScenarioSelectionCardArgs = {
 	IsSelected: boolean;
@@ -14,7 +14,7 @@ const ScenarioSelectionCard: React.FC<ScenarioSelectionCardArgs> = (props) =>
 		className={cl.scenarioSelectionCard}
 		onClick={() => props.onSelection(props.Scenario.Guid)}
 	>
-		{props.Scenario.name}
+		{props.Scenario.Name}
 	</button>
 }
 

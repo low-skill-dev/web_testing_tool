@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import DbTestScenario from '../../models/Scenario/DbTestScenario';
 import cl from './EditorCards.module.css';
-import DbHttpAction from 'src/models/Actions/DbHttpAction';
 import EditorCardButtons from './EditorCardsCommon';
+import { DbHttpAction } from 'src/csharp/project';
 
 interface HttpRequestCardArgs extends EditorCardButtons
 {
@@ -12,6 +11,7 @@ interface HttpRequestCardArgs extends EditorCardButtons
 const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 {
 	return <span className={cl.actionCard}>
+		<span>TestHttpCard</span>
 		<span className={cl.actionGuid}>{props.Action.Guid}</span>
 		<span className={cl.moveRow}>
 			<button className={[cl.moveBtn, cl.moveUp].join('')} />

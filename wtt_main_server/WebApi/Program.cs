@@ -47,7 +47,8 @@ public class Program
 		{
 			opts.JsonSerializerOptions.WriteIndented = false;
 			opts.JsonSerializerOptions.AllowTrailingCommas = true;
-			opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+			opts.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+			opts.JsonSerializerOptions.PropertyNamingPolicy = null;
 		});
 
 		builder.Services.AddDbContext<WttContext>(opts =>

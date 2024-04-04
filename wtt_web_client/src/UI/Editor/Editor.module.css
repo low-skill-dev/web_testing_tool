@@ -34,21 +34,44 @@
 	background-color: lightblue;
 }
 
-.columnsList{
+.columnsList {
 	display: flex;
-    flex-direction: row;
-    flex-wrap:nowrap;
-    width: 100%;
-    height: fit-content;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	width: 100%;
+	height: fit-content;
 	min-height: 50vh;
 	overflow: scroll;
 }
 
 .actionsColumns {
-	width: 10rem;
-	min-height: 50%;
-	height: fit-content;
-	border-color: gray;
-	background-color: lightgray;
+	width: 10rem ;
+	min-height: 50vh;
+	height: 100%;
+	border: 1px solid blue;
+	border-radius: 1rem;
 	border-radius: .25rem;
+	margin-right: 1rem;
+}
+
+.columnAddAtionsBtns {
+	display: flexbox;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-items: start;
+	justify-content: start;
+}
+
+.addActionBtn{
+	margin: .2rem;
+	padding: .1rem;
+	font-weight: bold;
+}
+
+.addActionHttp {
+	background-color: lightcoral;
+}
+
+.addActionIcmp {
+	background-color: lightblue;
 }

@@ -27,35 +27,32 @@ import ValidationHelper from '../../helpers/ValidationHelper';
 import AuthorizedApiInteractionBase from "src/helpers/Api/AuthorizedApiInteractionBase";
 import AuthHelper from "src/helpers/Api/AuthHelper";
 import { useNavigate } from "react-router-dom";
-import DbTestScenario from "src/models/Scenario/DbTestScenario";
-import ActionsCollection from "src/models/Actions/ActionsCollection";
 import ScenarioApi from "src/helpers/Api/ScenarioApi";
 import ScenarioSelectionPanel from "./ScenarioSelectionPanel";
-import CDbTestScenario from "src/models/Scenario/CDbTestScenario";
 import clg from "../../App.module.css";
-import ADbAction from "src/models/Actions/Abstract/ADbAction";
 import ActionsEditor from "./ActionsEditor";
+import { ActionsCollection, DbTestScenario } from "src/csharp/project";
 
 type ScenarioEditorArgs = {
 	Scenario: DbTestScenario;
-	Actions: ActionsCollection;
+	// Actions: ActionsCollection;
 }
 
 
 const ScenarioEditor: React.FC<ScenarioEditorArgs> = (props) =>
 {
-	const [name, setName] = useState<string|null>(null);
+	const [name, setName] = useState<string|null|undefined>(null);
 
 	useLayoutEffect(() =>
 	{
-		setName(props.Scenario.name);
+		setName(props.Scenario.Name);
 	}, [props.Scenario]);
 
 
 	const setNameInternal = (name: string) =>
 	{
 		setName(name);
-		props.Scenario.name = name;
+		props.Scenario.Name = name;
 	}
 
 	return <span>

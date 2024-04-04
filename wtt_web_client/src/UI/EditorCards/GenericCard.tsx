@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import DbTestScenario from '../../models/Scenario/DbTestScenario';
 import cl from './EditorCards.module.css';
-import DbHttpAction from 'src/models/Actions/DbHttpAction';
 import EditorCardButtons from './EditorCardsCommon';
-import ADbAction from 'src/models/Actions/Abstract/ADbAction';
 import tn from '../../config/TypeNames.json';
 import HttpRequestCard from './HttpRequestCard';
+import { ActionTypes, ADbAction, DbHttpAction } from "src/csharp/project";
 
 interface GenericCardArgs extends EditorCardButtons
 {
@@ -14,9 +12,9 @@ interface GenericCardArgs extends EditorCardButtons
 
 const GenericCard: React.FC<GenericCardArgs> = (props) =>
 {
-	if (props.Action.Type === tn.DbHttpAction)
+	if (props.Action.Type === ActionTypes.DbHttpActionType)
 		return <HttpRequestCard Action={props.Action as DbHttpAction} {...(props as EditorCardButtons)} />;
-	if (props.Action.Type === tn.DbHttpAction)
+	if (props.Action.Type === ActionTypes.DbImapActionType)
 		return <HttpRequestCard Action={props.Action as DbHttpAction} {...(props as EditorCardButtons)} />;
 
 	 return <span/>

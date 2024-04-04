@@ -5,18 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Models.Database.Abstract;
 using Models.Enums;
+using Reinforced.Typings.Attributes;
 
 namespace Models.Database.TestScenarios;
 
 #pragma warning disable CS8618
 
+//[TsClass(IncludeNamespace = false, Order = 500)]
 public class DbImapAction : ADbAction
 {
-	public override string Type => "Imap";
+	public override ActionTypes Type { get; set; } = ActionTypes.DbImapActionType;
 
 	/* Аккаунт IMAP, которые будет использован для подтягивания письма.
 	 */
-	public Guid UserImapAccountGuid { get; set; }
+	public Guid UserImapAccountGuid { get; set; } = Guid.Empty;
 
 	/* Нижепредставленные поля нужны для первого режима работы
 	 * программы - поиск по регексу. Нужное письмо определяется
@@ -49,7 +51,7 @@ public class DbImapAction : ADbAction
 	 */
 	//public EmailAutoparsingMode AutoparsingMode { get; set; }
 
-	public int MinSearchLength { get; set; }
-	public int MaxSearchLength { get; set; }
-	public string[] SearchMustContain { get; set; }
+	public int MinSearchLength { get; set; } = 0;
+	public int MaxSearchLength { get; set; } = 0;
+	public string[] SearchMustContain { get; set; } = [];
 }

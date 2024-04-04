@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models.Database.Abstract;
+using Models.Enums;
+using Reinforced.Typings.Attributes;
 
 namespace Models.Database.TestScenarios;
 
 #pragma warning disable CS8618
 
+//[TsClass(IncludeNamespace = false, Order = 500)]
 public class DbConditionalAction : ADbAction
 {
-	public override string Type => "Conditional";
+	public override ActionTypes Type { get; set; } = ActionTypes.DbConditionalActionType;
 
-
-	public string JsBoolExpression { get; set; }
+	public string JsBoolExpression { get; set; } = "";
 
 	// Replaced by ScenarioAction
 	//public long? ScenarioIdCalledOnTrue { get; set; }

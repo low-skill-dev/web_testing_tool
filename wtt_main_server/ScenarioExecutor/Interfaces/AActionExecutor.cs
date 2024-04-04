@@ -38,7 +38,7 @@ public abstract class AActionExecutor
 		if(action is DbEchoAction dbEchoAction) ae = new EchoActionExecutor(dbEchoAction);
 		if(action is DbImapAction dbImapAction) ae = new ImapActionExecutor(dbImapAction);
 		if(action is DbDelayAction dbDelayAction) ae = new DelayActionExecutor(dbDelayAction);
-		if(action is DbErrorAction dbErrorAction) ae = new ErrorActionExecutor(dbErrorAction);
+		if(action is DbLogAction dbErrorAction) ae = new ErrorActionExecutor(dbErrorAction);
 		if(action is DbScenarioAction dbScenarioAction) ae = new ScenarioActionExecutor(dbScenarioAction);
 		if(action is DbConditionalAction dbConditionalAction) ae = new ConditionalActionExecutor(dbConditionalAction);
 

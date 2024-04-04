@@ -1,8 +1,10 @@
 ﻿using CommonLibrary.Models;
 using Models.Enums;
+using Reinforced.Typings.Attributes;
 
 namespace Models.Api;
 
+//[TsInterface(AutoExportMethods = false,Order =128)]
 public class DbUserJwtInfo : ObjectWithGuid
 {
 	public required string Email { get; init; }

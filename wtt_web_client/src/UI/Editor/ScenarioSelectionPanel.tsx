@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import DbTestScenario from '../../models/Scenario/DbTestScenario';
 import cl from "./Editor.module.css";
 import ScenarioSelectionCard from './ScenarioSelectionCard';
+import { DbTestScenario } from 'src/csharp/project';
 
 type ScenarioSelectionPanelArgs = {
 	Scenarios: DbTestScenario[];
@@ -30,7 +30,7 @@ const ScenarioSelectionPanel: React.FC<ScenarioSelectionPanelArgs> = (props) =>
 				className={cl.scenarioSelectionCard}
 				onClick={() => onSelectionInternal(x.Guid)}
 			>
-				{x.name}
+				{x.Name}
 			</button>)
 		}
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Reinforced.Typings.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Models.Database.Abstract;
 
+//[TsClass(IncludeNamespace = false, Order = 200)]
 public abstract class ADbProxiedAction : ADbAction
 {
 	/* Идентификатор прокси из базы данных. Вопрос - что делать

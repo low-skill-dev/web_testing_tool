@@ -1,6 +1,6 @@
 import cl from "./VdbPersonal.module.css";
 import { NavLink, useNavigate } from 'react-router-dom';
-import GlobalContext from '../../helpers/GlobalContext';
+//import GlobalContext from '../../helpers/GlobalContext';
 import hrefs from "../../config/hrefsList.json";
 import { useState, useEffect, useMemo } from 'react';
 import { CSSTransition } from 'react-transition-group';
@@ -41,7 +41,7 @@ const VdbPersonal: React.FC = () =>
 
 	const logout = async () =>
 	{
-		await AuthHelper.TerminateSession();
+		AuthorizedApiInteractionBase.LogOut();
 		navigate("/");
 		//window.location.reload();
 	}

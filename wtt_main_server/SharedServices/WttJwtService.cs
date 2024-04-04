@@ -30,15 +30,16 @@ public sealed class WttJwtService
 
 	public string GenerateAccessJwt(DbUser user, TimeSpan? lifespan = null)
 	{
+		var info = new DbUserPublicInfo(user);
 		var claims = new Claim[]
 		{
-			new(JwtRegisteredClaimNames.Sub, user.Guid.ToString(), ClaimValueTypes.String),
-			new(nameof(DbUser.Email), user.Email.ToString(), ClaimValueTypes.Email),
-			new(nameof(DbUser.Role), ((int)user.Role).ToString(), ClaimValueTypes.Integer32),
-			new(nameof(DbUser.IsDisabled), user.IsDisabled.ToString(), ClaimValueTypes.Boolean),
-			new(nameof(DbUser.Created), user.Created.ToString("O"), ClaimValueTypes.DateTime),
-			new(nameof(DbUser.PasswordLastChanged), user.PasswordLastChanged.ToString("O"), ClaimValueTypes.DateTime),
-			new(nameof(DbUser.EmailConfirmedAtUtc), user.EmailConfirmedAtUtc.ToString("O"), ClaimValueTypes.DateTime),
+			new(JwtRegisteredClaimNames.Sub, info.Guid.ToString(), ClaimValueTypes.String),
+			new(nameof(DbUser.Email), info.Email.ToString(), ClaimValueTypes.Email),
+			new(nameof(DbUser.Role), ((int)info.Role).ToString(), ClaimValueTypes.Integer32),
+			new(nameof(DbUser.IsDisabled), info.IsDisabled.ToString(), ClaimValueTypes.Boolean),
+			new(nameof(DbUser.Created), info.Created.ToString("O"), ClaimValueTypes.DateTime),
+			new(nameof(DbUser.PasswordLastChanged), info.PasswordLastChanged.ToString("O"), ClaimValueTypes.DateTime),
+			new(nameof(DbUser.EmailConfirmedAtUtc), info.EmailConfirmedAtUtc?.ToString("O") ?? null!, ClaimValueTypes.DateTime),
 		};
 
 		_logger?.LogInformation($"Creating access token: {claims.ToStringRepresentation()}.");

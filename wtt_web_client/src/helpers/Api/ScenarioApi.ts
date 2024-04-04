@@ -1,8 +1,8 @@
 import AuthorizedApiInteractionBase from './AuthorizedApiInteractionBase';
-import DbTestScenario from '../../models/Scenario/DbTestScenario';
 import UrlHelper from "./UrlHelper";
 import axios from 'axios';
 import Common from '../Common/Common';
+import { DbTestScenario } from "src/csharp/project";
 
 export default class ScenarioApi
 {

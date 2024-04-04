@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//using System.ComponentModel.DataAnnotations;
 
-namespace CommonLibrary.Models;
+//namespace CommonLibrary.Models;
 
-public class ObjectWithGuid : ObjectWithDates
-{
-	[Key]
-	public Guid Guid { get; set; }
-}
+//public class ObjectWithGuid : ObjectWithDates
+//{
+//	[Key]
+//	public Guid Guid { get; set; }
+//}

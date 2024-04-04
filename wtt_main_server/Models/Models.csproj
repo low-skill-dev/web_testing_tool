@@ -1,13 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+
 	<Import Project="../build.props" />
 
 	<ItemGroup>
+	  <Compile Remove="Reinforced.Typings.settings.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Jint" Version="3.0.0-beta-2056" />
+		<PackageReference Include="Reinforced.Typings" Version="1.6.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Common\CommonLibrary\CommonLibrary.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Basic\" />
+	</ItemGroup>
+
+	<!-- <PropertyGroup> --> 		<!-- <RtDisable>false</RtDisable> --> 	<!-- </PropertyGroup> -->
 
 </Project>

@@ -1,14 +1,16 @@
-import { useState, useMemo } from 'react';
-import ActionsCollection from "src/models/Actions/ActionsCollection";
+import { useState, useMemo, useReducer } from 'react';
 import cl from "./Editor.module.css";
 import clg from "../../App.module.css";
-import ADbAction from "src/models/Actions/Abstract/ADbAction";
 import GenericCard from '../EditorCards/GenericCard';
+import { ADbAction } from "src/csharp/project";
 
 type ActionsColumnArgs = {
+	SelfColumnId: number;
 	Actions: ADbAction[];
 	MoveActionLeftCallback: (guid: string) => void;
 	MoveActionRightCallback: (guid: string) => void;
+	AddHttpCallback: (columnId: number, rowId: number) => void;
+	AddEchoCallback: (columnId: number, rowId: number) => void;
 }
 
 const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
@@ -16,6 +18,7 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 	const [actions, setActions] = useState<ADbAction[]>();
 	const [enumeratedActions, setEnumeratedActions] = useState<ADbAction[]>();
 	const [columns, setColumns] = useState<number[]>([]);
+	const [, forceUpdate] = useReducer(x => x + 1, 0);
 
 	// useLayoutEffect(() =>
 	// {
@@ -27,10 +30,11 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 	useMemo(async () =>
 	{
 		console.info(`Creating actions column with '${props.Actions.length}' actions.`);
-		setActions(props.Actions);
+		if (props.Actions.length === 0) return;
 
-		if (!actions || actions.length === 0) return;
-		setEnumeratedActions((actions).toSorted((a, b) => a.InColumnId - b.InColumnId));
+		setActions(props.Actions);
+		setEnumeratedActions((props.Actions as any).toSorted((a: ADbAction, b: ADbAction) => a.RowId - b.ColumnId));
+		console.info(`Enumerated actions contsins '${enumeratedActions!.length}' elements.`);
 		setColumns([...new Set(enumeratedActions!.map(x => x.ColumnId))]);
 	}, []);
 
@@ -42,6 +46,7 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 	{
 
 	}
+	const getNewRowId = () => Math.max(...actions?.map(x => x.RowId) ?? [0]);
 
 	//
 	return <span className={cl.actionsColumns}>
@@ -55,6 +60,13 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 				MoveRightCallback={props.MoveActionRightCallback}
 			/>
 		)}
+
+		<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionHttp].join(' ')} onClick={() => { props.AddHttpCallback(props.SelfColumnId, getNewRowId()); forceUpdate(); }}>
+			+HTTP
+		</button>
+		<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddEchoCallback(props.SelfColumnId, getNewRowId()); forceUpdate(); }}>
+			+ECHO
+		</button>
 	</span>
 }
 

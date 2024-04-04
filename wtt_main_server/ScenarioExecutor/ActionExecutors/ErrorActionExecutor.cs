@@ -13,9 +13,9 @@ using ScenarioExecutor.Interfaces;
 
 namespace ScenarioExecutor.ActionExecutors;
 
-public sealed class ErrorActionExecutor : AActionExecutor<DbErrorAction, ErrorActionResult>
+public sealed class ErrorActionExecutor : AActionExecutor<DbLogAction, ErrorActionResult>
 {
-	public ErrorActionExecutor(DbErrorAction action) : base(action) { }
+	public ErrorActionExecutor(DbLogAction action) : base(action) { }
 
 	public override async Task Execute(IDictionary<string, string> currentContext)
 	{

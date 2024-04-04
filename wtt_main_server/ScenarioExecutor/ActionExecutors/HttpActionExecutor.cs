@@ -158,7 +158,7 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 
 			{{{ctxJs}}}
 		
-			{{{Action.UserScript}}}
+			{{{Action.AfterRunScript}}}
 
 			// --- UPDATE ---
 

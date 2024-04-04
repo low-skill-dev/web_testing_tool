@@ -1,6 +1,6 @@
 import cl from "./VdbHeader.module.css";
 import { NavLink } from "react-router-dom";
-import GlobalContext from '../../helpers/GlobalContext';
+//import GlobalContext from '../../helpers/GlobalContext';
 import AuthorizedApiInteractionBase from "src/helpers/Api/AuthorizedApiInteractionBase";
 import { useMemo, useState } from "react";
 import { isatty } from "tty";

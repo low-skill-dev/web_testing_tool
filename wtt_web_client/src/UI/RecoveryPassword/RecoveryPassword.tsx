@@ -9,7 +9,7 @@ import ValidationHelper from '../../helpers/ValidationHelper';
 import JwtHelper from '../../helpers/Common/jwtHelper';
 import { CSSTransition } from "react-transition-group";
 import AuthHelper from "src/helpers/Api/AuthHelper";
-import IJwtInfo from "src/models/Common/IJwtInfo";
+import IJwtInfo from "src/models/IJwtInfo";
 //import ApiHelper from '../../helpers/ApiHelper';
 //import { ChangePasswordRequest } from '../../models/Auth/ChangePasswordRequest';
 

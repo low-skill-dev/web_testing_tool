@@ -1,13 +1,16 @@
 ﻿using Models.Database.Abstract;
+using Models.Enums;
+using Reinforced.Typings.Attributes;
 using HttpMethod = Models.Enums.HttpRequestMethod;
 
 namespace Models.Database.TestScenarios;
 
 #pragma warning disable CS8618
 
+//[TsClass(IncludeNamespace = false, Order = 500)]
 public class DbHttpAction : ADbHttpAction
 {
-	public override string Type => nameof(DbHttpAction);
+	public override ActionTypes Type { get; set; } = ActionTypes.DbHttpActionType;
 
 	/* Тело, заголовки, куки. В видео форматироуемых строк, в которые будут
 	 * вставлены переменные из текущего контекста выполнения операции.
@@ -41,8 +44,8 @@ public class DbHttpAction : ADbHttpAction
 	 * сгенерировать объявление и присвоение всех переменных перед
 	 * юзер скриптом.
 	 */
-	public string? UserScript { get; set; } // Скрипт вытаскивания переменных. Должен возвращать словарь.
-	public bool UseTryBlockForUserScript { get; set; }
+	//public string? UserScript { get; set; } // Скрипт вытаскивания переменных. Должен возвращать словарь.
+	//public bool UseTryBlockForUserScript { get; set; } = false;
 
 	/* Другой вариант работы. Если полноценный юзер-скрипт предназначен
 	 * для опытнах пользователей, то данный вариант позволяет упростить
