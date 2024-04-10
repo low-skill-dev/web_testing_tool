@@ -28,10 +28,12 @@
 			"scenarioController": {
 				"basePath": "/scenario",
 				"get": {
-					"GetScenarios": ""
+					"GetScenarios": "",
+					"GetLogs": "/logs"
 				},
 				"put": {
-					"WriteScenario": ""
+					"WriteScenario": "",
+					"WriteScenarios": ""
 				}
 			}
 		}

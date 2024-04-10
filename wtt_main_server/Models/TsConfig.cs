@@ -11,6 +11,7 @@ using Reinforced.Typings.Ast;
 using Models.Api.Auth.Responses;
 using Reinforced.Typings.Ast.TypeNames;
 using Models.Structures;
+using Models.Database.RunningScenarios;
 
 [assembly: TsGlobal(UseModules = true, DiscardNamespacesWhenUsingModules = true, AutoOptionalProperties = true)]
 
@@ -21,7 +22,7 @@ public class Configuration
 
 	public static void Configure(ConfigurationBuilder builder)
 	{
-		builder.SubstituteGeneric(typeof(Dictionary<string,string>), (t, tr) =>
+		builder.SubstituteGeneric(typeof(Dictionary<string, string>), (t, tr) =>
 		{
 			var args = t.GetGenericArguments();
 			return new RtSimpleTypeName($"Map<{tr.ResolveTypeName(args[0])},{tr.ResolveTypeName(args[1])}>");
@@ -45,7 +46,7 @@ public class Configuration
 			.WithProperty(x => x.Bypass, c => c.InitializeWith((_, _, _) => "false"))
 			.WithProperty(x => x.ContinueExecutionInCaseOfCriticalError, c => c.InitializeWith((_, _, _) => "false"))
 			//.WithProperty(x => x.AfterRunScript!, null)
-			.WithProperty(x=> x.ScriptInTryBlock, c => c.InitializeWith((_, _, _) => "false"))
+			.WithProperty(x => x.ScriptInTryBlock, c => c.InitializeWith((_, _, _) => "false"))
 			.Order(400);
 
 		builder.ExportAsClass<ADbProxiedAction>().Abstract().WithPublicProperties()
@@ -58,7 +59,7 @@ public class Configuration
 		builder.ExportAsClass<ADbHttpAction>().Abstract().WithPublicProperties()
 			.WithConstructor(new(
 				$"super();\n" +
-				$"this.{nameof(ADbHttpAction.Method)} = {nameof(HttpRequestMethod)}.{Enum.GetName(typeof(HttpRequestMethod),(int)(HttpRequestMethod.Get))};\n" +
+				$"this.{nameof(ADbHttpAction.Method)} = {nameof(HttpRequestMethod)}.{Enum.GetName(typeof(HttpRequestMethod), (int)(HttpRequestMethod.Get))};\n" +
 				$"this.{nameof(ADbHttpAction.TlsValidationMode)} = {nameof(HttpTlsValidationMode)}.{Enum.GetName(typeof(HttpTlsValidationMode), 0)}"))
 			.Order(700);
 
@@ -111,6 +112,9 @@ public class Configuration
 
 		builder.ExportAsInterface<DbUserPublicInfo>().WithPublicProperties()
 			.Order(1300);
+
+		builder.ExportAsInterface<DbScenarioRun>().WithPublicProperties()
+			.Order(1400);
 	}
 
 	static void ExportAction<T>(ConfigurationBuilder cb, T e)

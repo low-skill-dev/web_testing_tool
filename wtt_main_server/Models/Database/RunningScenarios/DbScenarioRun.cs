@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Models.Enums;
+using System.Text.Json.Serialization;
+using Models.Database.TestScenarios;
 
 namespace Models.Database.RunningScenarios;
 
@@ -13,7 +15,9 @@ namespace Models.Database.RunningScenarios;
 
 public class DbScenarioRun : ObjectWithGuid
 {
-	public Guid OriginalScenarioGuid { get; set; }
+	#region props
+
+	public Guid ScenarioGuid { get; set; }
 
 	public DateTime? Started { get; set; }
 	public DateTime? Completed { get; set; }
@@ -30,7 +34,7 @@ public class DbScenarioRun : ObjectWithGuid
 	 */
 	public TimeSpan? ProcessorTime { get; set; }
 
-
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public ScenarioRunReasons? RunReason { get; set; }
 
 	/* Сам по себе сценарий может меняться, писать алгоритм сохранения
@@ -45,6 +49,7 @@ public class DbScenarioRun : ObjectWithGuid
 	 * будет записываться нул.
 	 */
 	[Column(TypeName = "jsonb")]
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public string? ScenarioJsonSnapshot { get; set; }
 
 	/* Данное поле будет хранить всё... Вообще всё что связано с данным
@@ -52,8 +57,14 @@ public class DbScenarioRun : ObjectWithGuid
 	 * юзкейс для jsonb.
 	 */
 	[Column(TypeName = "jsonb")]
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public string? ScenarioJsonResult { get; set; }
 
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public Dictionary<string, string>? InputValues { get; set; } // name to value
+
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public Dictionary<string, string>? OutputValues { get; set; } // name to value
+
+	#endregion
 }

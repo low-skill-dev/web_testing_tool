@@ -35,29 +35,41 @@ import { ActionsCollection, DbTestScenario } from "src/csharp/project";
 
 type ScenarioEditorArgs = {
 	Scenario: DbTestScenario;
+	DeleteScenarioCallback: (guid: string) => void;
 	// Actions: ActionsCollection;
 }
 
 
 const ScenarioEditor: React.FC<ScenarioEditorArgs> = (props) =>
 {
-	const [name, setName] = useState<string|null|undefined>(null);
+	const [name, setName] = useState<string | null | undefined>(null);
+	const [runEvery, setRunEvery] = useState<number>(1);
+	const [deleteConfim, setDeleteConfim] = useState(false);
 
-	useLayoutEffect(() =>
+	useEffect(() => { if (name) props.Scenario.Name = name; }, [name]);
+	useEffect(() => { if (name) props.Scenario.RunIntervalMinutes = runEvery; }, [runEvery]);
+
+	useMemo(() =>
 	{
 		setName(props.Scenario.Name);
-	}, [props.Scenario]);
+		setRunEvery(props.Scenario.RunIntervalMinutes ?? 0);
+		setDeleteConfim(false);
+	}, []);
 
-
-	const setNameInternal = (name: string) =>
+	const deleteInternal = () =>
 	{
-		setName(name);
-		props.Scenario.Name = name;
+		if (deleteConfim) props.DeleteScenarioCallback(props.Scenario.Guid!);
+		else setDeleteConfim(true);
 	}
 
-	return <span>
-		<span>{props.Scenario.Guid}</span>
-		<input value={name ?? ''} onChange={e => setNameInternal(e.target.value)} />
+	return <span className={cl.nameEditor}>
+		<span>UUID: {props.Scenario.Guid!}</span>
+		<span style={{ fontSize: "1.5rem" }}> Run every <input type="number" value={runEvery} onChange={e=> setRunEvery(parseInt(e.target.value) ?? runEvery)}></input> minutes </span>
+		<span style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap" }}>
+			{/* <span style={{ display: "flex", marginRight: ".25rem" }}>NAME: </span> */}
+			<input style={{ display: "flex", fontSize: "1.5rem" }} value={name ?? ''} onChange={e => setName(e.target.value)} />
+			<button className={[cl.scenarioSelectionCard, cl.scenarioSelectionSaveAll].join(' ')} onClick={deleteInternal}>{!deleteConfim ? "DELETE" : "REALLY?"}</button>
+		</span>
 	</span>
 }
 

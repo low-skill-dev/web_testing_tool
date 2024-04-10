@@ -17,6 +17,8 @@ using CommonLibrary.Services.Jwt;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi.Infrastructure.Authorization;
 using SharedServices;
+using Newtonsoft.Json.Serialization;
+using WebApi.Services;
 
 namespace WebApi;
 
@@ -43,12 +45,21 @@ public class Program
 			.AddEnvironmentVariables()
 			.Build();
 
-		builder.Services.AddControllers().AddJsonOptions(opts =>
+		builder.Services.AddControllers()
+			//	.AddNewtonsoftJson(opts =>
+			//{
+			//	opts.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+			//	opts.SerializerSettings.ContractResolver = new DefaultContractResolver();
+			//})
+			.AddJsonOptions(opts =>
 		{
-			opts.JsonSerializerOptions.WriteIndented = false;
+			opts.JsonSerializerOptions.WriteIndented = true;
 			opts.JsonSerializerOptions.AllowTrailingCommas = true;
 			opts.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
 			opts.JsonSerializerOptions.PropertyNamingPolicy = null;
+			opts.JsonSerializerOptions.PreferredObjectCreationHandling = System.Text.Json.Serialization.JsonObjectCreationHandling.Populate;
+			opts.JsonSerializerOptions.ReadCommentHandling = System.Text.Json.JsonCommentHandling.Skip;
+			opts.JsonSerializerOptions.UnmappedMemberHandling = System.Text.Json.Serialization.JsonUnmappedMemberHandling.Skip;
 		});
 
 		builder.Services.AddDbContext<WttContext>(opts =>
@@ -78,6 +89,21 @@ public class Program
 		builder.Services.AddScoped<JwtMinIatStorage>();
 		builder.Services.AddScoped<JwtParseMiddleware>();
 
+		builder.Services
+			.AddSingleton<ScenarioSchedulerBackgroundService>(sp =>
+				new ScenarioSchedulerBackgroundService(
+					sp.CreateScope().ServiceProvider.GetRequiredService<WttContext>()))
+			.AddHostedService(sp => sp.GetRequiredService<ScenarioSchedulerBackgroundService>());
+
+		builder.Services
+			.AddSingleton<ScenarioExecutorBackgroundService>(sp =>
+				new ScenarioExecutorBackgroundService(
+					sp.CreateScope().ServiceProvider.GetRequiredService<WttContext>(),
+					sp.CreateScope().ServiceProvider.GetRequiredService<ScenarioSchedulerBackgroundService>(),
+					sp.CreateScope().ServiceProvider.GetRequiredService<ILogger<ScenarioExecutorBackgroundService>>()))
+			.AddHostedService(sp => sp.GetRequiredService<ScenarioExecutorBackgroundService>());
+
+
 		var app = builder.Build();
 
 		if(builder.Environment.IsDevelopment())
@@ -90,7 +116,7 @@ public class Program
 		app.UseMiddleware<JwtParseMiddleware>();
 		app.MapControllers();
 
-		app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().Database.EnsureDeleted();
+		//app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().Database.EnsureDeleted();
 		app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().Database.Migrate();
 		app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().CreateTriggers();
 		app.Run();

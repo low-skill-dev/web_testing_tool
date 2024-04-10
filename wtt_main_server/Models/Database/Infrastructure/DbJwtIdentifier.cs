@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -21,4 +22,16 @@ public class DbJwtIdentifier : ObjectWithUser
 	public required IPAddress? IPAddress { get; set; } // provided by nginx :: proxy_set_header X-Real-IP $remote_addr
 	public required string? Country { get; set; } // provided by nginx :: proxy_set_header X-GeoIP-Country $geoip_country_name;
 	public required string? City { get; set; } // provided by nginx :: proxy_set_header X-GeoIP-Country $geoip_city;
+}
+
+[Table(nameof(RefreshJwt) + "s")]
+public class  RefreshJwt : DbJwtIdentifier
+{
+    
+}
+
+[Table(nameof(RecoveryJwt) + "s")]
+public class RecoveryJwt : DbJwtIdentifier
+{
+
 }

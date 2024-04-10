@@ -26,5 +26,23 @@ public abstract class ADbAction : ObjectWithGuid
 	public bool ContinueExecutionInCaseOfCriticalError { get; set; } = false;
 
 	public string? AfterRunScript { get; set; }
-	public bool ScriptInTryBlock { get; set; } = false;
+
+	// Отказ от разработки по причине нехватки времени
+	// public bool ScriptInTryBlock { get; set; } = false;
+
+	/* После долги размышлений я пришел к выводу, что все прочие
+	 * варианты работы являются овернинжинирингов и проще навесить
+	 * на юзера обязанность написать одно (буквально одно) лишнее
+	 * слово в текстбоксе, чем писать дополнительные сотни (если не
+	 * тысячи) строк кода, каждая из которых может содержать ошибки.
+	 * 
+	 * Окончательно принимаю вариант, когда пользователь обращается
+	 * к ответу через заранее захардкоженные переменные с названиями
+	 * 'body', 'cookies', 'headers', в которых уже содержаться 
+	 * определенные члены. Тело ответа - это JSON объект произвольной
+	 * структуры, куки и заголовки - строго являются словорями, к членам
+	 * которых можно обратиться через индекс-строку, аля 
+	 * headers['last-modified'].
+	 */
+	public Dictionary<string, string>? VariableToPath { get; set; }
 }

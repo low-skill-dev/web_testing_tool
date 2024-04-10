@@ -67,7 +67,7 @@ public class DbTestScenario : ObjectWithUser
 	 *		прописывать???
 	 */
 	[Column(TypeName = "jsonb")]
-	public string ActionsJson { get; set; } = "{}";
+	public ActionsCollection ActionsJson { get; set; }
 	public Guid EntryPoint { get; set; } = Guid.Empty;
 
 
@@ -83,8 +83,11 @@ public class DbTestScenario : ObjectWithUser
 	public TestScenarioArgTypes[] ArgTypes { get; set; } = [];
 	public string[] ArgNames { get; set; } = [];
 
-	public void EncodeActions(ActionsCollection actions)
-	{
-		this.ActionsJson = System.Text.Json.JsonSerializer.Serialize(actions);
-	}
+	//public void EncodeActions(ActionsCollection actions)
+	//{
+	//	this.ActionsJson = System.Text.Json.JsonSerializer.Serialize(actions);
+	//}
+
+	public int? RunIntervalMinutes { get; set; }
+	public TimeOnly[]? RunTimes { get; set; }
 }

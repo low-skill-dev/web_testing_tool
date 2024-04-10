@@ -115,6 +115,21 @@ export default class UrlHelper
                             UrlHelper.Backend.V1.Scenario.FullPath,
                             endpoints.backend.v1.scenarioController.get.GetScenarios);
                     }
+                    static get GetLogs()
+                    {
+                        return urlJoin(
+                            UrlHelper.Backend.V1.Scenario.FullPath,
+                            endpoints.backend.v1.scenarioController.get.GetLogs);
+                    }
+                }
+                static Put = class
+                {
+                    static get SaveScenarios()
+                    {
+                        return urlJoin(
+                            UrlHelper.Backend.V1.Scenario.FullPath,
+                            endpoints.backend.v1.scenarioController.put.WriteScenarios);
+                    }
                 }
             }
         }

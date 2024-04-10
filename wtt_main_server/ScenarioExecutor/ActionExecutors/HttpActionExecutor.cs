@@ -133,11 +133,17 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 
 		var reqJs = await GetMessageAsJsVariable(HttpType.Request, request);
 		var resJs = await GetMessageAsJsVariable(HttpType.Response, response);
+
+		var beforeContext = string.Join('\n', [reqJs, resJs]);
+
+		await base.ExecuteUserScripts(context, beforeContext);
+
+#if FALSE
+
 		var ctxJs = string.Join('\n', context.Select(x => $"{x.Key} = {x.Value};"));
 		var updJs = string.Join('\n', Action.VariableToPath?.Select(x =>
 		{
-			var nonCritical = !Action.VariablesUpdatedInTryBlock?.Any(v => v.Equals(x.Key)) ?? false;
-			var errorCmd = $"{(nonCritical ? JsConsts.LogWarn : JsConsts.LogError)}({nonCritical.ToString().ToLower()}, 'Error parsing \'{x.Key}\' variable value.');";
+			var errorCmd = $"{JsConsts.LogError}(\"Error parsing \'{x.Key}\' variable.\");";
 
 			var l1 = $"try {{ {x.Key}={x.Value}; {JsConsts.UpdateVariable}({x.Key},{x.Value}); }}";
 			var l2 = $"catch {{ {errorCmd} }}";
@@ -174,6 +180,8 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 		//var logErrorFunc = (string msg, bool crit = false) => errors.Add((msg, crit));
 
 		JsHelper.Execute(eng => this.Result!.BindAll(eng), js, this.UserSubscription);
+
+#endif
 	}
 
 	private enum HttpType

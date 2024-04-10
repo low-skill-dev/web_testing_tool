@@ -34,6 +34,17 @@
 	background-color: lightblue;
 }
 
+.scenarioSelectionSaveAll {
+	background-color: lightcoral;
+}
+
+.schedulerCard{
+	display: flex;
+	flex-direction: column;
+	margin-top: .25rem;
+	font-family: "Roboto";
+}
+
 .columnsList {
 	display: flex;
 	flex-direction: row;
@@ -44,14 +55,32 @@
 	overflow: scroll;
 }
 
+.nameEditor{
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-top: .5rem;
+	margin-bottom: .5rem;
+}
+
 .actionsColumns {
-	width: 10rem ;
+	display: flex;
+	flex-direction: column;
+	min-width: 10rem;
+	width: 30vw;
 	min-height: 50vh;
+	min-width: 48%;
 	height: 100%;
-	border: 1px solid blue;
+	border: 2px solid blue;
 	border-radius: 1rem;
 	border-radius: .25rem;
 	margin-right: 1rem;
+}
+
+.selfColumnId{
+	display: block;
+	width: 100%;
+	text-align: center;
 }
 
 .columnAddAtionsBtns {

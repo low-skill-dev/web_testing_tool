@@ -20,7 +20,8 @@ public sealed class ScenarioRunInfo
 	public required Guid DbScenarioGuid { get; init; }
 
 	// GUID сценария, который вызвал данный сценарий
-	public required Guid? Parent { get; init; }
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
+	public Guid? Parent { get; init; }
 
 	// Уровень вложенности в текущем сценарии.
 	// Альтернативно ручному заданию значения, можно вычислить
@@ -40,10 +41,12 @@ public sealed class ScenarioRunInfo
 	public required Dictionary<Guid, ADbAction> ActionsLoadedFromDb { get; init; }
 
 	// Уровень доступа пользователя к ресурсам
-	public required DbTariff? DbExecutionLimitations { get; init; }
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
+	public DbTariff? DbExecutionLimitations { get; init; }
 
 	/// <summary>
 	/// Параметры, переданные в текущий сценарий извне.
 	/// </summary>
-	public required Dictionary<string, string> Arguments { get; init; }
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
+	public Dictionary<string, string> Arguments { get; init; }
 }

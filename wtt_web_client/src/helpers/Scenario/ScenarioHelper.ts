@@ -4,6 +4,7 @@ export default class ScenarioHelper
 {
 	// https://stackoverflow.com/a/43836580/11325184
 	public static GetClone = (s: DbTestScenario): DbTestScenario => Object.assign({}, s);
+	public static GetClone2 = (s: ActionsCollection): ActionsCollection => Object.assign({}, s);
 
 	public static EnumerateActions(ac: ActionsCollection)
 	{

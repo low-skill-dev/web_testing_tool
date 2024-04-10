@@ -7,10 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Models.Application.Abstract;
 using Models.Application.TestScenarios.Parameter;
+using Models.Constants;
 using Models.Database.Abstract;
 using Models.Database.Common;
 using Models.Database.TestScenarios;
 using ScenarioExecutor.ActionExecutors;
+using ScenarioExecutor.Helpers;
 
 namespace ScenarioExecutor.Interfaces;
 
@@ -48,11 +50,6 @@ public abstract class AActionExecutor
 
 		return ae;
 	}
-
-	public virtual async Task ExecuteUserScripts()
-	{
-
-	}
 }
 
 public abstract class AActionExecutor<A, R> : AActionExecutor where A : ADbAction where R : AActionResult
@@ -69,4 +66,56 @@ public abstract class AActionExecutor<A, R> : AActionExecutor where A : ADbActio
 	}
 
 	protected AActionExecutor(A action) : base(action) { }
+
+	protected virtual async Task ExecuteUserScripts(IDictionary<string, string> context,
+		string beforeContext = "",
+		string beforeScript = "",
+		string beforeUpdate = "")
+	{
+#pragma warning disable format // @formatter:off
+
+		var ctxJs = string.Join('\n', context.Select(x => $"{x.Key} = {x.Value};"));
+		var updJs = string.Join('\n', Action.VariableToPath?.Select(x =>
+		{
+			var errorCmd = $"{JsConsts.LogError}(\"Error parsing \'{x.Key}\' variable.\");";
+
+			var l1 = $"try {{ {x.Key}={x.Value}; {JsConsts.UpdateVariable}({x.Key},{x.Value}); }}";
+			var l2 = $"catch {{ {errorCmd} }}";
+			var l3 = $"finally {{ }}";
+
+			return string.Join('\n', l1, l2, l3);
+		}) ?? Array.Empty<string>());
+
+		var js = $$$"""
+			
+			// generated: {{{DateTime.UtcNow.ToString("O")}}}
+			// action: {{{Action.Guid}}}
+
+			// --- BEFORE UPDATE ---
+
+			{{{beforeContext}}}
+
+			{{{ctxJs}}}
+
+			{{{beforeScript}}}
+		
+			{{{Action.AfterRunScript}}}
+
+			{{{beforeUpdate}}}
+
+			// --- UPDATE ---
+
+			{{{updJs}}}
+		""";
+
+#pragma warning restore format // @formatter:on
+
+		//var contextUpdates = new List<(string name, string val)>(Action.VariableToPath.Count);
+		//var errors = new List<(string msg, bool crit)>(Action.VariableToPath.Count);
+
+		//var updateVariableFunc = (string name, string val) => contextUpdates.Add((name, val));
+		//var logErrorFunc = (string msg, bool crit = false) => errors.Add((msg, crit));
+
+		JsHelper.Execute(eng => this.Result!.BindAll(eng), js, this.UserSubscription);
+	}
 }

@@ -18,5 +18,5 @@ public abstract class ADbProxiedAction : ADbAction
 	 * ! его непосредственно запуском, что не исключает
 	 * ! ошибки в ходе выполнения.
 	 */
-	public Guid? ProxyGuid { get; set; }
+	public string? ProxyUrl { get; set; }
 }

@@ -8,6 +8,7 @@ using WebApi.Infrastructure.Authorization;
 using WebApi.Extensions;
 using static Models.Enums.UserRoles;
 using Models.Enums;
+using Models.Database.RunningScenarios;
 
 namespace WebApi.Controllers.v1;
 
@@ -49,11 +50,49 @@ public class ScenarioController : ControllerBase
 
 		if(guid is not null)
 		{
-			baseQuery = baseQuery.Where(x=> x.Guid == guid);
+			baseQuery = baseQuery.Where(x => x.Guid == guid);
 		}
 
 		return Ok(await baseQuery.ToListAsync());
 	}
+
+	///* https://datatracker.ietf.org/doc/html/rfc5789
+	// * PATCH Method for HTTP
+	// *	Several applications extending the Hypertext Transfer Protocol (HTTP)
+	// *	require a feature to do partial resource modification.  The existing
+	// *	HTTP PUT method only allows a complete replacement of a document.
+	// *	This proposal adds a new HTTP method, PATCH, to modify an existing
+	// *  
+	// *  ... So we do replacement here.
+	// */
+	//[HttpPut]
+	//[JwtAuthorize]
+	//public async Task<IActionResult> WriteScenario([FromBody][Required] DbTestScenario data)
+	//{
+	//	var user = this.HttpContext.GetAuthedUser()!;
+
+	//	var found = await _context.TestScenarios.FirstOrDefaultAsync(x => x.Guid.Equals(data.Guid));
+
+	//	if(found is not null)
+	//	{
+	//		if(!found.UserGuid.Equals(user) && user.Role < Administrator)
+	//			//return Forbid("You are not the owner of this scenario.");
+	//			return NotFound();
+
+	//		var oldId = found.Guid;
+	//		_context.Entry(found).CurrentValues.SetValues(data);
+	//		found.Guid = oldId;
+	//		found.Changed = DateTime.UtcNow;
+	//	}
+	//	else
+	//	{
+	//		data.Guid = Guid.NewGuid();
+	//		_context.TestScenarios.Add(data);
+	//	}
+
+	//	await _context.SaveChangesAsync();
+	//	return Ok(data.Guid);
+	//}
 
 	/* https://datatracker.ietf.org/doc/html/rfc5789
 	 * PATCH Method for HTTP
@@ -66,31 +105,77 @@ public class ScenarioController : ControllerBase
 	 */
 	[HttpPut]
 	[JwtAuthorize]
-	public async Task<IActionResult> WriteScenario([FromQuery][Required] string scenarioGuid, [FromBody][Required] DbTestScenario data)
+	public async Task<IActionResult> WriteScenarios([FromBody][Required] DbTestScenario[] data)
 	{
 		var user = this.HttpContext.GetAuthedUser()!;
-		var parsed = Guid.Parse(scenarioGuid);
 
-		var found = await _context.TestScenarios.FirstOrDefaultAsync(x => x.Guid.Equals(parsed));
+		var guids = data.Select(x => x.Guid).ToList();
+		var found = await _context.TestScenarios.Where(x => guids.Contains(x.Guid)).Select(x => new { x.Guid, x.UserGuid }).ToListAsync();
 
-		if(found is not null)
+		if(user.Role < Administrator && found.Any(x => x.UserGuid != user.Guid))
+			return Forbid();
+
+		var foundGuids = found.Select(x => x.Guid).ToHashSet();
+
+		await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.ReadUncommitted);
+
+		try
 		{
-			if(!found.UserGuid.Equals(user) && user.Role < Administrator)
-				//return Forbid("You are not the owner of this scenario.");
-				return NotFound();
+			foreach(var scenarioFromClient in data)
+			{
 
-			var oldId = found.Guid;
-			_context.Entry(found).CurrentValues.SetValues(data);
-			found.Guid = oldId;
-			found.Changed = DateTime.UtcNow;
+				if(foundGuids.Contains(scenarioFromClient.Guid))
+				{
+					await _context.TestScenarios.Where(x => x.Guid == scenarioFromClient.Guid).ExecuteUpdateAsync(s =>
+						s.SetProperty(x => x.ActionsJson, scenarioFromClient.ActionsJson)
+						.SetProperty(x => x.Name, scenarioFromClient.Name)
+						.SetProperty(x => x.ArgNames, scenarioFromClient.ArgNames)
+						.SetProperty(x => x.ArgTypes, scenarioFromClient.ArgTypes)
+						.SetProperty(x => x.EnableEmailNotifications, scenarioFromClient.EnableEmailNotifications)
+						.SetProperty(x => x.EntryPoint, scenarioFromClient.EntryPoint)
+						.SetProperty(x => x.RunIntervalMinutes, scenarioFromClient.RunIntervalMinutes)
+						);
+				}
+				else
+				{
+					scenarioFromClient.Guid = Guid.NewGuid();
+					scenarioFromClient.UserGuid = user.Guid;
+					_context.TestScenarios.Add(scenarioFromClient);
+				}
+			}
+
+			var newGuids = data.Select(x => x.Guid).ToList();
+			await _context.TestScenarios.Where(x => x.UserGuid == user.Guid && !newGuids.Contains(x.Guid)).ExecuteDeleteAsync();
+			var i = await _context.SaveChangesAsync();
 		}
-		else
+		catch(Exception ex)
 		{
-			data.Guid = Guid.NewGuid();
-			_context.TestScenarios.Add(data);
+			await _context.Database.RollbackTransactionAsync();
+			return Problem();
 		}
 
-		await _context.SaveChangesAsync();
-		return Ok(data.Guid);
+		await _context.Database.CommitTransactionAsync();
+
+		return Ok();
 	}
+
+	[HttpGet]
+	[Route("logs")]
+	[JwtAuthorize]
+	public async Task<IActionResult> GetLogs()
+	{
+		var user = this.HttpContext.GetAuthedUser()!;
+		var userScenarios = await _context.TestScenarios.Where(x => x.UserGuid == user.Guid).Select(x => x.Guid).ToListAsync();
+		var userLogs = await _context.ScenarioRuns.Where(x => userScenarios.Contains(x.ScenarioGuid)).ToListAsync();
+
+		var ret = userLogs.GroupBy(x => x.ScenarioGuid).Select(x => new ScenarioGuidToRuns { g = x.Key, r = x.OrderByDescending(x=> x.Completed).ToArray() }).ToList();
+
+		return Ok(ret);
+	}
+	class ScenarioGuidToRuns
+	{
+		public Guid g { get; set; }
+		public DbScenarioRun[] r { get; set; }
+	}
+
 }

@@ -3,6 +3,74 @@
 	flex-direction: column;
 }
 
+.actionHeader{
+	display: flex;
+	flex-direction: column;
+}
+
+.actionName{
+	display: flex;
+    width: 100%;
+}
+
+.editorBlock{
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid green;
+	margin-top: .5rem;
+}
+
+.codeEditor{
+	display: block;
+	width: 100%;
+	height: fit-content;
+}
+
+.editorPropHeader{
+	display: flex;
+    width: 100%;
+	font-size: 1rem;
+	background-color: rgb(200, 255, 200);
+}
+
+.editorText{
+	display: flex;
+    width: 100%;
+	height: fit-content;
+}
+
+.actionGuid{
+	display: block;
+	font-family: monospace;
+	font-size: small;
+	width: 100%;
+	text-align: center;
+}
+
+.actionCardWrapper{
+	display: flex;
+	flex-direction: column;
+	margin: .25rem;
+	padding:.25rem;
+	border: 2px solid green;
+	border-radius: .25rem;
+}
+
+.editorTextBlock{
+	display: flex;
+	width: 100%;
+	height: fit-content;
+	resize: none;
+}
+
+.editorInput{
+	display: flex;
+	width:100%;
+	height: fit-content;
+	border: 1px solid violet;
+	border-radius: 3px;
+}
+
 .moveRow {
 	display: flex;
 	flex-direction: row;
@@ -11,25 +79,27 @@
 .moveBtn {
 	display: flex;
 	justify-content: center;
+	min-width: 1.25rem;
+	min-height: 1.25rem;
+	margin-right: .1rem;
+	/* width: 20px;
+	height: 20px;
+	font-weight: bolder;
+	background-color: blue; */
 }
 
-.moveLeft{
-	content: '/heroicons/solid/arrow-left.svg';
+/* .moveLeft{
+	content: url('/heroicons/solid/arrow-left.svg');
 }
 
 .moveRight{
-	content: '/heroicons/solid/arrow-right.svg';
+	content: url('/heroicons/solid/arrow-right.svg');
 }
 
 .moveUp{
-	content: '/heroicons/solid/arrow-up.svg';
+	content: url('/heroicons/solid/arrow-up.svg');
 }
 
 .moveDown{
-	content: '/heroicons/solid/arrow-down.svg';
-}
-
-.actionGuid{
-	display: flex;
-	overflow: hidden;
-}
+	content: url('/heroicons/solid/arrow-down.svg');
+} */

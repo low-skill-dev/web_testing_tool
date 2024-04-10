@@ -11,14 +11,14 @@ using ScenarioExecutor.Interfaces;
 
 namespace ScenarioExecutor.ProjectInterface;
 
-public class ScenarioExecutor
+public class ScenarioExecution
 {
 	public const int MaxExecutionDepth = 16;
 
 	public ScenarioProgressInfo Progress { get; init; }
 
 
-	public ScenarioExecutor(ScenarioRunInfo runInfo, long executionDepth = 0)
+	public ScenarioExecution(ScenarioRunInfo runInfo, long executionDepth = 0)
 	{
 		if(executionDepth > MaxExecutionDepth)
 			throw new AggregateException("Maximum execution depth reached.");
@@ -35,10 +35,21 @@ public class ScenarioExecutor
 		{
 			Guid? actionGuid = Progress.RunInfo.EntryPoint;
 
+			if(Progress.RunInfo.ActionsLoadedFromDb.Count < 1)
+			{
+				throw new Exception("Scenario contains no actions.");
+			}
+
+			if(!Progress.RunInfo.ActionsLoadedFromDb.TryGetValue(actionGuid.Value, out var action))
+			{
+				actionGuid = Progress.RunInfo.ActionsLoadedFromDb
+					.OrderByDescending(x => x.Value.ColumnId)
+					.ThenByDescending(x => x.Value.RowId)
+					.First().Value.Guid;
+			}
+
 			while(actionGuid.HasValue)
 			{
-				var action = Progress.RunInfo.ActionsLoadedFromDb[actionGuid.Value];
-
 				if(action is null) break;
 
 				var executor = AActionExecutor.Create(action, Progress.RunInfo.DbExecutionLimitations);

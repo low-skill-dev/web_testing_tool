@@ -184,10 +184,12 @@ export class DbTestScenario extends ObjectWithUser
 {
 	public Name?: string;
 	public EnableEmailNotifications?: boolean;
-	public ActionsJson?: string;
+	public ActionsJson?: ActionsCollection;
 	public EntryPoint?: any;
 	public ArgTypes?: number[];
 	public ArgNames?: string[];
+	public RunIntervalMinutes?: number;
+	public RunTimes?: any[];
 }
 export class ActionsCollection
 {
@@ -227,4 +229,18 @@ export interface IJwtResponse
 {
 	Access: string;
 	Refresh: string;
+}
+export interface IDbScenarioRun extends ObjectWithGuid
+{
+	ScenarioGuid: any;
+	Started?: any;
+	Completed?: any;
+	IsSucceeded?: boolean;
+	ErrorMessage?: string;
+	ProcessorTime?: any;
+	RunReason?: number;
+	ScenarioJsonSnapshot?: string;
+	ScenarioJsonResult?: string;
+	InputValues?: Map<string,string>;
+	OutputValues?: Map<string,string>;
 }

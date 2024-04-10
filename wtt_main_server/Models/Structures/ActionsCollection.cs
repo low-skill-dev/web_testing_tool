@@ -12,19 +12,19 @@ using Reinforced.Typings.Attributes;
 namespace Models.Structures;
 
 //[TsInterface(AutoExportMethods = false)]
-public sealed class ActionsCollection : IEnumerable<ADbAction>
+public sealed class ActionsCollection /*: IEnumerable<ADbAction>*/
 {
 	#pragma warning disable format
 
-	public List<DbGetParametersAction>	DbGetParametersActions	{ get; init; }
-	public List<DbCertificateAction>	DbCertificateActions	{ get; init; }
-	public List<DbConditionalAction>	DbConditionalActions	{ get; init; }
-	public List<DbScenarioAction>		DbScenarioActions		{ get; init; }
-	public List<DbDelayAction>			DbDelayActions			{ get; init; }
-	public List<DbLogAction>			DbErrorActions			{ get; init; }
-	public List<DbEchoAction>			DbEchoActions			{ get; init; }
-	public List<DbHttpAction>			DbHttpActions			{ get; init; }
-	public List<DbImapAction>			DbImapActions			{ get; init; }
+	public List<DbGetParametersAction>	DbGetParametersActions	{ get; set; }
+	public List<DbCertificateAction>	DbCertificateActions	{ get; set; }
+	public List<DbConditionalAction>	DbConditionalActions	{ get; set; }
+	public List<DbScenarioAction>		DbScenarioActions		{ get; set; }
+	public List<DbDelayAction>			DbDelayActions			{ get; set; }
+	public List<DbLogAction>			DbErrorActions			{ get; set; }
+	public List<DbEchoAction>			DbEchoActions			{ get; set; }
+	public List<DbHttpAction>			DbHttpActions			{ get; set; }
+	public List<DbImapAction>			DbImapActions			{ get; set; }
 
 #pragma warning restore format
 
@@ -60,11 +60,19 @@ public sealed class ActionsCollection : IEnumerable<ADbAction>
 
 	public IEnumerator<ADbAction> GetEnumerator()
 	{
-		var concated = this.GetType().GetFields().Where(x => x.Name.StartsWith("Db") && x.Name.EndsWith("Actions"))
+		var concated = this.GetType().GetProperties().Where(x => x.Name.StartsWith("Db") && x.Name.EndsWith("Actions"))
 			.Select(x => x.GetValue(this)).SelectMany(x => ((IEnumerable)x!).Cast<ADbAction>());
 
 		foreach(var el in concated) yield return el;
 	}
 
-	IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
+	
+	public Dictionary<Guid, ADbAction> ToDictionary()
+	{
+		var ret = this.GetType().GetProperties().Where(x => x.Name.StartsWith("Db") && x.Name.EndsWith("Actions"))
+			.Select(x => x.GetValue(this)).SelectMany(x => ((IEnumerable)x!).Cast<ADbAction>())
+			.ToDictionary(x => x.Guid, x => x);
+
+		return ret;
+	}
 }

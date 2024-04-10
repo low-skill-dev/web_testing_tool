@@ -39,7 +39,7 @@ export class ObjectWithDates
 }
 export class ObjectWithGuid extends ObjectWithDates
 {
-	public Guid: any;
+	public Guid?: string;
 }
 export class ObjectWithUser extends ObjectWithGuid
 {
@@ -58,7 +58,7 @@ export abstract class ADbAction extends ObjectWithGuid
 }
 export abstract class ADbProxiedAction extends ADbAction
 {
-	public ProxyGuid?: any;
+	public ProxyUrl?: string;
 }
 export abstract class ADbWebRequest extends ADbProxiedAction
 {
@@ -200,10 +200,11 @@ export class DbTestScenario extends ObjectWithUser
 {
 	public Name?: string;
 	public EnableEmailNotifications?: boolean;
-	public ActionsJson?: string;
+	public ActionsJson?: ActionsCollection;
 	public EntryPoint?: any;
 	public ArgTypes?: number[];
 	public ArgNames?: string[];
+	public RunIntervalMinutes?:number;
 }
 export class ActionsCollection
 {
@@ -226,4 +227,18 @@ export interface IDbUserPublicInfo extends ObjectWithGuid
 	EmailConfirmedAtUtc?: any;
 	IsEmailConfirmed: boolean;
 	PasswordLastChanged: any;
+}
+export interface IDbScenarioRun extends ObjectWithGuid
+{
+	ScenarioGuid: any;
+	Started?: any;
+	Completed?: any;
+	IsSucceeded?: boolean;
+	ErrorMessage?: string;
+	ProcessorTime?: any;
+	RunReason?: number;
+	ScenarioJsonSnapshot?: string;
+	ScenarioJsonResult?: string;
+	InputValues?: Map<string,string>;
+	OutputValues?: Map<string,string>;
 }

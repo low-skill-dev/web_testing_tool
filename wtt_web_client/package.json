@@ -7,18 +7,26 @@
   "dependencies": {
     "@types/jest": "^29",
     "@types/node": "^18",
+    "@types/prismjs": "^1.26.3",
     "@types/react": "^18",
     "@types/react-transition-group": "^4",
+    "@types/uuid": "^9.0.8",
     "axios": "^1",
+    "i": "^0.3.7",
     "jwt-decode": "^3",
-    "url-join-ts": "^1",
+    "npm": "^10.5.1",
+    "prismjs": "^1.29.0",
     "react": "^18",
     "react-dom": "^18",
     "react-router-dom": "^6",
     "react-scripts": "^5",
+    "react-simple-code-editor": "^0.13.1",
+    "react-time-picker": "^6.6.0",
     "react-transition-group": "^4",
     "typescript": "^4",
-    "typescript-plugin-css-modules": "^5"
+    "typescript-plugin-css-modules": "^5",
+    "url-join-ts": "^1",
+    "uuid": "^9.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,5 +54,8 @@
   },
   "devDependencies": {
     "@types/react-dom": "^18.0.11"
+  },
+  "browser": {
+    "crypto": false
   }
 }

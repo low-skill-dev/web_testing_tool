@@ -78,22 +78,6 @@ public class DbHttpAction : ADbHttpAction
 	//public string? WriteResponseMimeTypeToVariable { get; set; }
 	//public string? WriteHttpVersionToVariable { get; set; }
 
-	/* После долги размышлений я пришел к выводу, что все прочие
-	 * варианты работы являются овернинжинирингов и проще навесить
-	 * на юзера обязанность написать одно (буквально одно) лишнее
-	 * слово в текстбоксе, чем писать дополнительные сотни (если не
-	 * тысячи) строк кода, каждая из которых может содержать ошибки.
-	 * 
-	 * Окончательно принимаю вариант, когда пользователь обращается
-	 * к ответу через заранее захардкоженные переменные с названиями
-	 * 'body', 'cookies', 'headers', в которых уже содержаться 
-	 * определенные члены. Тело ответа - это JSON объект произвольной
-	 * структуры, куки и заголовки - строго являются словорями, к членам
-	 * которых можно обратиться через индекс-строку, аля 
-	 * headers['last-modified'].
-	 */
-	public Dictionary<string, string>? VariableToPath { get; set; }
-
 	/// <summary>
 	/// Variables, updates of which in the generated JS code
 	/// should be placed into the try/catch/finally block.
