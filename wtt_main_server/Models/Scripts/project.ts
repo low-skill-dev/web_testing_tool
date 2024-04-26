@@ -59,11 +59,11 @@ export abstract class ADbAction extends ObjectWithGuid
 	public Bypass: boolean = false;
 	public ContinueExecutionInCaseOfCriticalError: boolean = false;
 	public AfterRunScript?: string;
-	public ScriptInTryBlock: boolean = false;
+	public VariableToPath?: Map<string,string>;
 }
 export abstract class ADbProxiedAction extends ADbAction
 {
-	public ProxyGuid?: any;
+	public ProxyUrl?: string;
 }
 export abstract class ADbHttpAction extends ADbWebRequest
 {
@@ -136,7 +136,6 @@ export class DbHttpAction extends ADbHttpAction
 	public RequestBody?: string;
 	public RequestHeaders?: Map<string,string>;
 	public RequestCookies?: Map<string,string>;
-	public VariableToPath?: Map<string,string>;
 	public VariablesUpdatedInTryBlock?: string[];
 }
 export class DbImapAction extends ADbAction

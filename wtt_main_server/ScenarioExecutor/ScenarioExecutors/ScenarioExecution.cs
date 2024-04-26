@@ -7,6 +7,7 @@ using Models.Database.Abstract;
 using Models.Database.RunningScenarios;
 using Models.Database.TestScenarios;
 using ScenarioExecutor.ActionExecutors;
+using ScenarioExecutor.Helpers;
 using ScenarioExecutor.Interfaces;
 
 namespace ScenarioExecutor.ProjectInterface;
@@ -55,8 +56,8 @@ public class ScenarioExecution
 				var executor = AActionExecutor.Create(action, Progress.RunInfo.DbExecutionLimitations);
 
 				this.Progress.ExecutionCount++;
-				await executor.Execute(this.Progress.CurrentVariableContext);
 
+				var updates = await executor.Execute(this.Progress.CurrentVariableContext);
 				var result = executor.AbstractResult;
 
 				if(result is null) throw new AggregateException(string.Join(' ',
@@ -69,6 +70,8 @@ public class ScenarioExecution
 				this.Progress.ActionResults.Add(result);
 
 				// TODO: update context here
+				this.Progress.CurrentVariableContext = 
+					ContextHelper.MergeContexts(this.Progress.CurrentVariableContext, updates);
 
 				actionGuid = executor.AbstractResult?.Next;
 			}

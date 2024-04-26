@@ -14,10 +14,10 @@ public static class ContextHelper
 	/// содержащихся в обоих словарях устанавливается значение из "следующего" контекста.
 	/// Оригинальные коллекции не модифицируются.
 	/// </summary>
-	public static Dictionary<string, ScenarioArgument> MergeContexts(
-		Dictionary<string, ScenarioArgument> prev, Dictionary<string, ScenarioArgument> next)
+	public static Dictionary<string, string> MergeContexts(
+		Dictionary<string, string> prev, Dictionary<string, string> next)
 	{
-		var ret = new Dictionary<string, ScenarioArgument>(prev.Keys.Union(next.Keys).Count());
+		var ret = new Dictionary<string, string>(prev.Keys.Union(next.Keys).Count());
 
 		foreach(var pair in prev)
 		{

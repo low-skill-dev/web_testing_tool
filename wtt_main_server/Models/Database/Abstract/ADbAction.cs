@@ -23,6 +23,7 @@ public abstract class ADbAction : ObjectWithGuid
 
 	public bool Bypass { get; set; } = false;
 
+[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public bool ContinueExecutionInCaseOfCriticalError { get; set; } = false;
 
 	public string? AfterRunScript { get; set; }
@@ -43,6 +44,8 @@ public abstract class ADbAction : ObjectWithGuid
 	 * структуры, куки и заголовки - строго являются словорями, к членам
 	 * которых можно обратиться через индекс-строку, аля 
 	 * headers['last-modified'].
+	 *
+	 * НАХУЯ Я ЭТО ВООБЩЕ ДОБАВИЛ ?
 	 */
 	public Dictionary<string, string>? VariableToPath { get; set; }
 }

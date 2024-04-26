@@ -13,6 +13,7 @@ using ScenarioExecutor.Interfaces;
 
 namespace ScenarioExecutor.ActionExecutors;
 
+[Obsolete("Отказ от разработки по причине нехватки времени")]
 public sealed class ErrorActionExecutor : AActionExecutor<DbLogAction, ErrorActionResult>
 {
 	public ErrorActionExecutor(DbLogAction action) : base(action) { }

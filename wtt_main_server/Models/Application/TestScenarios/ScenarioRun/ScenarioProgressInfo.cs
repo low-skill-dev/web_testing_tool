@@ -25,7 +25,7 @@ public sealed class ScenarioProgressInfo
 	public List<Dictionary<string, ScenarioArgument>> ContextByAction { get; init; } = new();
 
 	// Текущее состояние значений переменных.
-	public Dictionary<string, string> CurrentVariableContext { get; init; } = new();
+	public Dictionary<string, string> CurrentVariableContext { get; set; } = new();
 
 	public List<AActionResult> ActionResults { get; init; } = new();
 

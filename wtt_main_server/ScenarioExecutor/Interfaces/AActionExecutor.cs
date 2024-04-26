@@ -30,21 +30,21 @@ public abstract class AActionExecutor
 		this.AbstractAction = action;
 	}
 
-	public abstract Task Execute(IDictionary<string, string> currentContext);
+	public abstract Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext);
 
 	public static AActionExecutor Create(ADbAction action, DbTariff? subscription = null)
 	{
 		AActionExecutor? ae = null;
 
-		if(action is DbHttpAction dbHttpAction) ae = new HttpActionExecutor(dbHttpAction);
-		if(action is DbEchoAction dbEchoAction) ae = new EchoActionExecutor(dbEchoAction);
-		if(action is DbImapAction dbImapAction) ae = new ImapActionExecutor(dbImapAction);
-		if(action is DbDelayAction dbDelayAction) ae = new DelayActionExecutor(dbDelayAction);
-		if(action is DbLogAction dbErrorAction) ae = new ErrorActionExecutor(dbErrorAction);
-		if(action is DbScenarioAction dbScenarioAction) ae = new ScenarioActionExecutor(dbScenarioAction);
-		if(action is DbConditionalAction dbConditionalAction) ae = new ConditionalActionExecutor(dbConditionalAction);
+		if (action is DbHttpAction dbHttpAction) ae = new HttpActionExecutor(dbHttpAction);
+		if (action is DbEchoAction dbEchoAction) ae = new EchoActionExecutor(dbEchoAction);
+		if (action is DbImapAction dbImapAction) ae = new ImapActionExecutor(dbImapAction);
+		if (action is DbDelayAction dbDelayAction) ae = new DelayActionExecutor(dbDelayAction);
+		if (action is DbLogAction dbErrorAction) ae = new ErrorActionExecutor(dbErrorAction);
+		if (action is DbScenarioAction dbScenarioAction) ae = new ScenarioActionExecutor(dbScenarioAction);
+		if (action is DbConditionalAction dbConditionalAction) ae = new ConditionalActionExecutor(dbConditionalAction);
 
-		if(ae is null) throw new NotImplementedException(nameof(ADbAction));
+		if (ae is null) throw new NotImplementedException(nameof(ADbAction));
 
 		ae.UserSubscription = subscription;
 
@@ -68,19 +68,20 @@ public abstract class AActionExecutor<A, R> : AActionExecutor where A : ADbActio
 	protected AActionExecutor(A action) : base(action) { }
 
 	protected virtual async Task ExecuteUserScripts(IDictionary<string, string> context,
-		string beforeContext = "",
-		string beforeScript = "",
-		string beforeUpdate = "")
+		string beforeContext = "", string beforeScript = "", string afterScript = "")
 	{
-#pragma warning disable format // @formatter:off
+		#pragma warning disable format // @formatter:off
 
 		var ctxJs = string.Join('\n', context.Select(x => $"{x.Key} = {x.Value};"));
+
+		// Что это вообще? Я не помню уже.
+		// Неактуально, каждое действие прописывает свои перменные внутри себя.
 		var updJs = string.Join('\n', Action.VariableToPath?.Select(x =>
 		{
 			var errorCmd = $"{JsConsts.LogError}(\"Error parsing \'{x.Key}\' variable.\");";
 
 			var l1 = $"try {{ {x.Key}={x.Value}; {JsConsts.UpdateVariable}({x.Key},{x.Value}); }}";
-			var l2 = $"catch {{ {errorCmd} }}";
+			var l2 = $"catch(e) {{ {JsConsts.LogError}(`Error updating \'{x.Key}\' variable: '${{e.message}}'.`) }}";
 			var l3 = $"finally {{ }}";
 
 			return string.Join('\n', l1, l2, l3);
@@ -91,7 +92,7 @@ public abstract class AActionExecutor<A, R> : AActionExecutor where A : ADbActio
 			// generated: {{{DateTime.UtcNow.ToString("O")}}}
 			// action: {{{Action.Guid}}}
 
-			// --- BEFORE UPDATE ---
+			// BEFORE UPDATE
 
 			{{{beforeContext}}}
 
@@ -101,14 +102,14 @@ public abstract class AActionExecutor<A, R> : AActionExecutor where A : ADbActio
 		
 			{{{Action.AfterRunScript}}}
 
-			{{{beforeUpdate}}}
+			{{{afterScript}}}
 
-			// --- UPDATE ---
+			// UPDATE
 
 			{{{updJs}}}
 		""";
 
-#pragma warning restore format // @formatter:on
+		#pragma warning restore format // @formatter:on
 
 		//var contextUpdates = new List<(string name, string val)>(Action.VariableToPath.Count);
 		//var errors = new List<(string msg, bool crit)>(Action.VariableToPath.Count);
@@ -116,6 +117,6 @@ public abstract class AActionExecutor<A, R> : AActionExecutor where A : ADbActio
 		//var updateVariableFunc = (string name, string val) => contextUpdates.Add((name, val));
 		//var logErrorFunc = (string msg, bool crit = false) => errors.Add((msg, crit));
 
-		JsHelper.Execute(eng => this.Result!.BindAll(eng), js, this.UserSubscription);
+		await Task.Run(() => JsHelper.Execute(eng => this.Result!.BindAll(eng), js, this.UserSubscription));
 	}
 }

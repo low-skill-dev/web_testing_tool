@@ -14,11 +14,12 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace ScenarioExecutor.ActionExecutors;
 
+[Obsolete("Отказ от разработки по причине нехватки времени")]
 public sealed class DelayActionExecutor : AActionExecutor<DbDelayAction, DelayActionResult>
 {
 	public DelayActionExecutor(DbDelayAction action) : base(action) { }
 
-	public override async Task Execute(IDictionary<string, string> currentContext)
+	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
 		throw new NotImplementedException();
 	}

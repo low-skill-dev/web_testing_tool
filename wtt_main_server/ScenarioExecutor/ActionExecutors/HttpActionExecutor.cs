@@ -202,7 +202,8 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 		 * but it also points out that non-conforming syntaxes (like the Expires parameter, 
 		 * which has ,s in its value) are still common and must be dealt with by implementations.
 		 * 
-		 * RFC 2109 has been obsoleted by RFC 2965 that in turn got obsoleted by RFC 6265, which is stricter on the issue:
+		 * ! RFC 2109 has been obsoleted by RFC 2965 
+		 * that in turn got obsoleted by RFC 6265, which is stricter on the issue:
 		 * Origin servers SHOULD NOT fold multiple Set-Cookie header fields into a single header field. The usual mechanism 
 		 * for folding HTTP headers fields (i.e., as defined in [RFC2616]) might change the semantics of the Set-Cookie 
 		 * header field because the %x2C (",") character is used by Set-Cookie in a way that conflicts with such folding.

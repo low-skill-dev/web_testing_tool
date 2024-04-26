@@ -16,7 +16,6 @@ public abstract class AActionResult
 
 	public DateTime? Started { get; set; }
 	public DateTime? Completed { get; set; }
-	public DateTime? Interrupted { get; set; }
 
 	public List<(LogType typ, string msg)> Logs { get; } = new();
 	public List<(string name, string val)> ContextUpdates { get; } = new();

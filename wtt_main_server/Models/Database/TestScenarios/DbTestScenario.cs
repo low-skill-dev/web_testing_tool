@@ -80,6 +80,7 @@ public class DbTestScenario : ObjectWithUser
 	 * ЗДЕСЬ УКАЗАНО ТО, ЧТО СЦЕНАРИЙ МОЖЕТ ПРИНЯТЬ,
 	 * А КОНКРЕТНЫЙ НАБОР ПАРАМЕТРО ЗАДАЕТСЯ ОТДЕЛЬНО
 	 */
+	 [Obsolete("Отказ от типов, только голые аргументы")]
 	public TestScenarioArgTypes[] ArgTypes { get; set; } = [];
 	public string[] ArgNames { get; set; } = [];
 

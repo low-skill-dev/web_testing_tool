@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Models.Application.Abstract;
+﻿using System.Net.NetworkInformation;
 using Models.Application.TestScenarios.ActionResults;
-using Models.Application.TestScenarios.Parameter;
-using Models.Database.Abstract;
-using Models.Database.Common;
 using Models.Database.TestScenarios;
 using ScenarioExecutor.Interfaces;
-using static System.Collections.Specialized.BitVector32;
+using static ScenarioExecutor.Helpers.ContextHelper;
 
 namespace ScenarioExecutor.ActionExecutors;
 
 public sealed class EchoActionExecutor : AActionExecutor<DbEchoAction, EchoActionResult>
 {
 	public EchoActionExecutor(DbEchoAction action) : base(action) { }
-	public override async  Task Execute(IDictionary<string, string> currentContext)
+
+	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
 		_cpuTimeCounter.Start();
 
@@ -26,14 +19,23 @@ public sealed class EchoActionExecutor : AActionExecutor<DbEchoAction, EchoActio
 			Started = DateTime.UtcNow
 		};
 
-		var (req, res) = await MakeRequestAsync(currentContext);
+		var (reply, delay) = await MakeRequestAsync(currentContext);
 
-		await ExecuteUserScripts(currentContext, req, res);
+		await ExecuteUserScripts(currentContext);
 
 		var ret = (this.Result!.ContextUpdates as IEnumerable<(string n, string v)>).Reverse().DistinctBy(x => x.n).ToDictionary(x => x.n, x => x.v);
 
 		_cpuTimeCounter.Stop();
 		Result.Completed = DateTime.UtcNow;
 		return ret;
+	}
+
+	private async Task<(PingReply reply, TimeSpan? delay)> MakeRequestAsync(IDictionary<string, string> currentContext)
+	{
+		var url = CreateStringFromContext(Action.RequestUrl, currentContext);
+		var reply = await new Ping().SendPingAsync(url);
+
+		return (reply, reply.Status == IPStatus.Success 
+			? TimeSpan.FromMilliseconds(reply.RoundtripTime) : null);
 	}
 }

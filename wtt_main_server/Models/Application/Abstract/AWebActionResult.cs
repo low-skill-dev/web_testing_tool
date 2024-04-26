@@ -8,6 +8,7 @@ namespace Models.Application.Abstract;
 
 #pragma warning disable CS8618
 
+[Obsolete("Не требуется")]
 public abstract class AWebActionResult : AActionResult
 {
 	public string Url { get; set; }

@@ -7,6 +7,7 @@ using Models.Enums;
 
 namespace Models.Application.TestScenarios.Parameter;
 
+[Obsolete("Отказ от разработки по причине нехватки времени")]
 public class ScenarioArgument
 {
 	public required TestScenarioArgTypes Type { get; init; }

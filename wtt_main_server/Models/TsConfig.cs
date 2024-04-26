@@ -46,7 +46,7 @@ public class Configuration
 			.WithProperty(x => x.Bypass, c => c.InitializeWith((_, _, _) => "false"))
 			.WithProperty(x => x.ContinueExecutionInCaseOfCriticalError, c => c.InitializeWith((_, _, _) => "false"))
 			//.WithProperty(x => x.AfterRunScript!, null)
-			.WithProperty(x => x.ScriptInTryBlock, c => c.InitializeWith((_, _, _) => "false"))
+			//.WithProperty(x => x.ScriptInTryBlock, c => c.InitializeWith((_, _, _) => "false"))
 			.Order(400);
 
 		builder.ExportAsClass<ADbProxiedAction>().Abstract().WithPublicProperties()
