@@ -15,6 +15,8 @@ const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 	const [url, setUrl] = useState(props.Action.RequestUrl);
 	const [method, setMethod] = useState(props.Action.Method);
 	const [body, setBody] = useState(props.Action.RequestBody);
+	const [headersText, setHeadersText] = useState(props.Action.RequestBody);
+	const [cookiesText, setCookiesText] = useState(props.Action.RequestBody);
 	const [headers, setHeaders] = useState(props.Action.RequestHeaders);
 	const [cookies, setCookies] = useState(props.Action.RequestCookies);
 	//const [script, setScript] = useState(props.Action.AfterRunScript); // ! COMMON
@@ -22,12 +24,34 @@ const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 	useEffect(() => { props.Action.RequestUrl = url }, [url]);
 	useEffect(() => { props.Action.Method = method }, [method]);
 	useEffect(() => { props.Action.RequestBody = body }, [body]);
-	useEffect(() => { props.Action.RequestHeaders = headers }, [headers]);
-	useEffect(() => { props.Action.RequestCookies = cookies }, [cookies]);
+
+	useEffect(() =>
+	{
+		try
+		{
+			props.Action.RequestHeaders = headersText?.replaceAll('\r', '').split('\n').map(a =>
+			{
+				let [k, v] = a.split(' ', 2);
+				return [k, v];
+			})!;
+		} catch { }
+	}, [headersText]);
+	useEffect(() =>
+	{
+		try
+		{
+			props.Action.RequestCookies = cookiesText?.replaceAll('\r', '').split('\n').map(a =>
+			{
+				let [k, v] = a.split(' ', 2);
+				return [k, v];
+			})!;
+		} catch { }
+	}, [cookiesText]);
 	//useEffect(() => { props.Action.AfterRunScript = script}, [script]);
 
-	const fixTextAreaHeight = (e: any) =>{
-		e.currentTarget.style.height = "";e.currentTarget.style.height = `calc(${e.currentTarget.scrollHeight}px + 5px)`; 
+	const fixTextAreaHeight = (e: any) =>
+	{
+		e.currentTarget.style.height = ""; e.currentTarget.style.height = `calc(${e.currentTarget.scrollHeight}px + 5px)`;
 	}
 
 	return <span className={cl.actionCard}>
@@ -43,22 +67,22 @@ const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 		</span>
 		<span className={cl.editorBlock}>
 			<span className={cl.editorPropHeader}>URL</span>
-			<textarea rows={1} className={cl.editorTextBlock} value={url} onChange={e=> setUrl(e.target.value)} onInput={e=> fixTextAreaHeight(e)}/>
+			<textarea rows={1} className={cl.editorTextBlock} value={url} onChange={e => setUrl(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
 		</span>
 		<span className={cl.editorBlock}>
-			<span  className={cl.editorPropHeader}>BODY</span>
+			<span className={cl.editorPropHeader}>BODY</span>
 			{/* https://stackoverflow.com/a/48460773/11325184 */}
-			<textarea rows={1}  className={cl.editorTextBlock} value={body} onChange={e=> setBody(e.target.value)} onInput={e=> fixTextAreaHeight(e)} />
+			<textarea rows={1} className={cl.editorTextBlock} value={body} onChange={e => setBody(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
 		</span>
 		<span className={cl.editorBlock}>
-			<span  className={cl.editorPropHeader}>HEADERS</span>
+			<span className={cl.editorPropHeader}>HEADERS</span>
 			{/* https://stackoverflow.com/a/48460773/11325184 */}
-			<textarea rows={1}  className={cl.editorTextBlock} value={body} onChange={e=> setBody(e.target.value)} onInput={e=> fixTextAreaHeight(e)} />
+			<textarea rows={1} className={cl.editorTextBlock} value={headersText} onChange={e => setHeadersText(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
 		</span>
 		<span className={cl.editorBlock}>
-			<span  className={cl.editorPropHeader}>COOKIES</span>
+			<span className={cl.editorPropHeader}>COOKIES</span>
 			{/* https://stackoverflow.com/a/48460773/11325184 */}
-			<textarea rows={1}  className={cl.editorTextBlock} value={body} onChange={e=> setBody(e.target.value)} onInput={e=> fixTextAreaHeight(e)} />
+			<textarea rows={1} className={cl.editorTextBlock} value={cookiesText} onChange={e => setCookiesText(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
 		</span>
 		<ProxiedCardPart Action={props.Action} />
 		{/* <span className={cl.editorBlock}>

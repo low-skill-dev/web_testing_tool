@@ -11,13 +11,12 @@ namespace ScenarioExecutor.Helpers;
 
 internal static class JsHelper
 {
-	public static void Execute(Action<Engine> functionsAdding, string code, DbTariff limitations,
-		bool ignoreErrors = false)
+	public static void Execute(Action<Engine> functionsAdding, string code, bool ignoreErrors = false)
 	{
 		var eng = new Engine(o =>
 		{
-			o.LimitMemory(limitations.MaximumScriptMemoryBytes);
-			o.TimeoutInterval(TimeSpan.FromSeconds(limitations.MaximumScriptTimeSecs));
+			o.LimitMemory(8 * 1024 * 1024); // 8 mb
+			o.TimeoutInterval(TimeSpan.FromSeconds(4));
 		});
 
 		functionsAdding(eng);

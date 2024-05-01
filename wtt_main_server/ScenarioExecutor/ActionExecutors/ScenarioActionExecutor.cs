@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Models.Application.Abstract;
 using Models.Application.TestScenarios.ActionResults;
-using Models.Application.TestScenarios.Parameter;
 using Models.Database.Abstract;
 using Models.Database.Common;
 using Models.Database.TestScenarios;
@@ -21,7 +20,7 @@ public sealed class ScenarioActionExecutor : AActionExecutor<DbScenarioAction, S
 { 
 	public ScenarioActionExecutor(DbScenarioAction action) : base(action) { }
 
-	public override async Task Execute(IDictionary<string, string> currentContext)
+	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
 		throw new NotImplementedException();
 	}

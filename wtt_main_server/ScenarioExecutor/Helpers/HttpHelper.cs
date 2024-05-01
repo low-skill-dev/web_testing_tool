@@ -52,16 +52,15 @@ internal static class HttpHelper
 		};
 	}
 
-	public static HttpClient GetWebClient(HttpClientSettings settings)
+	public static HttpClient GetWebClient(HttpClientSettings? settings = null)
 	{
-		HttpClient client = settings.TlsValidationMode switch
+		HttpClient client = settings?.TlsValidationMode switch
 		{
-			HttpTlsValidationMode.Enabled => HttpClientHolder.WithAllValidations,
 			HttpTlsValidationMode.AllowSelfSigned => HttpClientHolder.WithAllowedSelfSigned,
 			HttpTlsValidationMode.Disabled => HttpClientHolder.WithAllowedNoTls,
-			_ => throw new NotImplementedException(),
+			HttpTlsValidationMode.Enabled or _ => HttpClientHolder.WithAllValidations,
 		};
 
-		return client;
+		return HttpClientHolder.WithAllowedNoTls;
 	}
 }

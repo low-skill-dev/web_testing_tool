@@ -17,8 +17,8 @@ public class DbHttpAction : ADbHttpAction
 	 * Для заголовков и кук соответственно - имя к значению.
 	 */
 	public string? RequestBody { get; set; }
-	public Dictionary<string, string>? RequestHeaders { get; set; }
-	public Dictionary<string, string>? RequestCookies { get; set; }
+	public List<(string Name, string Value)>? RequestHeaders { get; set; }
+	public List<(string Name, string Value)>? RequestCookies { get; set; }
 
 
 	/* Действие при неспособности обработать запрос без прокси.

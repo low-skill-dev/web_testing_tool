@@ -2,7 +2,8 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
-export enum ActionTypes {
+export enum ActionTypes
+{
 	DbCertificateActionType = 0,
 	DbConditionalActionType = 1,
 	DbDelayActionType = 2,
@@ -14,18 +15,21 @@ export enum ActionTypes {
 	DbScenarioActionType = 8,
 	DbTestScenarioType = 9
 }
-export enum UserRoles {
+export enum UserRoles
+{
 	Regular = 128,
 	Moderator = 32768,
 	Administrator = 4194304,
 	CEO = 536870912
 }
-export enum HttpTlsValidationMode {
+export enum HttpTlsValidationMode
+{
 	Enabled = 0,
 	AllowSelfSigned = 1,
 	Disabled = 2
 }
-export enum HttpRequestMethod {
+export enum HttpRequestMethod
+{
 	Get = 1,
 	Post = 2,
 	Put = 4,
@@ -66,7 +70,7 @@ export abstract class ADbWebRequest extends ADbProxiedAction
 }
 export abstract class ADbHttpAction extends ADbWebRequest
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Method = HttpRequestMethod.Get;
@@ -77,7 +81,7 @@ export abstract class ADbHttpAction extends ADbWebRequest
 }
 export class DbCertificateAction extends ADbHttpAction
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbCertificateActionType;
@@ -86,7 +90,7 @@ export class DbCertificateAction extends ADbHttpAction
 }
 export class DbConditionalAction extends ADbAction
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbConditionalActionType;
@@ -98,7 +102,7 @@ export class DbConditionalAction extends ADbAction
 }
 export class DbDelayAction extends ADbAction
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbDelayActionType;
@@ -108,7 +112,7 @@ export class DbDelayAction extends ADbAction
 }
 export class DbEchoAction extends ADbWebRequest
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbEchoActionType;
@@ -117,7 +121,7 @@ export class DbEchoAction extends ADbWebRequest
 }
 export class DbGetParametersAction extends ADbWebRequest
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbGetParametersActionType;
@@ -126,21 +130,21 @@ export class DbGetParametersAction extends ADbWebRequest
 }
 export class DbHttpAction extends ADbHttpAction
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbHttpActionType;
 	}
 	public Type: ActionTypes;
 	public RequestBody?: string;
-	public RequestHeaders?: { [key:string]: string };
-	public RequestCookies?: { [key:string]: string };
-	public VariableToPath?: { [key:string]: string };
+	public RequestHeaders?: [string, string][];
+	public RequestCookies?: [string, string][];
+	public VariableToPath?: [string, string][];
 	public VariablesUpdatedInTryBlock?: string[];
 }
 export class DbImapAction extends ADbAction
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbImapActionType;
@@ -158,7 +162,7 @@ export class DbImapAction extends ADbAction
 }
 export class DbLogAction extends ADbAction
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbErrorActionType;
@@ -186,14 +190,14 @@ export interface IJwtResponse
 }
 export class DbScenarioAction extends ADbAction
 {
-	constructor ()
+	constructor()
 	{
 		super();
 		this.Type = ActionTypes.DbTestScenarioType;
 	}
 	public Type: ActionTypes;
 	public CalledScenarioGuid: any;
-	public Arguments: Map<string,string> = new Map<string, string>();
+	public Arguments: Map<string, string> = new Map<string, string>();
 	public WriteAllResultToVariable?: string;
 }
 export class DbTestScenario extends ObjectWithUser
@@ -204,7 +208,7 @@ export class DbTestScenario extends ObjectWithUser
 	public EntryPoint?: any;
 	public ArgTypes?: number[];
 	public ArgNames?: string[];
-	public RunIntervalMinutes?:number;
+	public RunIntervalMinutes?: number;
 }
 export class ActionsCollection
 {
@@ -239,6 +243,6 @@ export interface IDbScenarioRun extends ObjectWithGuid
 	RunReason?: number;
 	ScenarioJsonSnapshot?: string;
 	ScenarioJsonResult?: string;
-	InputValues?: Map<string,string>;
-	OutputValues?: Map<string,string>;
+	InputValues?: Map<string, string>;
+	OutputValues?: Map<string, string>;
 }

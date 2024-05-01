@@ -14,6 +14,7 @@ using static System.Text.Json.JsonSerializer;
 using System;
 using Models.Constants;
 using CommonLibrary.Helpers;
+using Jint.Runtime;
 
 namespace ScenarioExecutor.ActionExecutors;
 
@@ -51,14 +52,13 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 	/// </returns>
 	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
-		_cpuTimeCounter.Start();
-
 		Result = new()
 		{
 			Started = DateTime.UtcNow
 		};
 
 		var (req, res) = await MakeRequestAsync(currentContext);
+		Result.IsError = ((int)res.StatusCode >= 300);
 
 		await ExecuteUserScripts(currentContext, req, res);
 
@@ -75,7 +75,7 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 	{
 		var client = HttpHelper.GetWebClient(new HttpClientSettings
 		{
-			TlsValidationMode = this.Action.TlsValidationMode
+			TlsValidationMode = Models.Enums.HttpTlsValidationMode.Disabled,
 		});
 
 		var url = CreateStringFromContext(Action.RequestUrl, currentContext);
@@ -84,12 +84,16 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 			CreateStringFromContext(Action.RequestBody, currentContext);
 
 		var cookies = Action.RequestCookies?.Select(x => KeyValuePair.Create(
-			x.Key, CreateStringFromContext(x.Value, currentContext)))
+			x.Name, CreateStringFromContext(x.Value, currentContext)))
 			.ToDictionary(x => x.Key, x => x.Value);
 
 		var headers = Action.RequestHeaders?.Select(x => KeyValuePair.Create(
-			x.Key, CreateStringFromContext(x.Value, currentContext)))
+			x.Name, CreateStringFromContext(x.Value, currentContext)))
 			.ToDictionary(x => x.Key, x => x.Value);
+
+		Result!.RequestBody = body;
+		Result!.RequestCookies = cookies;
+		Result!.RequestHeaders = headers;
 
 		var msg = new HttpRequestMessage(this.Action.Method.ToNetHttpMethod(), new Uri(url));
 
@@ -113,6 +117,13 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 			_cpuTimeCounter.Stop();
 			var response = await client.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 			_cpuTimeCounter.Start();
+
+			Result!.ResponseBody = await response.Content.ReadAsStringAsync();
+			Result!.ResponseHeaders = response.Headers.ToDictionary(
+				x => x.Key, x => x.Value.First());
+			msg.Headers.TryGetValues("Set-Cookie", out var t); ;
+			Result!.ResponseCookies = t is null ? new Dictionary<string, string>()
+				: t.Select(x => x.Split(';', 2)[0].Split('=', 2)).ToDictionary(x => x[0], x => x[1]);
 
 			return (msg, response);
 		}

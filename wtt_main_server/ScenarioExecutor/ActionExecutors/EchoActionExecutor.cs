@@ -1,4 +1,6 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.Net;
+using System.Net.NetworkInformation;
+using System.Reflection.PortableExecutable;
 using Models.Application.TestScenarios.ActionResults;
 using Models.Database.TestScenarios;
 using ScenarioExecutor.Interfaces;
@@ -20,8 +22,12 @@ public sealed class EchoActionExecutor : AActionExecutor<DbEchoAction, EchoActio
 		};
 
 		var (reply, delay) = await MakeRequestAsync(currentContext);
+		Result.IsError = reply?.Status != 0;
+		Result.PingDelayMs = delay.HasValue 
+			? Convert.ToInt32(delay.Value.TotalMilliseconds) : -1;
 
-		await ExecuteUserScripts(currentContext);
+		var js = $"let pingMs = {Convert.ToInt32(delay?.TotalMilliseconds ?? -1)};";
+		await ExecuteUserScripts(currentContext, js);
 
 		var ret = (this.Result!.ContextUpdates as IEnumerable<(string n, string v)>).Reverse().DistinctBy(x => x.n).ToDictionary(x => x.n, x => x.v);
 
@@ -33,9 +39,12 @@ public sealed class EchoActionExecutor : AActionExecutor<DbEchoAction, EchoActio
 	private async Task<(PingReply reply, TimeSpan? delay)> MakeRequestAsync(IDictionary<string, string> currentContext)
 	{
 		var url = CreateStringFromContext(Action.RequestUrl, currentContext);
-		var reply = await new Ping().SendPingAsync(url);
 
-		return (reply, reply.Status == IPStatus.Success 
+		_cpuTimeCounter.Stop();
+		var reply = await new Ping().SendPingAsync(url);
+		_cpuTimeCounter.Start();
+
+		return (reply, reply.Status == IPStatus.Success
 			? TimeSpan.FromMilliseconds(reply.RoundtripTime) : null);
 	}
 }

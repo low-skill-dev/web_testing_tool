@@ -18,7 +18,13 @@ public class DbImapAction : ADbAction
 
 	/* Аккаунт IMAP, которые будет использован для подтягивания письма.
 	 */
-	public Guid UserImapAccountGuid { get; set; } = Guid.Empty;
+	//[Obsolete("Отказ от разработки по причине нехватки времени")]
+	//public Guid UserImapAccountGuid { get; set; } = Guid.Empty;
+
+	public string? ImapName { get; set; }
+	public int ImapPort { get; set; } = 0;
+	public string ImapUsername { get; set; }
+	public string ImapPassword { get; set; }
 
 	/* Нижепредставленные поля нужны для первого режима работы
 	 * программы - поиск по регексу. Нужное письмо определяется

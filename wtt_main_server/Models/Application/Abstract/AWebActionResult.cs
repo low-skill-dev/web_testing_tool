@@ -11,6 +11,7 @@ namespace Models.Application.Abstract;
 [Obsolete("Не требуется")]
 public abstract class AWebActionResult : AActionResult
 {
+	[Obsolete("Не требуется")]
 	public string Url { get; set; }
 
 	//public AWebActionResult(Guid dbActionGuid, string url) : base(dbActionGuid)

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Models.Database.RunningScenarios;
 using Models.Database.Abstract;
-using Models.Application.TestScenarios.Parameter;
 using Models.Database.Common;
 
 //using wtt_main_server_database_models.Database;
@@ -33,20 +32,10 @@ public sealed class ScenarioRunInfo
 	/// <summary>
 	/// GUID действия, которое является точкой входа.
 	/// </summary>
-	public required Guid EntryPoint { get; init; }
+	public required Guid? EntryPoint { get; init; }
 
 	/// <summary>
 	/// Действия, загруженные из базы данных для текущего сценария.
 	/// </summary>
 	public required Dictionary<Guid, ADbAction> ActionsLoadedFromDb { get; init; }
-
-	// Уровень доступа пользователя к ресурсам
-	[Obsolete("Отказ от разработки по причине нехватки времени")]
-	public DbTariff? DbExecutionLimitations { get; init; }
-
-	/// <summary>
-	/// Параметры, переданные в текущий сценарий извне.
-	/// </summary>
-	[Obsolete("Отказ от разработки по причине нехватки времени")]
-	public Dictionary<string, string> Arguments { get; init; }
 }

@@ -84,6 +84,7 @@ export class DbCertificateAction extends ADbHttpAction
 		this.Type = ActionTypes.DbCertificateActionType;
 	}
 	public Type: ActionTypes;
+	public MinimalDaysRemaining: number;
 }
 export class DbConditionalAction extends ADbAction
 {
@@ -134,8 +135,8 @@ export class DbHttpAction extends ADbHttpAction
 	}
 	public Type: ActionTypes;
 	public RequestBody?: string;
-	public RequestHeaders?: Map<string,string>;
-	public RequestCookies?: Map<string,string>;
+	public RequestHeaders?: [string,string][];
+	public RequestCookies?: [string,string][];
 	public VariablesUpdatedInTryBlock?: string[];
 }
 export class DbImapAction extends ADbAction

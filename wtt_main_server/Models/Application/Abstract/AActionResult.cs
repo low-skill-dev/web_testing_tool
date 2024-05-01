@@ -14,6 +14,8 @@ public abstract class AActionResult
 	public Guid DbActionGuid { get; set; }
 	public Guid? Next { get; set; }
 
+	public bool IsError { get; set; } = false;
+
 	public DateTime? Started { get; set; }
 	public DateTime? Completed { get; set; }
 
@@ -28,7 +30,7 @@ public abstract class AActionResult
 	private void LogError(string msg) => Log(LogType.Error, msg);
 	private void Log(int typ, string msg) => Log((LogType)typ, msg);
 	private void Log(LogType typ, string msg) => Logs.Add((typ, msg));
-	public Engine BindLogging(Engine e)
+	private Engine BindLogging(Engine e)
 	{
 		e.SetValue("logInfo", this.LogInfo);
 		e.SetValue("logWarn", this.LogWarn);
@@ -39,7 +41,7 @@ public abstract class AActionResult
 	}
 
 	private void UpdateVariable(string name, string val) => ContextUpdates.Add((name, val));
-	public Engine BindUpdating(Engine e)
+	private Engine BindUpdating(Engine e)
 	{
 		e.SetValue("updateVariable", this.UpdateVariable);
 		return e;

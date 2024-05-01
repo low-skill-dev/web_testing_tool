@@ -10,5 +10,5 @@ namespace Models.Application.TestScenarios.ActionResults;
 
 public class EchoActionResult : AWebActionResult
 {
-	// по сути тут ничего не нужно
+	public int PingDelayMs { get; set; }
 }

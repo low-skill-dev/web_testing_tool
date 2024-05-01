@@ -16,6 +16,4 @@ public class HttpActionResult : AWebActionResult
 	public string? ResponseBody { get; set; }
 	public Dictionary<string, string>? ResponseCookies { get; set; }
 	public Dictionary<string, string>? ResponseHeaders { get; set; }
-
-	// TODO: public List<byte[]> ResponseFiles { get; set; }
 }

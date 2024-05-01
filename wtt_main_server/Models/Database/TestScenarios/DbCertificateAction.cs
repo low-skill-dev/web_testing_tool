@@ -14,4 +14,6 @@ namespace Models.Database.TestScenarios;
 public class DbCertificateAction : ADbHttpAction
 {
 	public override ActionTypes Type { get; set; } = ActionTypes.DbCertificateActionType;
+
+	public int MinimalDaysRemaining { get; set; } = 0;
 }

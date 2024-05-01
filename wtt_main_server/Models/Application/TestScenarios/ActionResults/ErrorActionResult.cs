@@ -10,5 +10,5 @@ namespace Models.Application.TestScenarios.ActionResults;
 
 public class ErrorActionResult : AActionResult
 {
-	// просто кидаем LogMessage + HasCritical=true
+
 }

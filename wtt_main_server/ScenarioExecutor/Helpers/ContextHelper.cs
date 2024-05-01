@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Models.Application.TestScenarios.Parameter;
 
 namespace ScenarioExecutor.Helpers;
 public static class ContextHelper

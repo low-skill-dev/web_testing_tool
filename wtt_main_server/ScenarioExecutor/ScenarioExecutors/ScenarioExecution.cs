@@ -19,9 +19,9 @@ public class ScenarioExecution
 	public ScenarioProgressInfo Progress { get; init; }
 
 
-	public ScenarioExecution(ScenarioRunInfo runInfo, long executionDepth = 0)
+	public ScenarioExecution(ScenarioRunInfo runInfo)
 	{
-		if(executionDepth > MaxExecutionDepth)
+		if(runInfo.ExecutionDepth > MaxExecutionDepth)
 			throw new AggregateException("Maximum execution depth reached.");
 
 		Progress = new(runInfo);
@@ -34,46 +34,57 @@ public class ScenarioExecution
 
 		try
 		{
-			Guid? actionGuid = Progress.RunInfo.EntryPoint;
+			var ep = Progress.RunInfo.EntryPoint;
+			var actions = Progress.RunInfo.ActionsLoadedFromDb;
+			ADbAction? action = null;
 
-			if(Progress.RunInfo.ActionsLoadedFromDb.Count < 1)
+			if(actions.Count < 1)
 			{
 				throw new Exception("Scenario contains no actions.");
 			}
 
-			if(!Progress.RunInfo.ActionsLoadedFromDb.TryGetValue(actionGuid.Value, out var action))
+			if(ep.HasValue && !actions.TryGetValue(ep.Value, out action))
 			{
-				actionGuid = Progress.RunInfo.ActionsLoadedFromDb
-					.OrderByDescending(x => x.Value.ColumnId)
-					.ThenByDescending(x => x.Value.RowId)
-					.First().Value.Guid;
+				throw new Exception("Entry point action not found.");
 			}
+
+			Guid? actionGuid = action?.Guid ?? actions!
+				.OrderByDescending(x => x.Value.ColumnId)
+				.ThenByDescending(x => x.Value.RowId)
+				.First().Value.Guid;
+
 
 			while(actionGuid.HasValue)
 			{
-				if(action is null) break;
+				if(!actions.TryGetValue(actionGuid.Value, out action))
+					break;
 
-				var executor = AActionExecutor.Create(action, Progress.RunInfo.DbExecutionLimitations);
+				var executor = AActionExecutor.Create(action);
 
 				this.Progress.ExecutionCount++;
 
 				var updates = await executor.Execute(this.Progress.CurrentVariableContext);
 				var result = executor.AbstractResult;
 
-				if(result is null) throw new AggregateException(string.Join(' ',
+				if(result is null || result.IsError) throw new AggregateException(string.Join('\n',
 					$"Failed to execute action \'{action.Name}\'.",
 					$"Action GUID: \'{actionGuid}\'.",
 					$"Scenario GUID: \'{Progress.RunInfo.DbScenarioGuid}\'.",
 					$"Scenario run GUID: \'{Progress.RunInfo.Guid}\'.",
-					$"Timestamp: \'{DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture)}\'."));
+					$"Timestamp: \'{DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture)}\'.",
+					$"IsError: \'{result?.IsError}\'."));
 
 				this.Progress.ActionResults.Add(result);
 
+				// TODO: add logs
+
 				// TODO: update context here
-				this.Progress.CurrentVariableContext = 
+				this.Progress.CurrentVariableContext =
 					ContextHelper.MergeContexts(this.Progress.CurrentVariableContext, updates);
 
-				actionGuid = executor.AbstractResult?.Next;
+				actionGuid = executor.AbstractResult?.Next
+					?? actions.Values.Where(x => x.ColumnId == action.ColumnId)
+					.Where(x => x.RowId > action.RowId).MinBy(x => x.RowId)?.Guid;			
 			}
 		}
 		catch(Exception ex)
@@ -87,11 +98,6 @@ public class ScenarioExecution
 	private async Task CompleteAsync()
 	{
 		this.Progress.Completed = DateTime.UtcNow;
-
-		this.Progress.ProcessorTime = this.Progress.ActionResults
-			.Where(x => x is not DelayActionResult)
-			.Select(x => x.Completed - x.Started)
-			.Aggregate((x, y) => x + y);
 
 		await Task.CompletedTask;
 	}

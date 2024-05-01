@@ -14,5 +14,6 @@ public abstract class ADbHttpAction : ADbWebRequest
 	 */
 	public HttpRequestMethod Method { get; set; }
 
+	[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public HttpTlsValidationMode TlsValidationMode { get; set; } = 0;
 }
