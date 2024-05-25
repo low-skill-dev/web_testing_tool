@@ -13,26 +13,20 @@ using ScenarioExecutor.Interfaces;
 
 namespace ScenarioExecutor.ActionExecutors;
 
-public sealed class ErrorActionExecutor : AActionExecutor<DbLogAction, ErrorActionResult>
+public sealed class ErrorActionExecutor : AActionExecutor<DbErrorAction, ErrorActionResult>
 {
-	public ErrorActionExecutor(DbLogAction action) : base(action) { }
+	public ErrorActionExecutor(DbErrorAction action) : base(action) { }
 
 	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
-		_cpuTimeCounter.Start();
+		base.Start();
+		Result!.IsError = true;
 
-		Result = new()
-		{
-			Started = DateTime.UtcNow,
-			IsError = true,
-		};
-
-		await ExecuteUserScripts(currentContext);
+		await ExecuteUserScript(currentContext);
 
 		var ret = (this.Result!.ContextUpdates as IEnumerable<(string n, string v)>).Reverse().DistinctBy(x => x.n).ToDictionary(x => x.n, x => x.v);
 
-		_cpuTimeCounter.Stop();
-		Result.Completed = DateTime.UtcNow;
+		base.Complete();
 		return ret;
 	}
 }

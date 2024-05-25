@@ -9,8 +9,14 @@ type ActionsColumnArgs = {
 	Actions: ADbAction[];
 	MoveActionLeftCallback: (guid: string) => void;
 	MoveActionRightCallback: (guid: string) => void;
-	AddHttpCallback: (columnId: number, rowId: number) => void;
+	AddX509Callback: (columnId: number, rowId: number) => void;
+	AddConditionalCallback: (columnId: number, rowId: number) => void;
+	AddDelayCallback: (columnId: number, rowId: number) => void;
 	AddEchoCallback: (columnId: number, rowId: number) => void;
+	AddErrorCallback: (columnId: number, rowId: number) => void;
+	AddHttpCallback: (columnId: number, rowId: number) => void;
+	AddImapCallback: (columnId: number, rowId: number) => void;
+	AddScenarioCallback: (columnId: number, rowId: number) => void;
 	UpdateParentLayout: () => void;
 }
 
@@ -140,12 +146,32 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 			/>
 		)}
 
-		<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionHttp].join(' ')} onClick={() => { props.AddHttpCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
-			+HTTP
-		</button>
-		<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddEchoCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
-			+ECHO
-		</button>
+		<span style={{ display: "flex" }}>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddHttpCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+HTTP
+			</button>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddEchoCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+ECHO
+			</button>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddX509Callback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+X509
+			</button>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddImapCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+IMAP
+			</button>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddConditionalCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+ERROR
+			</button>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddConditionalCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+DELAY
+			</button>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddImapCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+IF/ELSE
+			</button>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddEchoCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+				+SCENARIO
+			</button>
+		</span>
 	</span>
 }
 

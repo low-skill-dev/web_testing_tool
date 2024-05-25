@@ -64,6 +64,8 @@ export abstract class ADbAction extends ObjectWithGuid
 export abstract class ADbProxiedAction extends ADbAction
 {
 	public ProxyUrl?: string;
+	public ProxyUsername?: string;
+	public ProxyPassword?: string;
 }
 export abstract class ADbHttpAction extends ADbWebRequest
 {
@@ -117,6 +119,15 @@ export class DbEchoAction extends ADbWebRequest
 	}
 	public Type: ActionTypes;
 }
+export class DbErrorAction extends ADbAction
+{
+	constructor ()
+	{
+		super();
+		this.Type = ActionTypes.DbErrorActionType;
+	}
+	public Type: ActionTypes;
+}
 export class DbGetParametersAction extends ADbWebRequest
 {
 	constructor ()
@@ -137,6 +148,8 @@ export class DbHttpAction extends ADbHttpAction
 	public RequestBody?: string;
 	public RequestHeaders?: [string,string][];
 	public RequestCookies?: [string,string][];
+	public MinResponseCode: number;
+	public MaxResponseCode: number;
 	public VariablesUpdatedInTryBlock?: string[];
 }
 export class DbImapAction extends ADbAction
@@ -147,26 +160,15 @@ export class DbImapAction extends ADbAction
 		this.Type = ActionTypes.DbImapActionType;
 	}
 	public Type: ActionTypes;
-	public UserImapAccountGuid: any;
-	public SubjectRegex?: string;
-	public SenderRegex?: string;
-	public BodyRegex?: string;
+	public ImapAddress?: string;
+	public ImapPort?: string;
+	public ImapUsername?: string;
+	public ImapPassword?: string;
+	public SubjectMustContain?: string;
+	public SenderMustContain?: string;
+	public BodyMustContain?: string;
 	public BodySearchRegex?: string;
-	public BodyProcessingScript?: string;
-	public MinSearchLength: number = 4;
-	public MaxSearchLength: number = 8;
-	public SearchMustContain: string[] = [];
-}
-export class DbLogAction extends ADbAction
-{
-	constructor ()
-	{
-		super();
-		this.Type = ActionTypes.DbErrorActionType;
-	}
-	public Type: ActionTypes;
-	public Message: string = '';
-	public StopExecution: boolean = false;
+	public WriteResultToVariable?: string;
 }
 export class DbScenarioAction extends ADbAction
 {
@@ -177,8 +179,8 @@ export class DbScenarioAction extends ADbAction
 	}
 	public Type: ActionTypes;
 	public CalledScenarioGuid: any;
-	public Arguments: Map<string,string> = new Map<string, string>();
-	public WriteAllResultToVariable?: string;
+	public WriteWriteOutputContextToVariable?: string;
+	public UseParentContextAsInitial?: boolean;
 }
 export class DbTestScenario extends ObjectWithUser
 {
@@ -198,7 +200,7 @@ export class ActionsCollection
 	public DbConditionalActions?: DbConditionalAction[];
 	public DbScenarioActions?: DbScenarioAction[];
 	public DbDelayActions?: DbDelayAction[];
-	public DbErrorActions?: DbLogAction[];
+	public DbErrorActions?: DbErrorAction[];
 	public DbEchoActions?: DbEchoAction[];
 	public DbHttpActions?: DbHttpAction[];
 	public DbImapActions?: DbImapAction[];

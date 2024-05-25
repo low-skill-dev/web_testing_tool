@@ -2,7 +2,7 @@ import React, { useState, useMemo, useReducer, MutableRefObject, useEffect } fro
 import cl from "./Editor.module.css";
 import clg from "../../App.module.css";
 import ActionsColumn from './ActionsColumn';
-import { ActionsCollection, ADbAction, DbEchoAction, DbHttpAction } from "src/csharp/project";
+import { ActionsCollection, ADbAction, DbCertificateAction, DbConditionalAction, DbDelayAction, DbEchoAction, DbErrorAction, DbHttpAction, DbImapAction, DbScenarioAction } from "src/csharp/project";
 import ScenarioHelper from '../../helpers/Scenario/ScenarioHelper';
 import { randomUUID } from 'crypto';
 
@@ -78,6 +78,78 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 		setKeyStart(keyStart + 100);
 	}
 
+	const addNewX509Action = (column: number, row: number) =>
+	{
+		console.log("addNewX509Action()");
+
+		let toAdd = new DbCertificateAction();
+		initNewAction(toAdd, column, row);
+
+		setActions([...actions, toAdd]);
+		props.Actions.DbCertificateActions?.push(toAdd);
+		setKeyStart(keyStart + 100);
+	}
+
+	const addNewDelayAction = (column: number, row: number) =>
+	{
+		console.log("addNewDelayAction()");
+
+		let toAdd = new DbDelayAction();
+		initNewAction(toAdd, column, row);
+
+		setActions([...actions, toAdd]);
+		props.Actions.DbDelayActions?.push(toAdd);
+		setKeyStart(keyStart + 100);
+	}
+
+	const addNewImapAction = (column: number, row: number) =>
+	{
+		console.log("addNewImapAction()");
+
+		let toAdd = new DbImapAction();
+		initNewAction(toAdd, column, row);
+
+		setActions([...actions, toAdd]);
+		props.Actions.DbImapActions?.push(toAdd);
+		setKeyStart(keyStart + 100);
+	}
+
+	const addNewErrorAction = (column: number, row: number) =>
+	{
+		console.log("addNewErrorAction()");
+
+		let toAdd = new DbErrorAction();
+		initNewAction(toAdd, column, row);
+
+		setActions([...actions, toAdd]);
+		props.Actions.DbErrorActions?.push(toAdd);
+		setKeyStart(keyStart + 100);
+	}
+
+	const addNewConditionalAction = (column: number, row: number) =>
+	{
+		console.log("addNewConditionalAction()");
+
+		let toAdd = new DbConditionalAction();
+		initNewAction(toAdd, column, row);
+
+		setActions([...actions, toAdd]);
+		props.Actions.DbConditionalActions?.push(toAdd);
+		setKeyStart(keyStart + 100);
+	}
+
+	const addNewScenarioAction = (column: number, row: number) =>
+	{
+		console.log("addNewScenarioAction()");
+
+		let toAdd = new DbScenarioAction();
+		initNewAction(toAdd, column, row);
+
+		setActions([...actions, toAdd]);
+		props.Actions.DbScenarioActions?.push(toAdd);
+		setKeyStart(keyStart + 100);
+	}
+
 	const showDebugInfo = () =>
 	{
 		console.log(actions);
@@ -96,6 +168,12 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 					MoveActionRightCallback={null!}
 					AddHttpCallback={addNewHttpAction}
 					AddEchoCallback={addNewEchoAction}
+					AddConditionalCallback={addNewConditionalAction}
+					AddDelayCallback={addNewDelayAction}
+					AddX509Callback={addNewX509Action}
+					AddImapCallback={addNewImapAction}
+					AddErrorCallback={addNewErrorAction}
+					AddScenarioCallback={addNewScenarioAction}
 					UpdateParentLayout={() => setKeyStart(keyStart + 100)}
 				/>))}
 			<button onClick={AddColumn}>Add column</button>

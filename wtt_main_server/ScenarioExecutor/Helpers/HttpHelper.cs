@@ -48,7 +48,8 @@ internal static class HttpHelper
 			HttpRequestMethod.Put => HttpMethod.Put,
 			HttpRequestMethod.Patch => HttpMethod.Patch,
 			HttpRequestMethod.Delete => HttpMethod.Delete,
-			_ => throw new NotImplementedException(),
+			//_ => throw new NotImplementedException(),
+			_ => HttpMethod.Get,
 		};
 	}
 
@@ -62,5 +63,51 @@ internal static class HttpHelper
 		};
 
 		return HttpClientHolder.WithAllowedNoTls;
+	}
+
+
+	const int _maxProxiedClients = 32;
+	static Dictionary<int, HttpClient> proxyToClient = new(_maxProxiedClients);
+	public static HttpClient GetWebClient(string proxyUrl,
+		string proxyUsername = "", string proxyPassword = "")
+	{
+		var proxyHash = HashCode.Combine(proxyUrl, proxyUsername, proxyPassword);
+		if(proxyToClient.TryGetValue(proxyHash, out var v1)) return v1;
+
+		lock(proxyToClient)
+		{
+			if(proxyToClient.TryGetValue(proxyHash, out var v2)) return v2;
+			if(proxyToClient.Count == _maxProxiedClients) CleanProxiedClients();
+
+			var c = new HttpClient(new HttpClientHandler
+			{
+				UseProxy = true,
+				Proxy = new WebProxy
+				{
+					Address = new(proxyUrl),
+					Credentials = string.IsNullOrWhiteSpace(proxyUsername + proxyPassword)
+						? null : new NetworkCredential
+						{
+							UserName = proxyUsername,
+							Password = proxyPassword,
+						},
+				},
+			});
+
+			proxyToClient.Add(proxyHash, c);
+			return c;
+		}
+	}
+
+	private static void CleanProxiedClients()
+	{
+		var clients = proxyToClient.Values;
+		proxyToClient.Clear();
+
+		_ = Task.Run(async () =>
+		{
+			await Task.Delay(60_000);
+			foreach(var c in clients) c.Dispose();
+		});
 	}
 }

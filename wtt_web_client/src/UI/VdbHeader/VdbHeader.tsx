@@ -28,7 +28,7 @@ const VdbHeader: React.FC = () =>
             <nav className={cl.menuRow}>
                 <NavLink to="/" className={cl.titleWrapper}>
                     <span className={cl.beta}>
-                        v0.1-beta
+                        v0.1-alpha
                     </span>
                     <span className={cl.title}>
                         <strong>

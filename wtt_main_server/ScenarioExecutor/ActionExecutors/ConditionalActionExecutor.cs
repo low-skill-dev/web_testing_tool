@@ -38,12 +38,7 @@ public sealed class ConditionalActionExecutor : AActionExecutor<DbConditionalAct
 
 	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
-		_cpuTimeCounter.Start();
-
-		Result = new()
-		{
-			Started = DateTime.UtcNow
-		};
+		base.Start();
 
 		var condition = CreateStringFromContext(Action.JsBoolExpression, currentContext);
 		bool? ifResult = null;
@@ -62,12 +57,11 @@ public sealed class ConditionalActionExecutor : AActionExecutor<DbConditionalAct
 		Result.IsError = !ifResult.HasValue;
 		Result.Next = (ifResult ?? false) ? Action.ActionOnTrue : Action.ActionOnFalse;
 
-		await ExecuteUserScripts(currentContext, js);
+		await ExecuteUserScript(currentContext);
 
 		var ret = (this.Result!.ContextUpdates as IEnumerable<(string n, string v)>).Reverse().DistinctBy(x => x.n).ToDictionary(x => x.n, x => x.v);
 
-		_cpuTimeCounter.Stop();
-		Result.Completed = DateTime.UtcNow;
+		base.Complete();
 		return ret;
 	}
 }

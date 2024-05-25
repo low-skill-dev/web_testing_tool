@@ -21,10 +21,10 @@ public class DbImapAction : ADbAction
 	//[Obsolete("Отказ от разработки по причине нехватки времени")]
 	//public Guid UserImapAccountGuid { get; set; } = Guid.Empty;
 
-	public string? ImapName { get; set; }
-	public int ImapPort { get; set; } = 0;
-	public string ImapUsername { get; set; }
-	public string ImapPassword { get; set; }
+	public string? ImapAddress { get; set; } = "imap.mail.ru";
+	public string? ImapPort { get; set; } = "993";
+	public string? ImapUsername { get; set; } = "wtt_service_box@mail.ru";
+	public string? ImapPassword { get; set; } = @"";
 
 	/* Нижепредставленные поля нужны для первого режима работы
 	 * программы - поиск по регексу. Нужное письмо определяется
@@ -37,27 +37,30 @@ public class DbImapAction : ADbAction
 	 * системы) это не будет сразу доступно, но как возможность
 	 * я лучше заложу это сейчас.
 	 */
-	public string? SubjectRegex { get; set; }
-	public string? SenderRegex { get; set; }
-	public string? BodyRegex { get; set; }
+	public string? SubjectMustContain { get; set; }
+	public string? SenderMustContain { get; set; }
+	public string? BodyMustContain { get; set; }
 	public string? BodySearchRegex { get; set; }
-	public string? BodyProcessingScript { get; set; }
 
-	/* Второй, более простой режим работы. Опять же, покрывает
-	 * просто большую часть простейших ситуаций. Позволяет найти
-	 * в теле письма нужную часть и далее сохранить её в переменную.
-	 * У меня нет желания тут писать очень сложную систему, поэтому
-	 * тело письма будет просто сплитом разбиваться.
-	 * 
-	 * UPD: принято решение исключить из проекта.
-	 * Вместо данного енама следует предлогать юзеру
-	 * автоматически заполнить регекс-выражение, что
-	 * для поиска номера будет соответственно представлять
-	 * строку "\d+", а для поиска ссылки "https://.+/.+",
-	 */
-	//public EmailAutoparsingMode AutoparsingMode { get; set; }
+	////public string? BodyProcessingScript { get; set; }
 
-	public int MinSearchLength { get; set; } = 0;
-	public int MaxSearchLength { get; set; } = 0;
-	public string[] SearchMustContain { get; set; } = [];
+	///* Второй, более простой режим работы. Опять же, покрывает
+	// * просто большую часть простейших ситуаций. Позволяет найти
+	// * в теле письма нужную часть и далее сохранить её в переменную.
+	// * У меня нет желания тут писать очень сложную систему, поэтому
+	// * тело письма будет просто сплитом разбиваться.
+	// * 
+	// * UPD: принято решение исключить из проекта.
+	// * Вместо данного енама следует предлогать юзеру
+	// * автоматически заполнить регекс-выражение, что
+	// * для поиска номера будет соответственно представлять
+	// * строку "\d+", а для поиска ссылки "https://.+/.+",
+	// */
+	////public EmailAutoparsingMode AutoparsingMode { get; set; }
+
+	//public int MinSearchLength { get; set; } = 0;
+	//public int MaxSearchLength { get; set; } = 0;
+	//public string[] SearchMustContain { get; set; } = [];
+
+	public string? WriteResultToVariable { get; set; }
 }

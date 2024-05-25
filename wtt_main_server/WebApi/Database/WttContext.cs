@@ -33,13 +33,11 @@ public class WttContext : DbContext
 		//modelBuilder.Entity<ObjectWithGuid>().UseTpcMappingStrategy();
 		//modelBuilder.Entity<ObjectWithGuid>(e => { e.HasKey(x => x.Guid); });
 
-		modelBuilder.Entity<RefreshJwt>();
-		modelBuilder.Entity<RecoveryJwt>();
-		modelBuilder.Entity<DbEmailSendLog>();
-		modelBuilder.Entity<DbUserProxy>();
-		modelBuilder.Entity<DbProxy>();
-		modelBuilder.Entity<DbUserImapAccount>();
-		modelBuilder.Entity<DbImapAccount>();
+		//modelBuilder.Entity<RefreshJwt>();
+		//modelBuilder.Entity<RecoveryJwt>();
+		//modelBuilder.Entity<DbEmailSendLog>();
+		//modelBuilder.Entity<DbUserImapAccount>();
+		//modelBuilder.Entity<DbImapAccount>();
 
 		var serialize = (ActionsCollection ac) => JsonSerializer.Serialize(ac);
 		var deserialize = (string ac) => JsonSerializer.Deserialize<ActionsCollection>(ac);

@@ -56,53 +56,6 @@ public class ScenarioController : ControllerBase
 		return Ok(await baseQuery.ToListAsync());
 	}
 
-	///* https://datatracker.ietf.org/doc/html/rfc5789
-	// * PATCH Method for HTTP
-	// *	Several applications extending the Hypertext Transfer Protocol (HTTP)
-	// *	require a feature to do partial resource modification.  The existing
-	// *	HTTP PUT method only allows a complete replacement of a document.
-	// *	This proposal adds a new HTTP method, PATCH, to modify an existing
-	// *  
-	// *  ... So we do replacement here.
-	// */
-	//[HttpPut]
-	//[JwtAuthorize]
-	//public async Task<IActionResult> WriteScenario([FromBody][Required] DbTestScenario data)
-	//{
-	//	var user = this.HttpContext.GetAuthedUser()!;
-
-	//	var found = await _context.TestScenarios.FirstOrDefaultAsync(x => x.Guid.Equals(data.Guid));
-
-	//	if(found is not null)
-	//	{
-	//		if(!found.UserGuid.Equals(user) && user.Role < Administrator)
-	//			//return Forbid("You are not the owner of this scenario.");
-	//			return NotFound();
-
-	//		var oldId = found.Guid;
-	//		_context.Entry(found).CurrentValues.SetValues(data);
-	//		found.Guid = oldId;
-	//		found.Changed = DateTime.UtcNow;
-	//	}
-	//	else
-	//	{
-	//		data.Guid = Guid.NewGuid();
-	//		_context.TestScenarios.Add(data);
-	//	}
-
-	//	await _context.SaveChangesAsync();
-	//	return Ok(data.Guid);
-	//}
-
-	/* https://datatracker.ietf.org/doc/html/rfc5789
-	 * PATCH Method for HTTP
-	 *	Several applications extending the Hypertext Transfer Protocol (HTTP)
-	 *	require a feature to do partial resource modification.  The existing
-	 *	HTTP PUT method only allows a complete replacement of a document.
-	 *	This proposal adds a new HTTP method, PATCH, to modify an existing
-	 *  
-	 *  ... So we do replacement here.
-	 */
 	[HttpPut]
 	[JwtAuthorize]
 	public async Task<IActionResult> WriteScenarios([FromBody][Required] DbTestScenario[] data)
@@ -130,7 +83,7 @@ public class ScenarioController : ControllerBase
 						s.SetProperty(x => x.ActionsJson, scenarioFromClient.ActionsJson)
 						.SetProperty(x => x.Name, scenarioFromClient.Name)
 						.SetProperty(x => x.ArgNames, scenarioFromClient.ArgNames)
-						.SetProperty(x => x.ArgTypes, scenarioFromClient.ArgTypes)
+						//.SetProperty(x => x.ArgTypes, scenarioFromClient.ArgTypes)
 						.SetProperty(x => x.EnableEmailNotifications, scenarioFromClient.EnableEmailNotifications)
 						.SetProperty(x => x.EntryPoint, scenarioFromClient.EntryPoint)
 						.SetProperty(x => x.RunIntervalMinutes, scenarioFromClient.RunIntervalMinutes)
@@ -168,14 +121,8 @@ public class ScenarioController : ControllerBase
 		var userScenarios = await _context.TestScenarios.Where(x => x.UserGuid == user.Guid).Select(x => x.Guid).ToListAsync();
 		var userLogs = await _context.ScenarioRuns.Where(x => userScenarios.Contains(x.ScenarioGuid)).ToListAsync();
 
-		var ret = userLogs.GroupBy(x => x.ScenarioGuid).Select(x => new ScenarioGuidToRuns { g = x.Key, r = x.OrderByDescending(x=> x.Completed).ToArray() }).ToList();
+		var ret = userLogs.GroupBy(x => x.ScenarioGuid).Select(x => new { g = x.Key, r = x.OrderByDescending(x => x.Completed).ToArray() }).ToList();
 
 		return Ok(ret);
 	}
-	class ScenarioGuidToRuns
-	{
-		public Guid g { get; set; }
-		public DbScenarioRun[] r { get; set; }
-	}
-
 }

@@ -19,8 +19,11 @@ public class DbScenarioAction : ADbAction
 	// GUID сценария, который будет вызван
 	public Guid CalledScenarioGuid { get; set; }
 
-	public Dictionary<string, string> Arguments { get; set; } = new();// name to value
+	//[Obsolete("Отказ от разработки по причине нехватки времени.")]
+	//public Dictionary<string, string> Arguments { get; set; } = new();// name to value
 
 	// Все переменные контекста исполненнОГО сценнария записать в переменную Х в текущем контексте.
-	public string? WriteAllResultToVariable { get; set; }
+	public string? WriteWriteOutputContextToVariable { get; set; }
+
+	public bool? UseParentContextAsInitial { get; set; }
 }

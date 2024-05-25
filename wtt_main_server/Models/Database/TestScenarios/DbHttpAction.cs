@@ -20,6 +20,9 @@ public class DbHttpAction : ADbHttpAction
 	public List<(string Name, string Value)>? RequestHeaders { get; set; }
 	public List<(string Name, string Value)>? RequestCookies { get; set; }
 
+	public int MinResponseCode { get; set; } = 200;
+	public int MaxResponseCode { get; set; } = 299;
+
 
 	/* Действие при неспособности обработать запрос без прокси.
 	 * По началу будем всем задавать ThrowAsNormally - потом

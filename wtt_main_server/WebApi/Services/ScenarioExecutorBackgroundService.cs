@@ -9,8 +9,9 @@ namespace WebApi.Services;
 public class ScenarioExecutorBackgroundService : BackgroundService
 {
 	private readonly WttContext _ctx;
+	private readonly IServiceProvider _ctxProvider;
 	private readonly ScenarioSchedulerBackgroundService _scheduler;
-	private readonly List<ScenarioExecution> _inProgress;
+	private readonly List<ScenarioExecutor.ProjectInterface.ScenarioExecutor> _inProgress;
 	private readonly ILogger<ScenarioExecutorBackgroundService> _logger;
 
 	private const int GlobalExecutionLimit = 128;
@@ -22,12 +23,13 @@ public class ScenarioExecutorBackgroundService : BackgroundService
 		10;
 #endif
 
-	public ScenarioExecutorBackgroundService(WttContext ctx, ScenarioSchedulerBackgroundService scheduler, ILogger<ScenarioExecutorBackgroundService> logger)
+	public ScenarioExecutorBackgroundService(WttContext ctx, IServiceProvider ctxProvider, ScenarioSchedulerBackgroundService scheduler, ILogger<ScenarioExecutorBackgroundService> logger)
 	{
 		_ctx = ctx;
 		_scheduler = scheduler;
 		_logger = logger;
 		_inProgress = new();
+		_ctxProvider = ctxProvider;
 	}
 
 	protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -48,20 +50,27 @@ public class ScenarioExecutorBackgroundService : BackgroundService
 			var scenarios = await _ctx.TestScenarios.Where(x => queue.Contains(x.Guid)).Select(x => new { x.Guid, x.Name, x.EntryPoint, x.ActionsJson }).ToListAsync();
 			foreach(var s in scenarios)
 			{
-
-				var execution = new ScenarioExecution(new()
+				var ctxInstance = _ctxProvider.CreateScope().ServiceProvider.GetRequiredService<WttContext>();
+				var execution = new ScenarioExecutor.ProjectInterface.ScenarioExecutor(new()
 				{
 					Guid = Guid.NewGuid(),
 					DbScenarioGuid = s.Guid,
 					EntryPoint = s.EntryPoint,
 					ExecutionDepth = 1,
 					ActionsLoadedFromDb = s.ActionsJson.ToDictionary(),
+					LoadActionsByScenarioGuidFunc = async (g) =>
+					{
+						var s = await ctxInstance.TestScenarios.Where(x => x.Guid == g).FirstAsync();
+						var actions = s.ActionsJson.ToDictionary();
+						var entryPoint = s.EntryPoint;
+						return (entryPoint, actions);
+					},
 					//DbExecutionLimitations = null,
 				});
 
 				_inProgress.Add(execution);
 
-				_logger.LogInformation($"Scenario '{s.Name}' ({s.Guid.ToString().Substring(30, 6)}) was started.");
+				_logger.LogInformation($"Scenario '{s.Guid.ToString().Substring(30, 6)}' was started.");
 				_ = execution.StartAsync();
 			}
 		}
@@ -69,7 +78,7 @@ public class ScenarioExecutorBackgroundService : BackgroundService
 
 	private async Task RemoveCompletedExecutions()
 	{
-		IEnumerable<ScenarioExecution> completed;
+		IEnumerable<ScenarioExecutor.ProjectInterface.ScenarioExecutor> completed;
 		lock(_inProgress)
 		{
 			completed = _inProgress.Where(x => x.Progress.WasCompleted).ToList();
@@ -82,7 +91,7 @@ public class ScenarioExecutorBackgroundService : BackgroundService
 		await WriteResultsToDb(completed);
 	}
 
-	private async Task WriteResultsToDb(IEnumerable<ScenarioExecution> se)
+	private async Task WriteResultsToDb(IEnumerable<ScenarioExecutor.ProjectInterface.ScenarioExecutor> se)
 	{
 		var toWrite = se.Select(x => new DbScenarioRun
 		{

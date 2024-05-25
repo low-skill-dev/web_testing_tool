@@ -78,17 +78,17 @@ public class Configuration
 		builder.ExportAsClass<DbDelayAction>()
 			.WithProperty(x => x.DelayMs, c => c.InitializeWith((_, _, _) => "250"));
 
-		builder.ExportAsClass<DbLogAction>()
-			.WithProperty(x => x.Message, c => c.InitializeWith((_, _, _) => "''"))
-			.WithProperty(x => x.StopExecution, c => c.InitializeWith((_, _, _) => "false"));
+		builder.ExportAsClass<DbErrorAction>();
+			//.WithProperty(x => x.Message, c => c.InitializeWith((_, _, _) => "''"))
+			//.WithProperty(x => x.StopExecution, c => c.InitializeWith((_, _, _) => "false"));
 
-		builder.ExportAsClass<DbImapAction>()
-			.WithProperty(x => x.MinSearchLength, c => c.InitializeWith((_, _, _) => "4"))
-			.WithProperty(x => x.MaxSearchLength, c => c.InitializeWith((_, _, _) => "8"))
-			.WithProperty(x => x.SearchMustContain, c => c.InitializeWith((_, _, _) => "[]"));
+		builder.ExportAsClass<DbImapAction>();
+		//.WithProperty(x => x.MinSearchLength, c => c.InitializeWith((_, _, _) => "4"))
+		//.WithProperty(x => x.MaxSearchLength, c => c.InitializeWith((_, _, _) => "8"))
+		//.WithProperty(x => x.SearchMustContain, c => c.InitializeWith((_, _, _) => "[]"));
 
-		builder.ExportAsClass<DbScenarioAction>()
-			.WithProperty(x => x.Arguments, c => c.InitializeWith((_, _, _) => "new Map<string, string>()"));
+		builder.ExportAsClass<DbScenarioAction>();
+			//.WithProperty(x => x.Arguments, c => c.InitializeWith((_, _, _) => "new Map<string, string>()"));
 
 		builder.ExportAsClass<DbTestScenario>().WithPublicProperties(x => x.ForceNullable())
 			.Order(800);

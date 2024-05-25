@@ -6,12 +6,16 @@ import ScenarioApi, { ScenarioGuidToRuns } from "src/helpers/Api/ScenarioApi";
 import ScenarioSelectionPanel from "./ScenarioSelectionPanel";
 import ScenarioHelper from "src/helpers/Scenario/ScenarioHelper";
 import { ActionsCollection, DbTestScenario, IDbScenarioRun } from "src/csharp/project";
+import { format, formatDistance, formatRelative, subDays, parseISO } from 'date-fns'
+//import { useInView } from "react-intersection-observer";
 
 const MainPanel: React.FC = () =>
 {
 	const [scenarios, setScenarios] = useState<DbTestScenario[]>([]);
 	const [logs, setLogs] = useState<ScenarioGuidToRuns[]>();
 	const [selectedLogs, setSelectedLogs] = useState<IDbScenarioRun[]>();
+	const [selectedDisplayedLogs, setSelectedDisplayedLogs] = useState<IDbScenarioRun[]>();
+	const [showAllLogs, setShowAllLogs] = useState(false);
 	const [selectedScenario, setSelectedScenario] = useState<string>('');
 	const [loadCompleted, setLoadCompleted] = useState(false);
 	const [failedToLoad, setFailedToLoad] = useState(false);
@@ -33,10 +37,11 @@ const MainPanel: React.FC = () =>
 		console.info(`Loaded ${s.length} scenarios${s.length > 0 ? ':\n' : ''}${names}.`);
 	}
 
-	useEffect(()=>{
+	useEffect(() =>
+	{
 		console.log("Set new logs:");
 		console.log(logs);
-	},[logs]);
+	}, [logs]);
 
 	useMemo(async () =>
 	{
@@ -51,12 +56,14 @@ const MainPanel: React.FC = () =>
 
 		var logs = await api.GetMyLogs();
 
-		if(logs){
+		if (logs)
+		{
 			console.log("Loaded logs.");
 			console.log(logs);
 			setLogs(logs);
 		}
-		else {
+		else
+		{
 			console.warn("Unable to load logs.");
 			setLogs([]);
 		}
@@ -89,11 +96,11 @@ const MainPanel: React.FC = () =>
 	const setNewSelected = (guid: string) =>
 	{
 		console.trace("setNewSelected");
-		
+
 		setSelectedScenario(guid);
 		console.warn("loiggins")
 		console.warn(logs);
-		if(logs) setSelectedLogs(logs.find(x=> x.g === guid)?.r ?? []);
+		if (logs) setSelectedLogs(logs.find(x => x.g === guid)?.r ?? []);
 		else console.log("No logs for this scenario.");
 		setSelectedScenarioActions(scenarios.find(x => x.Guid! === guid)!.ActionsJson!);
 		setKey(ScenarioHelper.EnumerateActions(scenarios.find(x => x.Guid! === guid)!.ActionsJson!).map(a => a.Guid!).join(','));
@@ -101,6 +108,14 @@ const MainPanel: React.FC = () =>
 		console.log(`New scenario selected: '${guid}'.`);
 		console.log(`New actions assigned: [${ScenarioHelper.EnumerateActions(scenarios.find(x => x.Guid! === guid)!.ActionsJson!).map(a => a.Guid!).join(',')}].`);
 	}
+
+	useEffect(() =>
+	{
+		if (!selectedLogs) return;
+
+		if (showAllLogs) setSelectedDisplayedLogs(selectedLogs);
+		else setSelectedDisplayedLogs(selectedLogs?.slice(0, 10));
+	}, [selectedLogs, showAllLogs]);
 
 	const addNewScenario = () =>
 	{
@@ -138,6 +153,11 @@ const MainPanel: React.FC = () =>
 		api.SaveScenarios(scenarios);
 	}
 
+	// const { ref: refLogs, inView, entry } = useInView({
+	// 	/* Optional options */
+	// 	threshold: 0,
+	//   });
+
 	return <span className={clg.rootElementsMargin}>
 		<button onClick={showDebugInfo}>debug</button>
 		{
@@ -171,19 +191,23 @@ const MainPanel: React.FC = () =>
 				<span />
 		}
 		<hr style={{ marginTop: ".25rem", marginBottom: ".25rem" }} />
-		<br/>
-		RUNS: <button onClick={showDebugInfo}>debug</button>					<br/>
-		{
-			(loadCompleted && selectedScenario && selectedLogs) ?
-				selectedLogs!.map(x => <span key={x.Guid!}>
-					<br/>
-					<span style={{ color: x.IsSucceeded ? "green" : "red" }} >{x.Completed}</span><br/>
-					<span>SUCCESS: {x.IsSucceeded ? "true" : "false"}</span><br/>
-					<span>FAIL REASON: {x.ErrorMessage ?? "no"}</span><br/>					
-				</span>)
-				:
-				<span />
-		}
+		<br />
+		<input type="checkbox" title="SHOW ALL" content="SHOW ALL" checked={showAllLogs} onClick={()=> setShowAllLogs(!showAllLogs)} />
+		RUNS: <button onClick={showDebugInfo}>debug</button>					<br />
+		<span style={{ width: "100%", height: "fit-content" }} /*ref={refLogs}*/>
+			{
+				(loadCompleted && selectedScenario && selectedLogs && selectedDisplayedLogs) ?
+					selectedDisplayedLogs!.map(x => <span key={x.Guid!}>
+						<br />
+						{/* <span style={{ color: x.IsSucceeded ? "green" : "red" }} >{x.Completed}</span><br/> */}
+						<span style={{ color: x.IsSucceeded ? "green" : "red" }} >{format(parseISO(x.Completed), 'dd-MM-yyyy hh:mm:ss')}</span><br />
+						<span>SUCCESS: {x.IsSucceeded ? "true" : "false"}</span><br />
+						<span>FAIL REASON: {x.ErrorMessage ?? "no"}</span><br />
+					</span>)
+					:
+					<span />
+			}
+		</span>
 	</span>
 }
 

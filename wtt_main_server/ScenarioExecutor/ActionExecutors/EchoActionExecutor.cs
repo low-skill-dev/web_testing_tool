@@ -14,34 +14,28 @@ public sealed class EchoActionExecutor : AActionExecutor<DbEchoAction, EchoActio
 
 	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
-		_cpuTimeCounter.Start();
+		base.Start();
 
-		Result = new()
-		{
-			Started = DateTime.UtcNow
-		};
-
-		var (reply, delay) = await MakeRequestAsync(currentContext);
+		var (reply, delay) = await MakeRequest(currentContext);
 		Result.IsError = reply?.Status != 0;
 		Result.PingDelayMs = delay.HasValue 
 			? Convert.ToInt32(delay.Value.TotalMilliseconds) : -1;
 
 		var js = $"let pingMs = {Convert.ToInt32(delay?.TotalMilliseconds ?? -1)};";
-		await ExecuteUserScripts(currentContext, js);
+		await ExecuteUserScript(currentContext, js);
 
 		var ret = (this.Result!.ContextUpdates as IEnumerable<(string n, string v)>).Reverse().DistinctBy(x => x.n).ToDictionary(x => x.n, x => x.v);
 
-		_cpuTimeCounter.Stop();
-		Result.Completed = DateTime.UtcNow;
+		base.Complete();
 		return ret;
 	}
 
-	private async Task<(PingReply reply, TimeSpan? delay)> MakeRequestAsync(IDictionary<string, string> currentContext)
+	private async Task<(PingReply reply, TimeSpan? delay)> MakeRequest(IDictionary<string, string> currentContext)
 	{
 		var url = CreateStringFromContext(Action.RequestUrl, currentContext);
 
 		_cpuTimeCounter.Stop();
-		var reply = await new Ping().SendPingAsync(url);
+		var reply = await new Ping().SendPingAsync(url);	
 		_cpuTimeCounter.Start();
 
 		return (reply, reply.Status == IPStatus.Success

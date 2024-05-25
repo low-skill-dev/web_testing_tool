@@ -54,7 +54,7 @@ const GenericCard: React.FC<GenericCardArgs> = (props) =>
 
 	let common =
 		<span className={cl.actionHeader}>
-			<span className={cl.actionGuid} title='UUID'>{getTypeString(props.Action.Type!)} {props.Action.Guid!.substring(36-12, 36)}</span>
+			<span className={cl.actionGuid} title='Copy UUID' onClick={() => navigator.clipboard.writeText(props.Action.Guid!)}>{getTypeString(props.Action.Type!)} {props.Action.Guid!.substring(36-12, 36)}</span>
 			{/* <span className={cl.actionGuid} title='UUID'>{props.Action.Guid!!!.substring(30, 6)}</span> */}
 			<input className={cl.actionName} value={name} onChange={e => setNameInternal(e.target.value)} title='Name' />
 			<span className={cl.moveRow}>

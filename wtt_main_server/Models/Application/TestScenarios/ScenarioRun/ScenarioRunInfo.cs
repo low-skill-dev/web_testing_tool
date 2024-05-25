@@ -19,14 +19,14 @@ public sealed class ScenarioRunInfo
 	public required Guid DbScenarioGuid { get; init; }
 
 	// GUID сценария, который вызвал данный сценарий
-	[Obsolete("Отказ от разработки по причине нехватки времени")]
+	//[Obsolete("Отказ от разработки по причине нехватки времени")]
 	public Guid? Parent { get; init; }
 
 	// Уровень вложенности в текущем сценарии.
 	// Альтернативно ручному заданию значения, можно вычислить
 	// путем подъема вверх к наивысшему родителю, считая
 	// число шагов, но YAGNI подсказывает, что не стоит...
-	public required long ExecutionDepth { get; init; }
+	public required int ExecutionDepth { get; init; }
 
 
 	/// <summary>
@@ -38,4 +38,7 @@ public sealed class ScenarioRunInfo
 	/// Действия, загруженные из базы данных для текущего сценария.
 	/// </summary>
 	public required Dictionary<Guid, ADbAction> ActionsLoadedFromDb { get; init; }
+
+
+	public required Func<Guid, Task<(Guid EntryPoint, Dictionary<Guid, ADbAction> Actions)>> LoadActionsByScenarioGuidFunc { get; set; }
 }

@@ -63,6 +63,8 @@ export abstract class ADbAction extends ObjectWithGuid
 export abstract class ADbProxiedAction extends ADbAction
 {
 	public ProxyUrl?: string;
+	public ProxyUsername?: string;
+	public ProxyPassword?: string;
 }
 export abstract class ADbWebRequest extends ADbProxiedAction
 {
@@ -85,8 +87,10 @@ export class DbCertificateAction extends ADbHttpAction
 	{
 		super();
 		this.Type = ActionTypes.DbCertificateActionType;
+		this.MinimalDaysRemaining = 1;
 	}
 	public Type: ActionTypes;
+	public MinimalDaysRemaining: number;
 }
 export class DbConditionalAction extends ADbAction
 {
@@ -160,6 +164,15 @@ export class DbImapAction extends ADbAction
 	public MaxSearchLength: number = 8;
 	public SearchMustContain: string[] = [];
 }
+export class DbErrorAction extends ADbAction
+{
+	constructor()
+	{
+		super();
+		this.Type = ActionTypes.DbErrorActionType;
+	}
+}
+
 export class DbLogAction extends ADbAction
 {
 	constructor()
@@ -217,7 +230,7 @@ export class ActionsCollection
 	public DbConditionalActions?: DbConditionalAction[];
 	public DbScenarioActions?: DbScenarioAction[];
 	public DbDelayActions?: DbDelayAction[];
-	public DbErrorActions?: DbLogAction[];
+	public DbErrorActions?: DbErrorAction[];
 	public DbEchoActions?: DbEchoAction[];
 	public DbHttpActions?: DbHttpAction[];
 	public DbImapActions?: DbImapAction[];

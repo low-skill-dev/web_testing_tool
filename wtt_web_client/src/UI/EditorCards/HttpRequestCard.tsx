@@ -4,6 +4,9 @@ import EditorCardButtons from './EditorCardsCommon';
 import { DbHttpAction, HttpRequestMethod } from 'src/csharp/project';
 import Editor from 'react-simple-code-editor';
 import ProxiedCardPart from './ProxiedCardPart';
+import WebRequestCardPart from './WebRequestCard';
+import AHttpRequestCard from './AHttpRequestCard';
+import HtmlHelper from 'src/helpers/Common/HtmlHelper';
 
 interface HttpRequestCardArgs
 {
@@ -17,8 +20,8 @@ const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 	const [body, setBody] = useState(props.Action.RequestBody);
 	const [headersText, setHeadersText] = useState(props.Action.RequestBody);
 	const [cookiesText, setCookiesText] = useState(props.Action.RequestBody);
-	const [headers, setHeaders] = useState(props.Action.RequestHeaders);
-	const [cookies, setCookies] = useState(props.Action.RequestCookies);
+	//const [headers, setHeaders] = useState(props.Action.RequestHeaders);
+	//const [cookies, setCookies] = useState(props.Action.RequestCookies);
 	//const [script, setScript] = useState(props.Action.AfterRunScript); // ! COMMON
 
 	useEffect(() => { props.Action.RequestUrl = url }, [url]);
@@ -49,42 +52,23 @@ const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 	}, [cookiesText]);
 	//useEffect(() => { props.Action.AfterRunScript = script}, [script]);
 
-	const fixTextAreaHeight = (e: any) =>
-	{
-		e.currentTarget.style.height = ""; e.currentTarget.style.height = `calc(${e.currentTarget.scrollHeight}px + 5px)`;
-	}
-
 	return <span className={cl.actionCard}>
+		<AHttpRequestCard Action={props.Action} />
 		<span className={cl.editorBlock}>
-			<span className={cl.editorPropHeader}>METHOD</span>
-			<select name='method' onVolumeChange={e => setMethod(parseInt(e.currentTarget.value))}>
-				<option value={HttpRequestMethod.Get}>GET</option>
-				<option value={HttpRequestMethod.Post}>POST</option>
-				<option value={HttpRequestMethod.Put}>PUT</option>
-				<option value={HttpRequestMethod.Patch}>PATCH</option>
-				<option value={HttpRequestMethod.Delete}>DELETE</option>
-			</select>
-		</span>
-		<span className={cl.editorBlock}>
-			<span className={cl.editorPropHeader}>URL</span>
-			<textarea rows={1} className={cl.editorTextBlock} value={url} onChange={e => setUrl(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
-		</span>
-		<span className={cl.editorBlock}>
-			<span className={cl.editorPropHeader}>BODY</span>
+			{/* <span className={cl.editorPropHeader}>BODY</span> */}
 			{/* https://stackoverflow.com/a/48460773/11325184 */}
-			<textarea rows={1} className={cl.editorTextBlock} value={body} onChange={e => setBody(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
+			<textarea rows={1} className={cl.editorTextBlock} value={body} onChange={e => setBody(e.target.value)} onInput={e => HtmlHelper.FixTextAreaHeight(e)} placeholder='BODY' title='BODY'/>
 		</span>
 		<span className={cl.editorBlock}>
-			<span className={cl.editorPropHeader}>HEADERS</span>
+			{/* <span className={cl.editorPropHeader}>HEADERS</span> */}
 			{/* https://stackoverflow.com/a/48460773/11325184 */}
-			<textarea rows={1} className={cl.editorTextBlock} value={headersText} onChange={e => setHeadersText(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
+			<textarea rows={1} className={cl.editorTextBlock} value={headersText} onChange={e => setHeadersText(e.target.value)} onInput={e => HtmlHelper.FixTextAreaHeight(e)} placeholder='HEADERS' title='HEADERS'/>
 		</span>
 		<span className={cl.editorBlock}>
-			<span className={cl.editorPropHeader}>COOKIES</span>
+			{/* <span className={cl.editorPropHeader}>COOKIES</span> */}
 			{/* https://stackoverflow.com/a/48460773/11325184 */}
-			<textarea rows={1} className={cl.editorTextBlock} value={cookiesText} onChange={e => setCookiesText(e.target.value)} onInput={e => fixTextAreaHeight(e)} />
+			<textarea rows={1} className={cl.editorTextBlock} value={cookiesText} onChange={e => setCookiesText(e.target.value)} onInput={e => HtmlHelper.FixTextAreaHeight(e)} placeholder='COOKIES' title='COOKIES'/>
 		</span>
-		<ProxiedCardPart Action={props.Action} />
 		{/* <span className={cl.editorBlock}>
 			<span className={cl.editorPropHeader}>BODY</span>
 			<textarea className={cl.editorTextBlock} value={body} onChange={e=> setBody(e.target.value)}/>

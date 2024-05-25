@@ -39,9 +39,9 @@ public class Program
 		// TODO: took from old project, rewrite for actual files
 		builder.Configuration
 			.AddJsonFile("./appsettings.json", true)
-			.AddJsonFile("/run/secrets/aspsecrets.json", true)
-			.AddJsonFile("/run/secrets/nodes.json", true)
-			.AddJsonFile("/run/secrets/generated_sig.json", true)
+			//.AddJsonFile("/run/secrets/aspsecrets.json", true)
+			//.AddJsonFile("/run/secrets/nodes.json", true)
+			//.AddJsonFile("/run/secrets/generated_sig.json", true)
 			.AddEnvironmentVariables()
 			.Build();
 
@@ -98,7 +98,7 @@ public class Program
 		builder.Services
 			.AddSingleton<ScenarioExecutorBackgroundService>(sp =>
 				new ScenarioExecutorBackgroundService(
-					sp.CreateScope().ServiceProvider.GetRequiredService<WttContext>(),
+					sp.CreateScope().ServiceProvider.GetRequiredService<WttContext>(), sp,
 					sp.CreateScope().ServiceProvider.GetRequiredService<ScenarioSchedulerBackgroundService>(),
 					sp.CreateScope().ServiceProvider.GetRequiredService<ILogger<ScenarioExecutorBackgroundService>>()))
 			.AddHostedService(sp => sp.GetRequiredService<ScenarioExecutorBackgroundService>());

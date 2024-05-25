@@ -30,6 +30,9 @@ using Models.Constants;
 using CommonLibrary.Helpers;
 using Jint.Runtime;
 using System.Net;
+using System.Collections.Concurrent;
+using System.Runtime.ConstrainedExecution;
+using Models.Enums;
 
 namespace ScenarioExecutor.ActionExecutors;
 
@@ -40,40 +43,57 @@ public class CertificateActionExecutor : AActionExecutor<DbCertificateAction, Ce
 
 	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
-		_cpuTimeCounter.Start();
+		base.Start();
 
-		Result = new()
-		{
-			Started = DateTime.UtcNow
-		};
-
-		var cert = await MakeRequestAsync(currentContext);
+		var cert = await MakeRequest(currentContext);
 		Result.RetrievedCertificate = cert;
-		Result.IsError = cert is null;
 
-		await ExecuteUserScripts(currentContext);
+		if(cert is null)
+		{
+			Result.IsError = true;
+		}
+		else if(cert.NotAfter < DateTime.UtcNow.AddDays(Action.MinimalDaysRemaining))
+		{
+			Result.IsError = true;
+			Result.Logs.Add((LogType.Error, "Certificate has expired."));
+		}
+
+		await ExecuteUserScript(currentContext);
 
 		var ret = (this.Result!.ContextUpdates as IEnumerable<(string n, string v)>).Reverse().DistinctBy(x => x.n).ToDictionary(x => x.n, x => x.v);
 
-		_cpuTimeCounter.Stop();
-		Result.Completed = DateTime.UtcNow;
+		base.Complete();
 		return ret;
 	}
 
-	private async Task<X509Certificate?> MakeRequestAsync(IDictionary<string, string> currentContext)
+
+
+	private static ConcurrentDictionary<string, X509Certificate2?> _results = new();
+	private static HttpClient _client = new(new HttpClientHandler
+	{
+		ServerCertificateCustomValidationCallback = (req, cert, chain, policy) =>
+		{
+			var url = req.RequestUri?.AbsoluteUri;
+			if(url is not null)
+			{
+				if(_results.ContainsKey(url))
+					_results.TryAdd(url, cert);
+				else
+					_results[url] = cert;
+			}
+			return true;
+		}
+	});
+
+
+	private async Task<X509Certificate2?> MakeRequest(IDictionary<string, string> currentContext)
 	{
 		var url = CreateStringFromContext(Action.RequestUrl, currentContext);
-		var client = HttpHelper.GetWebClient();
 
 		try
 		{
-#pragma warning disable SYSLIB0014
-			var request = (HttpWebRequest)WebRequest.Create(url);
-			_cpuTimeCounter.Stop();
-			await request.GetResponseAsync();
-			_cpuTimeCounter.Start();
-			var cert = request.ServicePoint.Certificate;
-			return cert;
+			var req = (await _client.GetAsync(url)).RequestMessage!.RequestUri!.AbsoluteUri;
+			return _results[req];
 		}
 		catch
 		{

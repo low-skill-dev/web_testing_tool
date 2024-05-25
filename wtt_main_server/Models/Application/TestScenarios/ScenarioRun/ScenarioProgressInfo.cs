@@ -32,6 +32,8 @@ public sealed class ScenarioProgressInfo
 	public DateTime? Started { get; set; }
 	public DateTime? Completed { get; set; }
 
+	public long ProcessorTicksCount { get; set; }
+
 	public ScenarioProgressInfo(ScenarioRunInfo runInfo)
 	{
 		this.RunInfo = runInfo;

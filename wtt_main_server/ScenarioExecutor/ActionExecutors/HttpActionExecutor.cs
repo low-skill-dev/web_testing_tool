@@ -15,6 +15,7 @@ using System;
 using Models.Constants;
 using CommonLibrary.Helpers;
 using Jint.Runtime;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ScenarioExecutor.ActionExecutors;
 
@@ -24,24 +25,24 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 
 	private static int _maxParallelRequests = 64;
 	private static int _currentActiveRequests = 0;
-	private static int _totalCompletedRequests = 0;
+	//private static int _totalCompletedRequests = 0;
 
-	public static int MaxParallelRequests
-	{
-		get
-		{
-			return _maxParallelRequests;
-		}
-		set
-		{
-			if(_maxParallelRequests < 1) throw new
-				ArgumentOutOfRangeException(nameof(MaxParallelRequests));
+	//public static int MaxParallelRequests
+	//{
+	//	get
+	//	{
+	//		return _maxParallelRequests;
+	//	}
+	//	set
+	//	{
+	//		if(_maxParallelRequests < 1) throw new
+	//			ArgumentOutOfRangeException(nameof(MaxParallelRequests));
 
-			_maxParallelRequests = value;
-		}
-	}
-	public static int CurrentActiveRequests => _currentActiveRequests;
-	public static int TotalCompletedRequests => _totalCompletedRequests;
+	//		_maxParallelRequests = value;
+	//	}
+	//}
+	//public static int CurrentActiveRequests => _currentActiveRequests;
+	//public static int TotalCompletedRequests => _totalCompletedRequests;
 
 	#endregion
 
@@ -52,31 +53,33 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 	/// </returns>
 	public override async Task<Dictionary<string, string>> Execute(IDictionary<string, string> currentContext)
 	{
-		Result = new()
-		{
-			Started = DateTime.UtcNow
-		};
+		base.Start();
 
-		var (req, res) = await MakeRequestAsync(currentContext);
-		Result.IsError = ((int)res.StatusCode >= 300);
+		var (req, res) = await MakeRequest(currentContext);
 
-		await ExecuteUserScripts(currentContext, req, res);
+		var status = (int)res.StatusCode;
+		Result!.IsError = !(
+			this.Action.MinResponseCode <= status && status <= this.Action.MaxResponseCode);
+
+		await ExecuteUserScript(currentContext, req, res);
 
 		var ret = (this.Result!.ContextUpdates as IEnumerable<(string n, string v)>).Reverse().DistinctBy(x => x.n).ToDictionary(x => x.n, x => x.v);
 
-		_cpuTimeCounter.Stop();
-		Result.Completed = DateTime.UtcNow;
+		base.Complete();
 		return ret;
 	}
 
 	#region private
 
-	private async Task<(HttpRequestMessage req, HttpResponseMessage res)> MakeRequestAsync(IDictionary<string, string> currentContext)
+	private async Task<(HttpRequestMessage req, HttpResponseMessage res)> MakeRequest(IDictionary<string, string> currentContext)
 	{
-		var client = HttpHelper.GetWebClient(new HttpClientSettings
+		_cpuTimeCounter.Stop();
+		int safeCounter = 0;
+		while(_currentActiveRequests >= _maxParallelRequests && safeCounter++ < 30)
 		{
-			TlsValidationMode = Models.Enums.HttpTlsValidationMode.Disabled,
-		});
+			await Task.Delay(10000);
+		}
+		_cpuTimeCounter.Start();
 
 		var url = CreateStringFromContext(Action.RequestUrl, currentContext);
 
@@ -102,13 +105,9 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 		if(cookies is not null) msg.Content.Headers.Add("Cookie", string.Join(';', cookies.Select(x => $"{x.Key}={x.Value}")));
 		if(headers is not null) foreach(var pair in headers) msg.Content.Headers.Add(pair.Key, pair.Value);
 
-		_cpuTimeCounter.Stop();
-		int safeCounter = 0;
-		while(_currentActiveRequests >= _maxParallelRequests && safeCounter++ < 300)
-		{
-			await Task.Delay(5000);
-		}
-		_cpuTimeCounter.Start();
+		HttpClient client = string.IsNullOrWhiteSpace(Action.ProxyUrl)
+			? HttpHelper.GetWebClient(new HttpClientSettings { TlsValidationMode = Models.Enums.HttpTlsValidationMode.Disabled })
+			: HttpHelper.GetWebClient(Action.ProxyUrl, Action.ProxyUsername ?? "", Action.ProxyPassword ?? "");
 
 		try
 		{
@@ -130,7 +129,6 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 		finally
 		{
 			Interlocked.Decrement(ref _currentActiveRequests);
-			Interlocked.Increment(ref _totalCompletedRequests);
 		}
 	}
 
@@ -138,7 +136,7 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 	/// A context that should be merged with current to create 
 	/// context for the next action;
 	/// </returns>
-	private async Task ExecuteUserScripts(IDictionary<string, string> context, HttpRequestMessage request, HttpResponseMessage response)
+	private async Task ExecuteUserScript(IDictionary<string, string> context, HttpRequestMessage request, HttpResponseMessage response)
 	{
 #pragma warning disable format // @formatter:off
 
@@ -147,52 +145,7 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 
 		var beforeContext = string.Join('\n', [reqJs, resJs]);
 
-		await base.ExecuteUserScripts(context, beforeContext);
-
-#if FALSE
-
-		var ctxJs = string.Join('\n', context.Select(x => $"{x.Key} = {x.Value};"));
-		var updJs = string.Join('\n', Action.VariableToPath?.Select(x =>
-		{
-			var errorCmd = $"{JsConsts.LogError}(\"Error parsing \'{x.Key}\' variable.\");";
-
-			var l1 = $"try {{ {x.Key}={x.Value}; {JsConsts.UpdateVariable}({x.Key},{x.Value}); }}";
-			var l2 = $"catch {{ {errorCmd} }}";
-			var l3 = $"finally {{ }}";
-
-			return string.Join('\n', l1, l2, l3);
-		}) ?? Array.Empty<string>());
-
-		var js = $$$"""
-			
-			// generated: {{{DateTime.UtcNow.ToString("O")}}}
-			// action: {{{Action.Guid}}}
-
-			// --- BEFORE UPDATE ---
-
-			{{{reqJs}}}
-			{{{resJs}}}
-
-			{{{ctxJs}}}
-		
-			{{{Action.AfterRunScript}}}
-
-			// --- UPDATE ---
-
-			{{{updJs}}}
-		""";
-
-#pragma warning restore format // @formatter:on
-
-		//var contextUpdates = new List<(string name, string val)>(Action.VariableToPath.Count);
-		//var errors = new List<(string msg, bool crit)>(Action.VariableToPath.Count);
-
-		//var updateVariableFunc = (string name, string val) => contextUpdates.Add((name, val));
-		//var logErrorFunc = (string msg, bool crit = false) => errors.Add((msg, crit));
-
-		JsHelper.Execute(eng => this.Result!.BindAll(eng), js, this.UserSubscription);
-
-#endif
+		await base.ExecuteUserScript(context, beforeContext);
 	}
 
 	private enum HttpType
@@ -256,12 +209,6 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 			let {{{req_res}}}Body = {{{(bodyAsJson ? body : $"\"{body}\"")}}};
 			let {{{req_res}}}Cookies = {{{Serialize(cookies)}}};
 			let {{{req_res}}}Headers = {{{Serialize(headers)}}};
-
-			let {{{request_response}}} = {
-				'body': {{{req_res}}}Body,
-				'cookies': {{{req_res}}}Cookies,
-				'headers': {{{req_res}}}Headers
-			};
 
 		""";
 
