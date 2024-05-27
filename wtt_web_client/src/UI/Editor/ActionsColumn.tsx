@@ -146,7 +146,7 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 			/>
 		)}
 
-		<span style={{ display: "flex" }}>
+		<span style={{ display: "flex", flexWrap:"wrap" }}>
 			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddHttpCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
 				+HTTP
 			</button>
@@ -159,16 +159,16 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddImapCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
 				+IMAP
 			</button>
-			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddConditionalCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddErrorCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
 				+ERROR
 			</button>
-			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddConditionalCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddDelayCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
 				+DELAY
 			</button>
-			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddImapCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddConditionalCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
 				+IF/ELSE
 			</button>
-			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddEchoCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
+			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddScenarioCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
 				+SCENARIO
 			</button>
 		</span>

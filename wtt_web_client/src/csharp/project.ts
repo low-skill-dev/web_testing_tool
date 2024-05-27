@@ -9,11 +9,11 @@ export enum ActionTypes
 	DbDelayActionType = 2,
 	DbEchoActionType = 3,
 	DbErrorActionType = 4,
-	DbGetParametersActionType = 5,
+	DbGetParametersActionType = 5, // не применяется
 	DbHttpActionType = 6,
 	DbImapActionType = 7,
 	DbScenarioActionType = 8,
-	DbTestScenarioType = 9
+	//DbTestScenarioType = 9
 }
 export enum UserRoles
 {
@@ -112,7 +112,7 @@ export class DbDelayAction extends ADbAction
 		this.Type = ActionTypes.DbDelayActionType;
 	}
 	public Type: ActionTypes;
-	public DelayMs: number = 250;
+	public DelaySeconds: number = 10;
 }
 export class DbEchoAction extends ADbWebRequest
 {
@@ -153,16 +153,25 @@ export class DbImapAction extends ADbAction
 		super();
 		this.Type = ActionTypes.DbImapActionType;
 	}
+	// public UserImapAccountGuid: any;
+	// public SubjectRegex?: string;
+	// public SenderRegex?: string;
+	// public BodyRegex?: string;
+	// public BodyProcessingScript?: string;
+	// public MinSearchLength: number = 4;
+	// public MaxSearchLength: number = 8;
+	// public SearchMustContain: string[] = [];
+
 	public Type: ActionTypes;
-	public UserImapAccountGuid: any;
-	public SubjectRegex?: string;
-	public SenderRegex?: string;
-	public BodyRegex?: string;
+	public ImapAddress?: string;
+	public ImapPort?: string;
+	public ImapUsername?: string;
+	public ImapPassword?: string;
+	public SubjectMustContain?: string;
+	public SenderMustContain?: string;
+	public BodyMustContain?: string;
 	public BodySearchRegex?: string;
-	public BodyProcessingScript?: string;
-	public MinSearchLength: number = 4;
-	public MaxSearchLength: number = 8;
-	public SearchMustContain: string[] = [];
+	public WriteResultToVariable?: string;
 }
 export class DbErrorAction extends ADbAction
 {
@@ -206,11 +215,12 @@ export class DbScenarioAction extends ADbAction
 	constructor()
 	{
 		super();
-		this.Type = ActionTypes.DbTestScenarioType;
+		this.Type = ActionTypes.DbScenarioActionType;
 	}
 	public Type: ActionTypes;
 	public CalledScenarioGuid: any;
 	public Arguments: Map<string, string> = new Map<string, string>();
+	public UseParentContextAsInitial?: boolean = true;
 	public WriteAllResultToVariable?: string;
 }
 export class DbTestScenario extends ObjectWithUser

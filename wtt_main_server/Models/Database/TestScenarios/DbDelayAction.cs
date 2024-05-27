@@ -16,5 +16,5 @@ public class DbDelayAction : ADbAction
 {
 	public override ActionTypes Type { get; set; } = ActionTypes.DbDelayActionType;
 
-	public int DelayMs { get; set; } = 0;
+	public int DelaySeconds { get; set; } = 0;
 }

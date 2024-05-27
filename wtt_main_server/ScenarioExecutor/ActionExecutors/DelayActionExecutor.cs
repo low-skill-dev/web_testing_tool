@@ -25,10 +25,10 @@ public sealed class DelayActionExecutor : AActionExecutor<DbDelayAction, DelayAc
 	{
 		base.Start();
 
-		if(Action.DelayMs > 0)
+		if(Action.DelaySeconds > 0)
 		{
 			_cpuTimeCounter.Stop();
-			await Task.Delay(Action.DelayMs);
+			await Task.Delay(Action.DelaySeconds*1000);
 			_cpuTimeCounter.Start();
 		}
 

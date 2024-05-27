@@ -14,5 +14,4 @@ public enum ActionTypes
 	DbHttpActionType,
 	DbImapActionType,
 	DbScenarioActionType,
-	DbTestScenarioType,
 }

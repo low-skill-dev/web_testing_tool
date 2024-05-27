@@ -8,7 +8,7 @@ import eps from '../../config/endpoints.json'
 import RecoveryPassword from "../RecoveryPassword/RecoveryPassword";
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
 import MainPanel from "../Editor/MainPanel";
-import Scheduler from "../Editor/Scheduler";
+//import Scheduler from "../Editor/Scheduler";
 
 const VdbMain: React.FC = () =>
 {
@@ -19,8 +19,8 @@ const VdbMain: React.FC = () =>
             {/* <Route path="/download" element={<VdbDownload />} /> */}
             <Route path="/auth" element={<AuthForm />} />
             <Route path="/personal" element={<VdbPersonal />} />
-            {<Route path="/panel" element={<MainPanel />} />}
-            {<Route path="/scheduler" element={<Scheduler />} />}
+            <Route path="/panel" element={<MainPanel />} />
+            {/* <Route path="/scheduler" element={<Scheduler />} /> */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path={eps.fontend.passwordRecovery + "/*"} element={<RecoveryPassword />} />
             <Route path="/*" element={<NotFound />} />

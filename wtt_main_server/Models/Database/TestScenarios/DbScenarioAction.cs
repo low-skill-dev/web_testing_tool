@@ -14,7 +14,7 @@ namespace Models.Database.TestScenarios;
 //[TsClass(IncludeNamespace = false, Order = 500)]
 public class DbScenarioAction : ADbAction
 {
-	public override ActionTypes Type { get; set; } = ActionTypes.DbTestScenarioType;
+	public override ActionTypes Type { get; set; } = ActionTypes.DbScenarioActionType;
 
 	// GUID сценария, который будет вызван
 	public Guid CalledScenarioGuid { get; set; }

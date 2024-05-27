@@ -28,16 +28,11 @@ public class ScenarioSchedulerBackgroundService : BackgroundService
 #endif
 			var scenarios = await _ctx.TestScenarios.Where(x => x.RunIntervalMinutes > 0).Select(x => new { x.Guid, x.RunIntervalMinutes }).ToListAsync();
 
-			var runLogs = await _ctx.ScenarioRuns.OrderByDescending(x => x.Created)/*.DistinctBy(x => x.ScenarioGuid)*/.ToListAsync();
+			var runLogs = (await _ctx.ScenarioRuns.OrderByDescending(x => x.Created).ToListAsync()).DistinctBy(x => x.ScenarioGuid).ToList();
 
 			var now = DateTime.UtcNow;
 			var needToRun = scenarios
-
-#if DEBUG
-
-#else
 				.Where(s => (now - runLogs.First(x => x.ScenarioGuid == s.Guid).Created).TotalMinutes > s.RunIntervalMinutes)
-#endif
 				.Select(x => x.Guid).Where(x=> !_waitingToRun.Contains(x));
 
 			foreach(var g in needToRun) _waitingToRun.Add(g);

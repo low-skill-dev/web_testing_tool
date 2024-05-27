@@ -92,8 +92,9 @@ public class CertificateActionExecutor : AActionExecutor<DbCertificateAction, Ce
 
 		try
 		{
+			_results[url] = null;
 			var req = (await _client.GetAsync(url)).RequestMessage!.RequestUri!.AbsoluteUri;
-			return _results[req];
+			return _results[url];
 		}
 		catch
 		{

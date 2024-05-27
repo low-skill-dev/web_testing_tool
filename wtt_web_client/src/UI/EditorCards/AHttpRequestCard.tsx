@@ -4,12 +4,13 @@ import EditorCardButtons from './EditorCardsCommon';
 import { ADbHttpAction, DbHttpAction, HttpRequestMethod } from 'src/csharp/project';
 import Editor from 'react-simple-code-editor';
 import ProxiedCardPart from './ProxiedCardPart';
-import WebRequestCardPart from './WebRequestCard';
+import WebRequestCardPart from './WebRequestCardPart';
 import HtmlHelper from 'src/helpers/Common/HtmlHelper';
 
 interface AHttpRequestCardArgs
 {
 	Action: ADbHttpAction;
+	ShowMethods?: boolean;
 }
 
 const AHttpRequestCard: React.FC<AHttpRequestCardArgs> = (props) =>
@@ -22,16 +23,17 @@ const AHttpRequestCard: React.FC<AHttpRequestCardArgs> = (props) =>
 	useEffect(() => { props.Action.Method = method }, [method]);
 
 	return <span className={cl.actionCard}>
-		<span className={cl.editorBlock}>
-			<span className={cl.editorPropHeader}>METHOD</span>
-			<select name='method' onVolumeChange={e => setMethod(parseInt(e.currentTarget.value))}>
-				<option value={HttpRequestMethod.Get}>GET</option>
-				<option value={HttpRequestMethod.Post}>POST</option>
-				<option value={HttpRequestMethod.Put}>PUT</option>
-				<option value={HttpRequestMethod.Patch}>PATCH</option>
-				<option value={HttpRequestMethod.Delete}>DELETE</option>
-			</select>
-		</span>
+		{(props.ShowMethods ?? true) ?
+			<span className={cl.editorBlock}>
+				<span className={cl.editorPropHeader}>METHOD</span>
+				<select name='method' onVolumeChange={e => setMethod(parseInt(e.currentTarget.value))}>
+					<option value={HttpRequestMethod.Get}>GET</option>
+					<option value={HttpRequestMethod.Post}>POST</option>
+					<option value={HttpRequestMethod.Put}>PUT</option>
+					<option value={HttpRequestMethod.Patch}>PATCH</option>
+					<option value={HttpRequestMethod.Delete}>DELETE</option>
+				</select>
+			</span> : <span />}
 		<WebRequestCardPart Action={props.Action} />
 		<ProxiedCardPart Action={props.Action} />
 	</span>

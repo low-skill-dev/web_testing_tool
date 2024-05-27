@@ -67,7 +67,9 @@ public class ScenarioExecutor
 
 			this.Progress.ExecutionCount++;
 
-			var updates = await executor.Execute(this.Progress.CurrentVariableContext);
+			Dictionary<string, string>? updates = null;
+			try { updates = await executor.Execute(this.Progress.CurrentVariableContext); } catch { }
+
 			var resultNullable = executor.AbstractResult;
 
 			this.Progress.ProcessorTicksCount += executor.CpuTimeTicks;

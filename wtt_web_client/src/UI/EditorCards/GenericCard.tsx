@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import cl from './EditorCards.module.css';
 import EditorCardButtons from './EditorCardsCommon';
 import HttpRequestCard from './HttpRequestCard';
-import { ActionTypes, ADbAction, DbHttpAction } from "src/csharp/project";
+import { ActionTypes, ADbAction, ADbHttpAction, ADbWebRequest, DbConditionalAction, DbDelayAction, DbHttpAction, DbImapAction, DbScenarioAction } from "src/csharp/project";
 import ImagePathHelper from 'src/helpers/Common/ImagePathHelper';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs';
@@ -10,6 +10,12 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism.css'; //Example style, you can use another
 import EchoRequestCard from './EchoRequestCard';
+import WebRequestCardPart from './WebRequestCardPart';
+import AHttpRequestCard from './AHttpRequestCard';
+import ImapRequestCard from './ImapRequestCard';
+import DelayRequestCard from './DelayRequestCard';
+import ConditionalRequestCard from './ConditionalCard';
+import ScenarioRequestCard from './ScenarioCallCard';
 
 interface GenericCardArgs extends EditorCardButtons
 {
@@ -43,18 +49,21 @@ const GenericCard: React.FC<GenericCardArgs> = (props) =>
 	{
 		switch (at)
 		{
-			case ActionTypes.DbHttpActionType:
-				return "HTTP";
-			case ActionTypes.DbEchoActionType:
-				return "ECHO";
-			default:
-				return "Request";
+			case ActionTypes.DbCertificateActionType: return "X509";
+			case ActionTypes.DbConditionalActionType: return "CONDITION";
+			case ActionTypes.DbDelayActionType: return "DELAY";
+			case ActionTypes.DbEchoActionType: return "ECHO";
+			case ActionTypes.DbErrorActionType: return "ERROR";
+			case ActionTypes.DbHttpActionType: return "HTTP";
+			case ActionTypes.DbImapActionType: return "IMAP";
+			case ActionTypes.DbScenarioActionType: return "SCENARIO";
+			default: return "Request";
 		}
 	}
 
 	let common =
 		<span className={cl.actionHeader}>
-			<span className={cl.actionGuid} title='Copy UUID' onClick={() => navigator.clipboard.writeText(props.Action.Guid!)}>{getTypeString(props.Action.Type!)} {props.Action.Guid!.substring(36-12, 36)}</span>
+			<span className={cl.actionGuid} title='Copy UUID' onClick={() => navigator.clipboard.writeText(props.Action.Guid!)}>{getTypeString(props.Action.Type!)} {props.Action.Guid!.substring(36 - 12, 36)}</span>
 			{/* <span className={cl.actionGuid} title='UUID'>{props.Action.Guid!!!.substring(30, 6)}</span> */}
 			<input className={cl.actionName} value={name} onChange={e => setNameInternal(e.target.value)} title='Name' />
 			<span className={cl.moveRow}>
@@ -75,6 +84,22 @@ const GenericCard: React.FC<GenericCardArgs> = (props) =>
 		case ActionTypes.DbEchoActionType:
 			specific = <EchoRequestCard Action={props.Action as DbHttpAction} />;
 			break;
+		case ActionTypes.DbCertificateActionType:
+			specific = <AHttpRequestCard Action={props.Action as ADbHttpAction} ShowMethods={false} />;
+			break;
+		case ActionTypes.DbImapActionType:
+			specific = <ImapRequestCard Action={props.Action as DbImapAction} />;
+			break;
+		case ActionTypes.DbDelayActionType:
+			specific = <DelayRequestCard Action={props.Action as DbDelayAction} />
+			break;
+		case ActionTypes.DbConditionalActionType:
+			specific = <ConditionalRequestCard Action={props.Action as DbConditionalAction} />
+			break;
+		case ActionTypes.DbScenarioActionType:
+			specific = <ScenarioRequestCard Action={props.Action as DbScenarioAction} />
+			break;
+		case ActionTypes.DbGetParametersActionType: // не применяется
 		default:
 			specific = <span />;
 			break;
@@ -83,21 +108,23 @@ const GenericCard: React.FC<GenericCardArgs> = (props) =>
 	return <span className={cl.actionCardWrapper}>
 		{common}
 		{specific}
-		<span className={cl.editorBlock} >
-			<span className={cl.editorPropHeader}>SCRIPT</span>
-			<Editor className={cl.codeEditor}
-				value={script ?? ""}
-				onValueChange={code => setScriptInternal(code)}
-				highlight={code => highlight(code, languages.js, "js")}
-				padding={3}
-				style={{
-					fontFamily: '"Fira code", "Fira Mono", monospace',
-					fontSize: 12,
-				}}
-			/>
-		</span>
+		{props.Action.Type !== ActionTypes.DbErrorActionType ?
+			<span className={cl.editorBlock} >
+				<span className={cl.editorPropHeader}>SCRIPT</span>
+				<Editor className={cl.codeEditor}
+					value={script ?? ""}
+					onValueChange={code => setScriptInternal(code)}
+					highlight={code => highlight(code, languages.js, "js")}
+					padding={3}
+					style={{
+						fontFamily: '"Cascadia Mono Light", "Cascadia Mono", monospace',
+						fontSize: 12,
+					}}
+				/>
+			</span> : <span />}
 		{
-			props.Action.Type !== ActionTypes.DbConditionalActionType ?
+			(props.Action.Type !== ActionTypes.DbConditionalActionType &&
+				props.Action.Type !== ActionTypes.DbErrorActionType) ?
 				<span className={cl.editorBlock}>
 					<span className={cl.editorPropHeader}>NEXT ACTION UUID</span>
 					<input value={next} onChange={e => setNext(e.target.value)}></input>

@@ -161,7 +161,7 @@ public class SimpleActionTests : ATestsWithLogging
 		var executor = new DelayActionExecutor(new DbDelayAction()
 		{
 			Guid = Guid.NewGuid(),
-			DelayMs = 1000,
+			DelaySeconds = 2,
 		});
 
 		var start = DateTime.UtcNow;

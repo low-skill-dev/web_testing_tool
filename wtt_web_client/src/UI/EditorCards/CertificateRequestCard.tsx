@@ -4,7 +4,7 @@ import EditorCardButtons from './EditorCardsCommon';
 import { DbCertificateAction, DbHttpAction, HttpRequestMethod } from 'src/csharp/project';
 import Editor from 'react-simple-code-editor';
 import ProxiedCardPart from './ProxiedCardPart';
-import WebRequestCardPart from './WebRequestCard';
+import WebRequestCardPart from './WebRequestCardPart';
 import AHttpRequestCard from './AHttpRequestCard';
 
 interface CertificateRequestCardArgs

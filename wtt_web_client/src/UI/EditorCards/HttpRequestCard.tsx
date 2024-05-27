@@ -4,7 +4,7 @@ import EditorCardButtons from './EditorCardsCommon';
 import { DbHttpAction, HttpRequestMethod } from 'src/csharp/project';
 import Editor from 'react-simple-code-editor';
 import ProxiedCardPart from './ProxiedCardPart';
-import WebRequestCardPart from './WebRequestCard';
+import WebRequestCardPart from './WebRequestCardPart';
 import AHttpRequestCard from './AHttpRequestCard';
 import HtmlHelper from 'src/helpers/Common/HtmlHelper';
 
@@ -54,6 +54,8 @@ const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 
 	return <span className={cl.actionCard}>
 		<AHttpRequestCard Action={props.Action} />
+		<details>
+			<summary>BODY, HEADERS, COOKIES</summary>
 		<span className={cl.editorBlock}>
 			{/* <span className={cl.editorPropHeader}>BODY</span> */}
 			{/* https://stackoverflow.com/a/48460773/11325184 */}
@@ -73,6 +75,7 @@ const HttpRequestCard: React.FC<HttpRequestCardArgs> = (props) =>
 			<span className={cl.editorPropHeader}>BODY</span>
 			<textarea className={cl.editorTextBlock} value={body} onChange={e=> setBody(e.target.value)}/>
 		</span> */}
+				</details>
 	</span>
 }
 

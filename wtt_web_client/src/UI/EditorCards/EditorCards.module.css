@@ -20,6 +20,10 @@
 	margin-top: .5rem;
 }
 
+.editorBlock>input {
+	width: 100%;
+}
+
 .codeEditor {
 	display: block;
 	width: 100%;
@@ -45,6 +49,7 @@
 	font-size: small;
 	width: 100%;
 	text-align: center;
+	background-color: aliceblue;
 }
 
 .actionGuid:hover {

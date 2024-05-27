@@ -40,6 +40,7 @@ public abstract class AActionExecutor
 		if(action is DbErrorAction dbErrorAction) ae = new ErrorActionExecutor(dbErrorAction);
 		if(action is DbDelayAction dbDelayAction) ae = new DelayActionExecutor(dbDelayAction);
 		if(action is DbScenarioAction dbScenarioAction) ae = new ScenarioActionExecutor(dbScenarioAction);
+		if(action is DbCertificateAction dbCertificateAction) ae = new CertificateActionExecutor(dbCertificateAction);
 		if(action is DbConditionalAction dbConditionalAction) ae = new ConditionalActionExecutor(dbConditionalAction);
 
 		if(ae is null) throw new NotImplementedException(nameof(ADbAction));

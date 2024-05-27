@@ -76,7 +76,7 @@ public class Configuration
 			.WithProperty(x => x.JsBoolExpression, c => c.InitializeWith((_, _, _) => "''"));
 
 		builder.ExportAsClass<DbDelayAction>()
-			.WithProperty(x => x.DelayMs, c => c.InitializeWith((_, _, _) => "250"));
+			.WithProperty(x => x.DelaySeconds, c => c.InitializeWith((_, _, _) => "10"));
 
 		builder.ExportAsClass<DbErrorAction>();
 			//.WithProperty(x => x.Message, c => c.InitializeWith((_, _, _) => "''"))

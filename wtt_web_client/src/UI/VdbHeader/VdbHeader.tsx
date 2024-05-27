@@ -48,9 +48,9 @@ const VdbHeader: React.FC = () =>
                 <NavLink to={isAuthed ? "/panel" : "/auth"} className={cl.menuElement} >
                     Editor
                 </NavLink>
-                <NavLink to={isAuthed ? "/scheduler" : "/auth"} className={cl.menuElement} >
+                {/* <NavLink to={isAuthed ? "/scheduler" : "/auth"} className={cl.menuElement} >
                     Scheduler
-                </NavLink>
+                </NavLink> */}
             </nav>
         </header>);
 }

@@ -15,7 +15,7 @@ public class ScenarioExecutorBackgroundService : BackgroundService
 	private readonly ILogger<ScenarioExecutorBackgroundService> _logger;
 
 	private const int GlobalExecutionLimit = 128;
-
+	 
 	private const int loopDelaySeconds =
 #if DEBUG
 		1;
