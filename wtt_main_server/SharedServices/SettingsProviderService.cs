@@ -45,6 +45,7 @@ public class SettingsProviderService
 					if(!file.Exists || file.Length < 256)
 					{
 						ret.GenerateKey(ECCurve.NamedCurves.nistP384);
+						Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
 						File.WriteAllText(path, ret.ExportPkcs8PrivateKeyPem());
 						// do not return here, let it raise an exception if the file can't be read
 					}

@@ -39,11 +39,13 @@ public class Program
 		// TODO: took from old project, rewrite for actual files
 		builder.Configuration
 			.AddJsonFile("./appsettings.json", true)
+			.AddJsonFile("/etc/wtt/secrets.json", false)
 			//.AddJsonFile("/run/secrets/aspsecrets.json", true)
 			//.AddJsonFile("/run/secrets/nodes.json", true)
 			//.AddJsonFile("/run/secrets/generated_sig.json", true)
 			.AddEnvironmentVariables()
 			.Build();
+
 
 		builder.Services.AddControllers()
 			//	.AddNewtonsoftJson(opts =>
@@ -118,7 +120,7 @@ public class Program
 
 		//app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().Database.EnsureDeleted();
 		app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().Database.Migrate();
-		app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().CreateTriggers();
+		//app.Services.CreateScope().ServiceProvider.GetRequiredService<WttContext>().CreateTriggers();
 		app.Run();
 	}
 }

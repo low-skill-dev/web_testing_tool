@@ -60,14 +60,15 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 
 	const reorderActions = () =>
 	{
-		UpscaleRowIndexesToZero();
-		MinimizeRowIndexes();
+		//UpscaleRowIndexesToZero();
+		//MinimizeRowIndexes();
 
 		console.log(`Rows before sorting: [${props.Actions.map(x => x.RowId).join(',')}]`)
 		let enumerated = [...(props.Actions.sort((a, b) => a.RowId - b.RowId))];
 		console.log(`Rows after sorting: [${enumerated.map(x => x.RowId).join(',')}]`)
 
-		console.log(`Settings new enumerated actions: [${enumerated.map(x => x.Guid!).join(',')}].`);
+		console.log(`Setting new enumerated actions:\n` +
+			`${enumerated.map(x => x.Guid!.substring(36 - 12)).join('\n')}.`);
 		setEnumeratedActions(enumerated);
 		//setKeyStart(keyStart + 1000);
 		//props.UpdateParentLayout();
@@ -89,19 +90,49 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 		reorderActions();
 	}, []);
 
-	const moveUp = (guid: string) =>
+	const moveUp = (guid: string, increaseIndex: boolean = false) =>
 	{
 		console.log(`moveUp[${props.Actions.length}]`);
 
-		let targetIndex = props.Actions!.findIndex(x => x.Guid! === guid);
-		if (targetIndex === 0) return;
+		var sorted = props.Actions.sort((a, b) => a.RowId - b.RowId);
+		for (let i = 0; i < props.Actions.length; i++)
+		{
+			sorted[i].RowId = i + 1;
+		}
 
-		let prev = props.Actions![targetIndex - 1];
+		//console.warn(sorted.map(x=> x.RowId).join(','));
 
-		console.log(`Settings new rowId for action '${guid}': '${props.Actions![targetIndex].RowId}' -> '${prev.RowId - 1}'.`);
+		var indexOfTarget = props.Actions.findIndex(x => x.Guid?.endsWith(guid));
+		console.log(`indexOfTarget=${indexOfTarget}`);
+		console.log(`increaseIndex=${increaseIndex}`);
 
-		props.Actions![targetIndex].RowId = prev.RowId - 1;
-		reorderActions();
+		if (increaseIndex && indexOfTarget === (props.Actions.length - 1)) return;
+		if (!increaseIndex && indexOfTarget === 0) return;
+
+		if (increaseIndex)
+		{
+			sorted[indexOfTarget].RowId += 1;
+			sorted[indexOfTarget + 1].RowId -= 1;
+		}
+		else
+		{
+			sorted[indexOfTarget].RowId -= 1;
+			sorted[indexOfTarget - 1].RowId += 1;
+		}
+
+		let enumerated = [...(props.Actions.sort((a, b) => a.RowId - b.RowId))];
+		console.log(`Rows after sorting: [${enumerated.map(x => x.RowId).join(',')}]`)
+		setEnumeratedActions(enumerated);
+
+		// let targetIndex = props.Actions!.findIndex(x => x.Guid! === guid);
+		// if (targetIndex === 0) return;
+
+		// let prev = props.Actions![targetIndex - 1];
+
+		// console.log(`Settings new rowId for action '${guid}': '${props.Actions![targetIndex].RowId}' -> '${prev.RowId - 1}'.`);
+
+		// props.Actions![targetIndex].RowId = prev.RowId - 1;
+		// reorderActions();
 	}
 	const moveDown = (guid: string) =>
 	{
@@ -139,14 +170,14 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 			<GenericCard
 				key={x.Guid!}
 				Action={x}
-				MoveUpCallback={moveUp}
-				MoveDownCallback={moveDown}
+				MoveUpCallback={g => moveUp(g, false)}
+				MoveDownCallback={g => moveUp(g, true)}
 				MoveLeftCallback={props.MoveActionLeftCallback}
 				MoveRightCallback={props.MoveActionRightCallback}
 			/>
 		)}
 
-		<span style={{ display: "flex", flexWrap:"wrap" }}>
+		<span style={{ display: "flex", flexWrap: "wrap" }}>
 			<button className={[cl.columnAddAtionsBtns, cl.addActionBtn, cl.addActionIcmp].join(' ')} onClick={() => { props.AddHttpCallback(props.SelfColumnId, getNewRowId()); reorderActions(); }}>
 				+HTTP
 			</button>

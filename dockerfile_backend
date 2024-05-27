@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
-COPY . /sc
+COPY ./wtt_main_server /sc
 RUN dotnet publish /sc/WebApi/WebApi.csproj -c "Release" -r linux-musl-x64 --no-self-contained -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS final

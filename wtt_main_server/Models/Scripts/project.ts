@@ -11,8 +11,7 @@ export enum ActionTypes {
 	DbGetParametersActionType = 5,
 	DbHttpActionType = 6,
 	DbImapActionType = 7,
-	DbScenarioActionType = 8,
-	DbTestScenarioType = 9
+	DbScenarioActionType = 8
 }
 export enum UserRoles {
 	Regular = 128,
@@ -108,7 +107,7 @@ export class DbDelayAction extends ADbAction
 		this.Type = ActionTypes.DbDelayActionType;
 	}
 	public Type: ActionTypes;
-	public DelayMs: number = 250;
+	public DelaySeconds: number = 10;
 }
 export class DbEchoAction extends ADbWebRequest
 {
@@ -175,7 +174,7 @@ export class DbScenarioAction extends ADbAction
 	constructor ()
 	{
 		super();
-		this.Type = ActionTypes.DbTestScenarioType;
+		this.Type = ActionTypes.DbScenarioActionType;
 	}
 	public Type: ActionTypes;
 	public CalledScenarioGuid: any;

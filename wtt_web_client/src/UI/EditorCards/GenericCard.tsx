@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import cl from './EditorCards.module.css';
 import EditorCardButtons from './EditorCardsCommon';
 import HttpRequestCard from './HttpRequestCard';
-import { ActionTypes, ADbAction, ADbHttpAction, ADbWebRequest, DbConditionalAction, DbDelayAction, DbHttpAction, DbImapAction, DbScenarioAction } from "src/csharp/project";
+import { ActionTypes, ADbAction, ADbHttpAction, ADbWebRequest, DbCertificateAction, DbConditionalAction, DbDelayAction, DbEchoAction, DbHttpAction, DbImapAction, DbScenarioAction } from "src/csharp/project";
 import ImagePathHelper from 'src/helpers/Common/ImagePathHelper';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs';
@@ -82,10 +82,10 @@ const GenericCard: React.FC<GenericCardArgs> = (props) =>
 			specific = <HttpRequestCard Action={props.Action as DbHttpAction} />;
 			break;
 		case ActionTypes.DbEchoActionType:
-			specific = <EchoRequestCard Action={props.Action as DbHttpAction} />;
+			specific = <EchoRequestCard Action={props.Action as DbEchoAction} />;
 			break;
 		case ActionTypes.DbCertificateActionType:
-			specific = <AHttpRequestCard Action={props.Action as ADbHttpAction} ShowMethods={false} />;
+			specific = <AHttpRequestCard Action={props.Action as DbCertificateAction} ShowMethods={false} />;
 			break;
 		case ActionTypes.DbImapActionType:
 			specific = <ImapRequestCard Action={props.Action as DbImapAction} />;
