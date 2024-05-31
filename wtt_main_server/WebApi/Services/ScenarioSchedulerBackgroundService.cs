@@ -32,11 +32,22 @@ public class ScenarioSchedulerBackgroundService : BackgroundService
 
 			var now = DateTime.UtcNow;
 			var needToRun = scenarios
-				.Where(s => (now - runLogs.First(x => x.ScenarioGuid == s.Guid).Created).TotalMinutes > s.RunIntervalMinutes)
-				.Select(x => x.Guid).Where(x=> !_waitingToRun.Contains(x));
+				.Where(s => (now - (runLogs.FirstOrDefault(x => x.ScenarioGuid == s.Guid)?.Created ?? DateTime.MinValue))
+					.TotalMinutes > s.RunIntervalMinutes)
+				.Select(x => x.Guid).Where(x => !_waitingToRun.Contains(x));
 
 			foreach(var g in needToRun) _waitingToRun.Add(g);
 		}
+	}
+
+	public bool IsScheduled(Guid g)
+	{
+		return _waitingToRun.Contains(g);
+	}
+
+	public bool Enqueue(Guid g)
+	{
+		return _waitingToRun.Add(g);
 	}
 
 	public List<Guid> GetQueue()

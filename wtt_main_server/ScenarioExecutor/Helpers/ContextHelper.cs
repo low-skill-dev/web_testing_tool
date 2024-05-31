@@ -14,7 +14,7 @@ public static class ContextHelper
 	/// Оригинальные коллекции не модифицируются.
 	/// </summary>
 	public static Dictionary<string, string> MergeContexts(
-		Dictionary<string, string> prev, Dictionary<string, string> next)
+		IDictionary<string, string> prev, IDictionary<string, string> next)
 	{
 		var ret = new Dictionary<string, string>(prev.Keys.Union(next.Keys).Count());
 

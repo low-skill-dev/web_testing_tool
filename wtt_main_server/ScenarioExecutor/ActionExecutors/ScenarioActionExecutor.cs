@@ -58,6 +58,7 @@ public sealed class ScenarioActionExecutor : AActionExecutor<DbScenarioAction, S
 			ExecutionDepth = CallerExecutionDepth + 1,
 			Parent = CallerGuid,
 			LoadActionsByScenarioGuidFunc = this.LoadActionsByScenarioGuidFunc,
+			InitialContext = currentContext,
 		};
 
 		var execution = new ScenarioExecutor.ProjectInterface.ScenarioExecutor(runInfo);
@@ -72,7 +73,9 @@ public sealed class ScenarioActionExecutor : AActionExecutor<DbScenarioAction, S
 		base.Complete();
 
 		// перезапись процессорного времени - сколько занял вложенный сценарий
-		_cpuTimeCounter.GetType().GetField("_elapsed", System.Reflection.BindingFlags.NonPublic)!
+		_cpuTimeCounter.GetType().GetField("_elapsed",
+			System.Reflection.BindingFlags.NonPublic |
+			System.Reflection.BindingFlags.Instance)!
 			.SetValue(_cpuTimeCounter, execution.Progress.ProcessorTicksCount);
 
 		return new();

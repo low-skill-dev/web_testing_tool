@@ -9,6 +9,8 @@ using WebApi.Extensions;
 using static Models.Enums.UserRoles;
 using Models.Enums;
 using Models.Database.RunningScenarios;
+using Models.Application.Abstract;
+using WebApi.Services;
 
 namespace WebApi.Controllers.v1;
 
@@ -124,5 +126,25 @@ public class ScenarioController : ControllerBase
 		var ret = userLogs.GroupBy(x => x.ScenarioGuid).Select(x => new { g = x.Key, r = x.OrderByDescending(x => x.Completed).ToArray() }).ToList();
 
 		return Ok(ret);
+	}
+
+	[HttpPost]
+	[Route("run/{g:guid}")]
+	[JwtAuthorize]
+	public async Task<IActionResult> ManualRun([FromRoute][Required] Guid g,
+		[FromServices] ScenarioSchedulerBackgroundService scheduleService,
+		[FromServices] ScenarioExecutorBackgroundService exeService)
+	{
+		var user = this.HttpContext.GetAuthedUser()!;
+		var isOwner = await _context.TestScenarios.AnyAsync(x => x.Guid == g && x.UserGuid == user.Guid);
+
+		if(!isOwner) 
+			return Forbid();
+
+		if(scheduleService.IsScheduled(g) || exeService.IsExecuting(g)) 
+			return StatusCode(StatusCodes.Status503ServiceUnavailable);
+
+		scheduleService.Enqueue(g);
+		return Ok();
 	}
 }

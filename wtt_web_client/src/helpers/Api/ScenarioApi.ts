@@ -41,6 +41,11 @@ export default class ScenarioApi
 		const res = await axios.put(UrlHelper.Backend.V1.Scenario.Put.SaveScenarios, data);
 		return res.status;
 	}
+
+	public RunManually = async (guid: string) =>{
+		const res = await axios.post(UrlHelper.Backend.V1.Scenario.Post.RunManually + `/${guid}`);
+		return res.status;
+	}
 }
 
 export type ScenarioGuidToRuns = {

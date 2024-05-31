@@ -91,6 +91,11 @@ public class ScenarioExecutorBackgroundService : BackgroundService
 		await WriteResultsToDb(completed);
 	}
 
+	public bool IsExecuting(Guid g)
+	{
+		return _inProgress.Any(x => x.Progress.RunInfo.DbScenarioGuid == g);
+	}
+
 	private async Task WriteResultsToDb(IEnumerable<ScenarioExecutor.ProjectInterface.ScenarioExecutor> se)
 	{
 		var toWrite = se.Select(x => new DbScenarioRun

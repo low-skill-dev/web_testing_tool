@@ -145,6 +145,8 @@ export class DbHttpAction extends ADbHttpAction
 	public RequestCookies?: [string, string][];
 	public VariableToPath?: [string, string][];
 	public VariablesUpdatedInTryBlock?: string[];
+	public MinResponseCode = 200;
+	public MaxResponseCode = 299;
 }
 export class DbImapAction extends ADbAction
 {

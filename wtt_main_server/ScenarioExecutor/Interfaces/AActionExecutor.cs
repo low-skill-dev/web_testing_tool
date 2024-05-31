@@ -57,7 +57,7 @@ public abstract class AActionExecutor
 			&& string.IsNullOrWhiteSpace(beforeScript)
 			&& string.IsNullOrWhiteSpace(afterScript)) return;
 
-		var ctxJs = string.Join('\n', context.Select(x => $"let {x.Key} = {x.Value};"));
+		var ctxJs = string.Join('\n', context.Select(x => $"let {x.Key} = '{x.Value}';"));
 
 		var js = $$$"""		
 			// generated: {{{DateTime.UtcNow.ToString("")}}}

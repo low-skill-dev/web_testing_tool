@@ -18,7 +18,7 @@ public sealed class ScenarioProgressInfo
 	public ScenarioRunInfo RunInfo { get; init; }
 
 	// Текущее состояние значений переменных.
-	public Dictionary<string, string> CurrentVariableContext { get; set; } = new();
+	public IDictionary<string, string> CurrentVariableContext { get; set; }
 
 	public List<AActionResult> ActionResults { get; init; } = new();
 
@@ -37,5 +37,11 @@ public sealed class ScenarioProgressInfo
 	public ScenarioProgressInfo(ScenarioRunInfo runInfo)
 	{
 		this.RunInfo = runInfo;
+
+		if(runInfo.InitialContext is not null)
+			this.CurrentVariableContext = runInfo.InitialContext
+			.ToDictionary(x => string.Copy(x.Key), x => string.Copy(x.Value));
+		else
+			this.CurrentVariableContext = new Dictionary<string, string>();
 	}
 }

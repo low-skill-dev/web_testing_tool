@@ -68,12 +68,17 @@ public class ScenarioExecutor
 			this.Progress.ExecutionCount++;
 
 			Dictionary<string, string>? updates = null;
-			try { updates = await executor.Execute(this.Progress.CurrentVariableContext); } catch { }
+			try { updates = await executor.Execute(this.Progress.CurrentVariableContext); }
+			catch(Exception ex)
+			{
+				ValidateActionResult(action, executor.AbstractResult);
+				throw;
+			}
 
 			var resultNullable = executor.AbstractResult;
 
 			this.Progress.ProcessorTicksCount += executor.CpuTimeTicks;
-			var result = ValidateActionResult(action, resultNullable); 
+			var result = ValidateActionResult(action, resultNullable);
 
 			this.Progress.ActionResults.Add(result);
 
@@ -100,8 +105,8 @@ public class ScenarioExecutor
 			throw new Exception("Entry point action not found.");
 
 		return action?.Guid ?? actions!
-			.OrderByDescending(x => x.Value.ColumnId)
-			.ThenByDescending(x => x.Value.RowId)
+			.OrderBy(x => x.Value.ColumnId)
+			.ThenBy(x => x.Value.RowId)
 			.First().Value.Guid;
 	}
 

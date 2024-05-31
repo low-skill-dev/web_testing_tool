@@ -20,6 +20,7 @@ import ScenarioRequestCard from './ScenarioCallCard';
 interface GenericCardArgs extends EditorCardButtons
 {
 	Action: ADbAction;
+	DeleteCallback: (guid: string) => void;
 }
 
 const GenericCard: React.FC<GenericCardArgs> = (props) =>
@@ -63,7 +64,8 @@ const GenericCard: React.FC<GenericCardArgs> = (props) =>
 
 	let common =
 		<span className={cl.actionHeader}>
-			<span className={cl.actionGuid} title='Copy UUID' onClick={() => navigator.clipboard.writeText(props.Action.Guid!)}>{getTypeString(props.Action.Type!)} {props.Action.Guid!.substring(36 - 12, 36)}</span>
+			<span className={cl.actionGuid} title='Copy UUID' onClick={() => navigator.clipboard.writeText(props.Action.Guid!)}><strong>{getTypeString(props.Action.Type!)}</strong> {props.Action.Guid!.substring(36 - 12, 36)}
+			</span>
 			{/* <span className={cl.actionGuid} title='UUID'>{props.Action.Guid!!!.substring(30, 6)}</span> */}
 			<input className={cl.actionName} value={name} onChange={e => setNameInternal(e.target.value)} title='Name' />
 			<span className={cl.moveRow}>
@@ -72,6 +74,7 @@ const GenericCard: React.FC<GenericCardArgs> = (props) =>
 				<button className={[cl.moveBtn, "moveDownBackground"].join(' ')} onClick={() => props.MoveDownCallback(props.Action.Guid!!)} style={{ backgroundImage: ImagePathHelper.DownArrow }} />
 				<button className={[cl.moveBtn, "moveLeftBackground"].join(' ')} onClick={() => props.MoveLeftCallback(props.Action.Guid!!)} style={{ backgroundImage: ImagePathHelper.LeftArrow }} />
 				<button className={[cl.moveBtn, "moveRightBackground"].join(' ')} onClick={() => props.MoveRightCallback(props.Action.Guid!!)} style={{ backgroundImage: ImagePathHelper.RightArrow }} />
+				<button className={[cl.moveBtn, "deleteBackground"].join(' ')} onClick={() => props.DeleteCallback(props.Action.Guid!)} />
 			</span>
 		</span>;
 

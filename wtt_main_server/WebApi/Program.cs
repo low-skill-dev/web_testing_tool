@@ -39,10 +39,7 @@ public class Program
 		// TODO: took from old project, rewrite for actual files
 		builder.Configuration
 			.AddJsonFile("./appsettings.json", true)
-			.AddJsonFile("/etc/wtt/secrets.json", false)
-			//.AddJsonFile("/run/secrets/aspsecrets.json", true)
-			//.AddJsonFile("/run/secrets/nodes.json", true)
-			//.AddJsonFile("/run/secrets/generated_sig.json", true)
+			.AddJsonFile("/etc/wtt/secrets.json", Environment.OSVersion.Platform == PlatformID.Win32NT)
 			.AddEnvironmentVariables()
 			.Build();
 

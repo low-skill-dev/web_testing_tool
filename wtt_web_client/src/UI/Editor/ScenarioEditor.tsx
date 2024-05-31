@@ -54,7 +54,7 @@ const ScenarioEditor: React.FC<ScenarioEditorArgs> = (props) =>
 		setName(props.Scenario.Name);
 		setRunEvery(props.Scenario.RunIntervalMinutes ?? 0);
 		setDeleteConfim(false);
-	}, []);
+	}, [props]);
 
 	const deleteInternal = () =>
 	{
@@ -62,9 +62,14 @@ const ScenarioEditor: React.FC<ScenarioEditorArgs> = (props) =>
 		else setDeleteConfim(true);
 	}
 
+	const runManually = async () =>{
+		console.log(`runManually(${props.Scenario.Guid?.substring(36-12)})`)
+		await (await ScenarioApi.Create()).RunManually(props.Scenario.Guid!);
+	}
+
 	return <span className={cl.nameEditor}>
 		<span>UUID: {props.Scenario.Guid!}</span>
-		<span style={{ fontSize: "1.5rem" }}> Run every <input type="number" value={runEvery} onChange={e=> setRunEvery(parseInt(e.target.value) ?? runEvery)}></input> minutes </span>
+		<span style={{ fontSize: "1.5rem" }}><span onClick={runManually} >Run</span> every <input type="number" value={runEvery} onChange={e=> setRunEvery(parseInt(e.target.value) ?? runEvery)}></input> minutes </span>
 		<span style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap" }}>
 			{/* <span style={{ display: "flex", marginRight: ".25rem" }}>NAME: </span> */}
 			<input style={{ display: "flex", fontSize: "1.5rem" }} value={name ?? ''} onChange={e => setName(e.target.value)} />

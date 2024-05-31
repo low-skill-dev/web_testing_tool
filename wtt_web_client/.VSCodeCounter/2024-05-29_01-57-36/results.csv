@@ -1,0 +1,69 @@
+"filename", "language", "TypeScript JSX", "CSS", "TypeScript", "JSON", "XML", "comment", "blank", "total"
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\App.css", "CSS", 0, 0, 0, 0, 0, 0, 1, 1
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\App.module.css", "CSS", 0, 32, 0, 0, 0, 0, 5, 37
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\App.test.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 8, 2, 10
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\App.tsx", "TypeScript JSX", 30, 0, 0, 0, 0, 1, 6, 37
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\AuthForm\AuthForm.module.css", "CSS", 0, 96, 0, 0, 0, 0, 18, 114
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\AuthForm\AuthForm.tsx", "TypeScript JSX", 139, 0, 0, 0, 0, 2, 15, 156
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\AHttpRequestCard.tsx", "TypeScript JSX", 34, 0, 0, 0, 0, 3, 5, 42
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\CertificateRequestCard.tsx", "TypeScript JSX", 21, 0, 0, 0, 0, 14, 4, 39
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\ConditionalCard.tsx", "TypeScript JSX", 28, 0, 0, 0, 0, 0, 4, 32
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\DelayRequestCard.tsx", "TypeScript JSX", 23, 0, 0, 0, 0, 0, 5, 28
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\EchoRequestCard.tsx", "TypeScript JSX", 24, 0, 0, 0, 0, 1, 6, 31
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\EditorCards.module.css", "CSS", 0, 87, 0, 0, 0, 23, 16, 126
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\EditorCardsCommon.tsx", "TypeScript JSX", 6, 0, 0, 0, 0, 0, 1, 7
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\GenericCard.tsx", "TypeScript JSX", 128, 0, 0, 0, 0, 1, 9, 138
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\HttpRequestCard.tsx", "TypeScript JSX", 62, 0, 0, 0, 0, 14, 6, 82
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\ImapRequestCard.tsx", "TypeScript JSX", 54, 0, 0, 0, 0, 0, 9, 63
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\ProxiedCardPart.tsx", "TypeScript JSX", 25, 0, 0, 0, 0, 1, 5, 31
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\ScenarioCallCard.tsx", "TypeScript JSX", 28, 0, 0, 0, 0, 0, 4, 32
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\EditorCards\WebRequestCardPart.tsx", "TypeScript JSX", 22, 0, 0, 0, 0, 0, 4, 26
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\Editor\ActionsColumn.tsx", "TypeScript JSX", 157, 0, 0, 0, 0, 15, 37, 209
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\Editor\ActionsEditor.tsx", "TypeScript JSX", 146, 0, 0, 0, 0, 3, 35, 184
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\Editor\Editor.module.css", "CSS", 0, 92, 0, 0, 0, 0, 14, 106
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\Editor\MainPanel.tsx", "TypeScript JSX", 166, 0, 0, 0, 0, 17, 31, 214
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\Editor\ScenarioEditor.tsx", "TypeScript JSX", 44, 0, 0, 0, 0, 23, 9, 76
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\Editor\ScenarioSelectionPanel.tsx", "TypeScript JSX", 49, 0, 0, 0, 0, 0, 12, 61
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\ForgotPassword\ForgotPassword.tsx", "TypeScript JSX", 83, 0, 0, 0, 0, 48, 17, 148
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\NotFound\NotFound.tsx", "TypeScript JSX", 9, 0, 0, 0, 0, 0, 2, 11
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\OpenSourceInfo\OpenSourceInfo.module.css", "CSS", 0, 0, 0, 0, 0, 0, 1, 1
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\OpenSourceInfo\OpenSourceInfo.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 1, 1
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\RecoveryPassword\RecoveryPassword.tsx", "TypeScript JSX", 117, 0, 0, 0, 0, 19, 14, 150
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbHeader\VdbHeader.module.css", "CSS", 0, 74, 0, 0, 0, 1, 12, 87
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbHeader\VdbHeader.tsx", "TypeScript JSX", 47, 0, 0, 0, 0, 7, 4, 58
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbMain\VdbMain.module.css", "CSS", 0, 21, 0, 0, 0, 0, 5, 26
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbMain\VdbMain.tsx", "TypeScript JSX", 19, 0, 0, 0, 0, 10, 2, 31
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbPersonal\VdbPersonal.module.css", "CSS", 0, 58, 0, 0, 0, 1, 11, 70
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbPersonal\VdbPersonal.tsx", "TypeScript JSX", 62, 0, 0, 0, 0, 11, 8, 81
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbSecurity\VdbSecurity.module.css", "CSS", 0, 64, 0, 0, 0, 1, 11, 76
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbSecurity\VdbSecurity.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 157, 15, 172
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbWelcome\VdbWelcome.module.css", "CSS", 0, 130, 0, 0, 0, 5, 33, 168
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\UI\VdbWelcome\VdbWelcome.tsx", "TypeScript JSX", 147, 0, 0, 0, 0, 13, 13, 173
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\config\TypeNames.json", "JSON", 0, 0, 0, 12, 0, 0, 0, 12
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\config\authSettings.json", "JSON", 0, 0, 0, 8, 0, 0, 0, 8
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\config\endpoints.json", "JSON", 0, 0, 0, 45, 0, 0, 0, 45
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\config\hrefsList.json", "JSON", 0, 0, 0, 4, 0, 0, 0, 4
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\config\locationsPseudonyms.json", "JSON", 0, 0, 0, 6, 0, 0, 0, 6
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\csharp\project.ts", "TypeScript", 0, 0, 256, 0, 0, 12, 4, 272
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Api\AuthHelper.ts", "TypeScript", 0, 0, 69, 0, 0, 3, 12, 84
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Api\AuthorizedApiInteractionBase.ts", "TypeScript", 0, 0, 128, 0, 0, 6, 18, 152
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Api\ScenarioApi.ts", "TypeScript", 0, 0, 40, 0, 0, 0, 9, 49
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Api\UrlHelper.ts", "TypeScript", 0, 0, 133, 0, 0, 3, 1, 137
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Common\Common.ts", "TypeScript", 0, 0, 7, 0, 0, 0, 0, 7
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Common\Constants.ts", "TypeScript", 0, 0, 5, 0, 0, 0, 0, 5
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Common\EnvHelper.ts", "TypeScript", 0, 0, 7, 0, 0, 0, 0, 7
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Common\HtmlHelper.ts", "TypeScript", 0, 0, 8, 0, 0, 0, 0, 8
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Common\ImagePathHelper.ts", "TypeScript", 0, 0, 19, 0, 0, 0, 0, 19
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Common\jwtHelper.ts", "TypeScript", 0, 0, 26, 0, 0, 0, 6, 32
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\GlobalContext.ts", "TypeScript", 0, 0, 2, 0, 0, 68, 16, 86
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\Scenario\ScenarioHelper.ts", "TypeScript", 0, 0, 33, 0, 0, 1, 3, 37
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\UserApiHelper.ts", "TypeScript", 0, 0, 0, 0, 0, 182, 19, 201
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\helpers\ValidationHelper.ts", "TypeScript", 0, 0, 65, 0, 0, 0, 9, 74
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\index.css", "CSS", 0, 12, 0, 0, 0, 0, 1, 13
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\index.tsx", "TypeScript JSX", 4, 0, 0, 0, 0, 0, 1, 5
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\logo.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 1
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\models\IJwtInfo.ts", "TypeScript", 0, 0, 6, 0, 0, 0, 0, 6
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\react-app-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 1, 1, 2
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\reportWebVitals.ts", "TypeScript", 0, 0, 0, 0, 0, 13, 3, 16
+"d:\Users\user\Desktop\wtt_mono_repo\wtt_web_client\src\setupTests.ts", "TypeScript", 0, 0, 1, 0, 0, 4, 1, 6
+"Total", "-", 1674, 666, 805, 75, 1, 692, 516, 4429

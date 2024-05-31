@@ -26,7 +26,7 @@ services:
     ports:
       - 6030:5002/tcp
 
-    main_server_api:
+  main_server_api:
       restart: always
       image: luminodiode/wtt_web_client
     depends_on:

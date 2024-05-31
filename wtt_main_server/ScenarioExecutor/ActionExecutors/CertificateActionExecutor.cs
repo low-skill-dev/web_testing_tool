@@ -73,14 +73,8 @@ public class CertificateActionExecutor : AActionExecutor<DbCertificateAction, Ce
 	{
 		ServerCertificateCustomValidationCallback = (req, cert, chain, policy) =>
 		{
-			var url = req.RequestUri?.AbsoluteUri;
-			if(url is not null)
-			{
-				if(_results.ContainsKey(url))
-					_results.TryAdd(url, cert);
-				else
-					_results[url] = cert;
-			}
+			if(req?.RequestUri?.AbsoluteUri is not null)
+				_results[req.RequestUri.AbsoluteUri] = cert;
 			return true;
 		}
 	});
@@ -89,12 +83,14 @@ public class CertificateActionExecutor : AActionExecutor<DbCertificateAction, Ce
 	private async Task<X509Certificate2?> MakeRequest(IDictionary<string, string> currentContext)
 	{
 		var url = CreateStringFromContext(Action.RequestUrl, currentContext);
+		var uri = new Uri(url);
 
 		try
 		{
-			_results[url] = null;
-			var req = (await _client.GetAsync(url)).RequestMessage!.RequestUri!.AbsoluteUri;
-			return _results[url];
+			_results.TryAdd(uri.AbsoluteUri, null);
+			_results[uri.AbsoluteUri] = null;
+			var req = (await _client.GetAsync(uri)).RequestMessage!.RequestUri!.AbsoluteUri;
+			return _results[uri.AbsoluteUri];
 		}
 		catch
 		{

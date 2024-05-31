@@ -21,7 +21,21 @@ export default class ScenarioHelper
 		];
 	}
 
-	public static CreateNewActionsCollection = ():ActionsCollection => {
+	public static DeleteAction(ac: ActionsCollection, guid: string)
+	{
+		ac.DbGetParametersActions = ac.DbGetParametersActions?.filter(x => x.Guid !== guid);
+		ac.DbCertificateActions = ac.DbCertificateActions?.filter(x => x.Guid !== guid);
+		ac.DbConditionalActions = ac.DbConditionalActions?.filter(x => x.Guid !== guid);
+		ac.DbScenarioActions = ac.DbScenarioActions?.filter(x => x.Guid !== guid);
+		ac.DbDelayActions = ac.DbDelayActions?.filter(x => x.Guid !== guid);
+		ac.DbErrorActions = ac.DbErrorActions?.filter(x => x.Guid !== guid);
+		ac.DbEchoActions = ac.DbEchoActions?.filter(x => x.Guid !== guid);
+		ac.DbHttpActions = ac.DbHttpActions?.filter(x => x.Guid !== guid);
+		ac.DbImapActions = ac.DbImapActions?.filter(x => x.Guid !== guid);
+	}
+
+	public static CreateNewActionsCollection = (): ActionsCollection =>
+	{
 		var ret = new ActionsCollection();
 		ret.DbGetParametersActions = [];
 		ret.DbCertificateActions = [];

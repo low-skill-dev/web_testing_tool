@@ -17,6 +17,7 @@ type ActionsColumnArgs = {
 	AddHttpCallback: (columnId: number, rowId: number) => void;
 	AddImapCallback: (columnId: number, rowId: number) => void;
 	AddScenarioCallback: (columnId: number, rowId: number) => void;
+	DeleteAction: (guid: string) => void;
 	UpdateParentLayout: () => void;
 }
 
@@ -170,6 +171,7 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 			<GenericCard
 				key={x.Guid!}
 				Action={x}
+				DeleteCallback={g => props.DeleteAction(g)}
 				MoveUpCallback={g => moveUp(g, false)}
 				MoveDownCallback={g => moveUp(g, true)}
 				MoveLeftCallback={props.MoveActionLeftCallback}

@@ -39,6 +39,8 @@ public sealed class ScenarioRunInfo
 	/// </summary>
 	public required Dictionary<Guid, ADbAction> ActionsLoadedFromDb { get; init; }
 
+	public IDictionary<string, string>? InitialContext { get; init; }
+
 
 	public required Func<Guid, Task<(Guid EntryPoint, Dictionary<Guid, ADbAction> Actions)>> LoadActionsByScenarioGuidFunc { get; set; }
 }

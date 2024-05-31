@@ -16,6 +16,8 @@ using Models.Constants;
 using CommonLibrary.Helpers;
 using Jint.Runtime;
 using static System.Collections.Specialized.BitVector32;
+using System.Net.Http.Json;
+using Jint.Native;
 
 namespace ScenarioExecutor.ActionExecutors;
 
@@ -100,10 +102,9 @@ public sealed class HttpActionExecutor : AActionExecutor<DbHttpAction, HttpActio
 
 		var msg = new HttpRequestMessage(this.Action.Method.ToNetHttpMethod(), new Uri(url));
 
-		msg.Content = body is null ? new ByteArrayContent(Array.Empty<byte>())
-			: msg.Content = new ByteArrayContent(Encoding.UTF8.GetBytes(body));
-		if(cookies is not null) msg.Content.Headers.Add("Cookie", string.Join(';', cookies.Select(x => $"{x.Key}={x.Value}")));
-		if(headers is not null) foreach(var pair in headers) msg.Content.Headers.Add(pair.Key, pair.Value);
+		if(body is not null) msg.Content = new StringContent(body, Encoding.UTF8, "application/json");
+		if(cookies is not null && cookies.Count > 0) msg.Content.Headers.Add("Cookie", string.Join(';', cookies.Select(x => $"{x.Key}={x.Value}")));
+		if(headers is not null && headers.Count > 0) foreach(var pair in headers) msg.Content.Headers.Add(pair.Key, pair.Value);
 
 		HttpClient client = string.IsNullOrWhiteSpace(Action.ProxyUrl)
 			? HttpHelper.GetWebClient(new HttpClientSettings { TlsValidationMode = Models.Enums.HttpTlsValidationMode.Disabled })

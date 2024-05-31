@@ -28,7 +28,7 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 
 	useEffect(() =>
 	{
-		setColumns([...new Set([...actions!.map(x => x.ColumnId),0])]);
+		setColumns([...new Set([...actions!.map(x => x.ColumnId), 0])]);
 	}, [actions]);
 
 	const AddColumn = () =>
@@ -156,6 +156,59 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 		console.log(columns);
 	}
 
+	const deleteAction = (guid: string) =>
+	{
+		console.log(`deleteAction('${guid.substring(36 - 12)}')`);
+		ScenarioHelper.DeleteAction(props.Actions, guid);
+		setKeyStart(keyStart + 100);
+		return;
+	}
+
+	const moveRight = (g: string, left: boolean) =>
+	{
+		console.log(`moveRight('${g.substring(36 - 12)}', ${left})`);
+
+		if (!g) return;
+		if (!actions) return;
+		var found = actions.find(x => x.Guid === g);
+		if (!found) return;
+
+		console.log("found is not null");
+
+		let minColId = actions.map(x => x.ColumnId).sort()[0];
+		let maxColId = actions.map(x => x.ColumnId).sort()[actions.length - 1];
+
+		console.log(`minColId=${minColId}`);
+		console.log(`maxColId=${maxColId}`);
+
+		//if (maxColId === minColId) return;
+		if (left && found.ColumnId === minColId) return;
+		if (!left && found.ColumnId === maxColId && maxColId !== minColId) return;
+
+		let colIds = actions.map(x => x.ColumnId).sort();
+		let current = colIds.indexOf(found.ColumnId);
+		let targetCol = colIds[current + (left ? -1 : 1)];
+		if (targetCol === current) targetCol++;
+
+		console.log(`targetCol=${targetCol}`);
+
+		var maxRowIdInDest = actions.filter(x => x.ColumnId === targetCol)
+			.map(x => x.RowId).sort().reverse()[0];
+
+		if (isNaN(maxRowIdInDest)) maxRowIdInDest = 0;
+
+		let prevCol = found.ColumnId, prevRow = found.RowId;
+
+		found.ColumnId = targetCol;
+		found.RowId = maxRowIdInDest + 1;
+
+		console.log(`Change action '${found.Guid?.substring(36 - 12)}' position:` +
+			`[${prevCol},${prevCol}] -> [${found.ColumnId},${found.RowId}]`);
+
+		setKeyStart(keyStart + 100);
+		setColumns([...columns]);
+	}
+
 	return <span className={clg.rootElementsMargin}>
 		<button onClick={showDebugInfo}>debug</button>
 		<span className={cl.columnsList}>
@@ -164,8 +217,8 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 					key={1000 * (index + 1) + keyStart * (x + 1)}
 					SelfColumnId={x}
 					Actions={actions.filter(y => y.ColumnId === x)}
-					MoveActionLeftCallback={null!}
-					MoveActionRightCallback={null!}
+					MoveActionLeftCallback={g => moveRight(g, true)}
+					MoveActionRightCallback={g => moveRight(g, false)}
 					AddHttpCallback={addNewHttpAction}
 					AddEchoCallback={addNewEchoAction}
 					AddConditionalCallback={addNewConditionalAction}
@@ -175,6 +228,7 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 					AddErrorCallback={addNewErrorAction}
 					AddScenarioCallback={addNewScenarioAction}
 					UpdateParentLayout={() => setKeyStart(keyStart + 100)}
+					DeleteAction={deleteAction}
 				/>))}
 			<button onClick={AddColumn}>Add column</button>
 		</span>

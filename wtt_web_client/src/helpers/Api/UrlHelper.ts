@@ -122,6 +122,15 @@ export default class UrlHelper
                             endpoints.backend.v1.scenarioController.get.GetLogs);
                     }
                 }
+                static Post = class
+                {
+                    static get RunManually()
+                    {
+                        return urlJoin(
+                            UrlHelper.Backend.V1.Scenario.FullPath,
+                            endpoints.backend.v1.scenarioController.post.RunManually);
+                    }
+                }
                 static Put = class
                 {
                     static get SaveScenarios()

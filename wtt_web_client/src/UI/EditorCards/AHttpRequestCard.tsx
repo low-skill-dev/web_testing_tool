@@ -20,13 +20,13 @@ const AHttpRequestCard: React.FC<AHttpRequestCardArgs> = (props) =>
 	//const [cookies, setCookies] = useState(props.Action.RequestCookies);
 	//const [script, setScript] = useState(props.Action.AfterRunScript); // ! COMMON
 
-	useEffect(() => { props.Action.Method = method }, [method]);
+	useEffect(() => { props.Action.Method = method; console.log(`method=${method}`) }, [method]);
 
 	return <span className={cl.actionCard}>
 		{(props.ShowMethods ?? true) ?
 			<span className={cl.editorBlock}>
 				<span className={cl.editorPropHeader}>METHOD</span>
-				<select name='method' onVolumeChange={e => setMethod(parseInt(e.currentTarget.value))}>
+				<select name='method' value={method} onChange={e => setMethod(parseInt(e.currentTarget.value))}>
 					<option value={HttpRequestMethod.Get}>GET</option>
 					<option value={HttpRequestMethod.Post}>POST</option>
 					<option value={HttpRequestMethod.Put}>PUT</option>

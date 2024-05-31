@@ -17,6 +17,10 @@ const ScenarioRequestCard: React.FC<ScenarioRequestCardArgs> = (props) =>
 	const [writeOutContextToVar, setWriteOutContextToVar] = useState(props.Action.WriteAllResultToVariable ?? "");
 	const [useCurrentContext, setUseCurrentContext] = useState(props.Action.UseParentContextAsInitial ?? true);
 
+	useEffect(() => { props.Action.CalledScenarioGuid = calledGuid }, [calledGuid]);
+	useEffect(() => { props.Action.WriteAllResultToVariable = writeOutContextToVar }, [writeOutContextToVar]);
+	useEffect(() => { props.Action.UseParentContextAsInitial = useCurrentContext }, [useCurrentContext]);
+
 	return <span className={cl.actionCard}>
 		<span className={cl.editorBlock}>
 			<span className={cl.editorPropHeader}>SCENARIO GUID</span>
@@ -24,7 +28,7 @@ const ScenarioRequestCard: React.FC<ScenarioRequestCardArgs> = (props) =>
 			<span className={cl.editorPropHeader}>INTERNAL CONTEXT VAR</span>
 			<input value={writeOutContextToVar} onChange={e => setWriteOutContextToVar(e.target.value)} placeholder='WILL BE WRITTEN AFTER COMPLETION' />
 			<span className={cl.editorPropHeader}>USE CURRENT CONTEXT AS INITIAL</span>
-			<input style={{width:"fit-content"}} type="checkbox" checked={useCurrentContext} onChange={e => setUseCurrentContext(e.target.checked)} />
+			<input style={{ width: "fit-content" }} type="checkbox" checked={useCurrentContext} onChange={e => setUseCurrentContext(e.target.checked)} />
 		</span>
 	</span>
 }
