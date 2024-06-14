@@ -58,7 +58,6 @@ export abstract class ADbAction extends ObjectWithGuid
 	public Bypass: boolean = false;
 	public ContinueExecutionInCaseOfCriticalError: boolean = false;
 	public AfterRunScript?: string;
-	public VariableToPath?: Map<string,string>;
 }
 export abstract class ADbProxiedAction extends ADbAction
 {

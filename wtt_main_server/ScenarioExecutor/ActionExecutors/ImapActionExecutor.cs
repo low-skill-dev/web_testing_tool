@@ -98,7 +98,7 @@ public sealed class ImapActionExecutor : AActionExecutor<DbImapAction, ImapActio
 		if(!string.IsNullOrWhiteSpace(Action.BodyMustContain))
 			q.And(SearchQuery.BodyContains(CreateStringFromContext(Action.BodyMustContain, currentContext)));
 		if(!string.IsNullOrWhiteSpace(Action.SenderMustContain))
-			q.And(SearchQuery.SubjectContains(CreateStringFromContext(Action.SenderMustContain, currentContext)));
+			q.And(SearchQuery.FromContains(CreateStringFromContext(Action.SenderMustContain, currentContext)));
 
 		q.And(SearchQuery.NotSeen);
 

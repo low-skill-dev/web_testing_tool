@@ -47,5 +47,4 @@ public abstract class ADbAction : ObjectWithGuid
 	 *
 	 * НАХУЯ Я ЭТО ВООБЩЕ ДОБАВИЛ ?
 	 */
-	public Dictionary<string, string>? VariableToPath { get; set; }
 }

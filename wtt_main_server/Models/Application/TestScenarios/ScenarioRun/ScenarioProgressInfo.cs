@@ -25,7 +25,6 @@ public sealed class ScenarioProgressInfo
 	// Отражает общее число выполненных действий.
 	public long ExecutionCount { get; set; } = 0;
 
-	public bool WasStarted => Started.HasValue;
 	public bool WasCompleted => Completed.HasValue;
 	public Exception? Exception { get; set; } = null;
 
