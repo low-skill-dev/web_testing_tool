@@ -210,7 +210,7 @@ const ActionsEditor: React.FC<ActionsEditorArgs> = (props) =>
 	}
 
 	return <span className={clg.rootElementsMargin}>
-		<button onClick={showDebugInfo}>debug</button>
+		{/* <button onClick={showDebugInfo}>debug</button> */}
 		<span className={cl.columnsList}>
 			{columns.map((x, index) => (
 				<ActionsColumn

@@ -20,7 +20,7 @@ public class DbUser : ObjectWithGuid
 	public UserRoles Role { get; set; } = UserRoles.Regular;
 	public bool IsDisabled { get; set; } = false;
 
-	public IPAddress RegistrationIPAddress { get; set; } = null!;
+	public IPAddress? RegistrationIPAddress { get; set; } = IPAddress.Loopback;
 	public string? RegistrationCountry { get; set; } = null;
 	public string? RegistrationCity { get; set; } = null;
 

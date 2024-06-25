@@ -51,9 +51,9 @@ const ScenarioSelectionPanel: React.FC<ScenarioSelectionPanelArgs> = (props) =>
 			title='Save all scenarios to the database and realod the page'
 		>SAVE</button>
 
-		<button
+		{/* <button
 			onClick={printDebugInfo}
-		>debug</button>
+		>debug</button> */}
 
 	</span>
 }

@@ -119,47 +119,14 @@ const VdbWelcome: React.FC = () =>
             <CSSTransition in={othersTransSt} {...commonTransProp}>
                 <span className={cl.aboutText}>
                     <p style={{ marginTop: ".75rem" }}>
-                        VPN Servers
+                        Mono repo:
                     </p>
                     <p style={{ marginLeft: "2.75rem" }}>
 
                         <a
-                            href="https://github.com/LuminoDiode/rest2wireguard"
+                            href="https://github.com/low-skill-dev/web_testing_tool"
                             className={cl.myLink}>
-                            github.com/LuminoDiode/rest2wireguard
-                        </a>
-                    </p>
-                    <p style={{ marginTop: ".75rem" }}>
-                        Main Server
-                    </p>
-                    <p style={{ marginLeft: "2.75rem" }}>
-
-                        <a
-                            href="https://github.com/LuminoDiode/vdb_main_server"
-                            className={cl.myLink}>
-                            github.com/LuminoDiode/vdb_main_server
-                        </a>
-                    </p>
-                    <p style={{ marginTop: ".75rem" }}>
-                        Web Client
-                    </p>
-                    <p style={{ marginLeft: "2.75rem" }}>
-
-                        <a
-                            href="https://github.com/LuminoDiode/vdb_web_client"
-                            className={cl.myLink}>
-                            github.com/LuminoDiode/vdb_web_client
-                        </a>
-                    </p>
-                    <p style={{ marginTop: ".75rem" }}>
-                        Dekstop App
-                    </p>
-                    <p style={{ marginLeft: "2.75rem" }}>
-
-                        <a
-                            href="https://github.com/LuminoDiode/vdb_desktop_client"
-                            className={cl.myLink}>
-                            github.com/LuminoDiode/vdb_desktop_client
+                            https://github.com/low-skill-dev/web_testing_tool
                         </a>
                     </p>
                 </span>

@@ -159,7 +159,7 @@ const MainPanel: React.FC = () =>
 	//   });
 
 	return <span className={clg.rootElementsMargin}>
-		<button onClick={showDebugInfo}>debug</button>
+		{/* <button onClick={showDebugInfo}>debug</button> */}
 		{
 			!loadCompleted ?
 				<span>
@@ -193,7 +193,9 @@ const MainPanel: React.FC = () =>
 		<hr style={{ marginTop: ".25rem", marginBottom: ".25rem" }} />
 		<br />
 		<input type="checkbox" title="SHOW ALL" content="SHOW ALL" checked={showAllLogs} onClick={()=> setShowAllLogs(!showAllLogs)} />
-		RUNS: <button onClick={showDebugInfo}>debug</button>					<br />
+		RUNS: 
+		{/* <button onClick={showDebugInfo}>debug</button>					 */}
+		<br />
 		<span style={{ width: "100%", height: "fit-content" }} /*ref={refLogs}*/>
 			{
 				(loadCompleted && selectedScenario && selectedLogs && selectedDisplayedLogs) ?

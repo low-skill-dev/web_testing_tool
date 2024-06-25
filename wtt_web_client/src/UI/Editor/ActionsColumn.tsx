@@ -165,7 +165,7 @@ const ActionsColumn: React.FC<ActionsColumnArgs> = (props) =>
 
 	return <span className={cl.actionsColumns}>
 		<span className={cl.selfColumnId}>{props.SelfColumnId}</span>
-		<button onClick={printCurrentState}>debug</button>
+		{/* <button onClick={printCurrentState}>debug</button> */}
 		<span style={{ border: "1px solid", borderColor: "inherit", width: "100%", height: "0px" }} />
 		{enumeratedActions?.map((x, index) =>
 			<GenericCard
